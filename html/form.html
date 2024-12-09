@@ -1,0 +1,193 @@
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/web2/images/logo.ico" rel="shortcut icon" type="image/x-icon"/>
+    <title>芝麻柚子 とんかつ | 訂位</title>
+    <link rel="stylesheet" href="/web2/css/form.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="home-icon">
+            <img src="/web2/images/header-icon.png" alt="網站首頁" style="width:150px; height: auto;">
+        </a>
+        <nav id="menu">
+            <input type="checkbox" id="menu-toggle">
+            <label id="menu-toggle" for="menu-toggle">&#9776;</label> 
+            <a href="index.html">-首頁</a>
+            <a href="menu.html">-查看菜單</a>
+            <a href="form.html">-我要訂位</a>
+            <a href="questions.html">-常見問題</a>
+        </nav>
+    </header>
+
+    <div class="booking-toggle">
+        <button type="button" class="toggle-btn active" data-form="reservation">我要訂位</button>
+        <button type="button" class="toggle-btn" data-form="cancel">取消訂位</button>
+    </div>
+
+    <div class="container">
+        <div id="reservation-summary">
+            <h1 id="left-title">確認及預覽</h3>
+            <p>大人數量：<span id="preview-adults">1</span></p>
+            <p>小孩數量：<span id="preview-children">0</span></p>
+            <p>用餐日期：<span id="preview-date">尚未選擇</span></p>
+            <p>用餐時間：<span id="preview-time">尚未選擇</span></p>
+            <p>素食選項：<span id="preview-vegetarian">否</span></p>
+            <p>特殊需求：<span id="preview-special">無</span></p>
+            <p>電話：<span id="preview-phone">尚未填寫</span></p>
+            <p>電子郵件：<span id="preview-email">尚未填寫</span></p>
+            <p>備註：<span id="preview-notes">無</span></p>
+        </div>
+
+        <form id="reservationForm" action="/reservations" method="POST">
+            <h1 id="title">填寫訂位資訊</h1>
+            <div class="field date-field">
+                <div id="calendar-container">
+                    <div id="calendar-header">
+                        <div id="calendar-title"></div>
+                        <div id="calendar-buttons">
+                            <button type="button" id="prevMonth">&lt;</button>
+                            <button type="button" id="nextMonth">&gt;</button>
+                        </div>
+                    </div>
+                    <div id="calendar">
+                        <div class="weekdays">
+                            <div>日</div>
+                            <div>一</div>
+                            <div>二</div>
+                            <div>三</div>
+                            <div>四</div>
+                            <div>五</div>
+                            <div>六</div>
+                        </div>
+                        <div id="days-container"></div> 
+                    </div>
+                </div>
+                <input type="date" id="date" name="date" required style="display: none;" onchange="updateTimeButtons()" />
+            </div>
+            
+
+            <span class="note">※如果有更大組的訂位請來電詢問</span>
+            <div class="row">
+                <div class="field">
+                    <label for="adults">大人數量：</label> 
+                    <select id="adults" name="adults" required></select>
+                </div>
+            
+                <div class="field">
+                    <label for="children">小孩數量：</label>
+                    <select id="children" name="children"></select>
+                </div>
+            </div>
+
+            <div id="time-picker-container" style="display: none;">
+                <div id="morning-time-buttons" class="time-buttons"></div>
+                <div id="afternoon-time-buttons" class="time-buttons"></div>
+            </div>
+
+            <div id="time-buttons"></div>
+
+            <input type="hidden" id="time" name="time" />
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">姓名:</label>
+                    <input type="text" id="name" name="name" required placeholder="請輸入姓名">
+                </div>
+            
+                <div class="form-group" id="gender-container">
+                    <div>
+                        <label><input type="radio" name="gender" value="先生" required> 先生</label>
+                        <label><input type="radio" name="gender" value="小姐"> 小姐</label>
+                        <label><input type="radio" name="gender" value="其他"> 其他</label>
+                    </div>
+                </div>
+            </div>
+            
+            <span class="pe-note">※請留下正確的電話及電子郵件 確保可收到訂位資訊</span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">電話：</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="0912345678">
+                </div>
+            
+                <div class="form-group" id="email-container">
+                    <label for="email">電子郵件：</label>
+                    <input type="email" id="email" name="email" required placeholder="xxx@gmail.com">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="vegetarian">吃素：</label>
+                    <select id="vegetarian" name="vegetarian">
+                        <option value="否">否</option>
+                        <option value="是">是</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="specialNeeds">特殊需求：</label>
+                    <select id="specialNeeds" name="specialNeeds">
+                        <option value="無">無</option>
+                        <option value="有行動不便者">有行動不便者</option>
+                        <option value="有嬰兒車">有嬰兒車</option>
+                        <option value="攜帶寵物">攜帶寵物</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="notes" >備註：</label>
+                    <textarea id="notes" name="notes" maxlength="30" placeholder="有任何需求都可在此提出，如兒童椅等等… (最多可輸入 30 字)"></textarea>
+                </div>
+            </div>
+
+            <button class="form-row" type="submit">提交訂位</button>
+            <div id="message"></div>
+        </form>
+
+        <div id="cancel-container" style="display: none;">
+            <form id="cancelForm">
+                <h1 id="title">取消訂位</h1>
+                <div class="cancel-options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="cancelMethod" value="code" checked>
+                            使用訂位代碼
+                        </label>
+                        <div class="input-group" id="codeInput">
+                            <input type="text" name="bookingCode" placeholder="請輸入訂位代碼" required>
+                        </div>
+                    </div>
+                    
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="cancelMethod" value="info">
+                            使用訂位資訊
+                        </label>
+                        <div class="input-group" id="infoInput" style="display: none;">
+                            <input type="text" name="name" placeholder="請輸入姓名">
+                            <input type="tel" name="phone" placeholder="請輸入電話">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">查詢訂位</button>
+                </div>
+
+                <div id="reservation-display"></div>
+            </form>
+            
+        </div>
+    </div>
+
+    <!-- <footer>
+        &copy; 2024 ZYW
+    </footer> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/web2/js/form.js"></script>
+</body>
+</html>

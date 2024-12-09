@@ -1,0 +1,41 @@
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/images/logo.ico" rel="shortcut icon" type="image/x-icon"/>
+    <title>後台管理系統 | 登入</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/web2/css/backstage-login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>後台管理系統</h2>
+        </div>
+        <div class="form-group">
+            <label for="username">帳號</label>
+            <input type="text" id="username" placeholder="請輸入帳號" required>
+        </div>
+        <div class="form-group">
+            <label for="password">密碼</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="請輸入密碼" required>
+                <button type="button" class="password-toggle" onclick="togglePassword()">
+                    <i class="fas fa-eye" id="toggleIcon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="remember-me">
+            <label class="remember-label">
+                <input type="checkbox" id="rememberMe">
+                <span class="checkmark"></span>
+                <span class="remember-text">記住我</span>
+            </label>
+        </div>
+        <button class="login-button" onclick="checkLogin()">登入系統</button>
+        <div id="error-message" class="error-message">帳號或密碼錯誤，請重試</div>
+    </div>
+
+    <script src="/web2/js/bsl.js"></script>
+</body>
+</html>
