@@ -137,24 +137,24 @@ function logout() {
     });
 }
 
-// async function checkTokenValidity() {
-//     try {
-//         const response = await fetch('/api/check-auth', {
-//             method: 'GET',
-//             credentials: 'same-origin' 
-//         });
+async function checkTokenValidity() {
+    try {
+        const response = await fetch('/api/check-auth', {
+            method: 'GET',
+            credentials: 'same-origin' 
+        });
 
-//         if (!response.ok) {
-//             window.location.href = '/bsl';
-//             return false;
-//         }
-//         return true;
-//     } catch (error) {
-//         console.error('Auth check failed:', error);
-//         window.location.href = '/bsl';
-//         return false;
-//     }
-// }
+        if (!response.ok) {
+            window.location.href = '/bsl';
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = '/bsl';
+        return false;
+    }
+}
 
 setInterval(checkTokenValidity, 60000); 
 
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadSettings();
     loadBookings();
-    // checkTokenValidity();
+    checkTokenValidity();
     loadVIPList(1);
     showPage('reservations');
 });
