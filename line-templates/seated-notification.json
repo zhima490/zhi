@@ -35,7 +35,7 @@
                 "weight": "bold",
                 "size": "md",
                 "wrap": true,
-                "align": "left",
+                "align": "center",
                 "color": "#2E4A62",
                 "margin": "md"
             },
