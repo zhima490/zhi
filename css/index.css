@@ -18,7 +18,7 @@
 }
 
 /* phone */
-@media screen and (min-width: 1023px) {
+@media (min-width: 375px) and (max-width: 1024px) {
 
     html, body {
         width: 100%;
@@ -94,7 +94,7 @@
 
     .p1 {
         height: 115vh;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/store.jpeg');
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/web2/images/store.jpeg');
         background-size: cover;
         background-position: 50% center;
         overflow: hidden;
@@ -274,7 +274,7 @@
 } */
 
 /* computer */
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1025px) {
     
     body {
         background-color: #17140c;
@@ -315,7 +315,7 @@
     .p1 {
         overflow: hidden;
         background-image: linear-gradient(to right,  #17140c 30%, transparent 60%), 
-                          url('/images/br.png');
+                          url('/web2/images/br.png');
         background-size: cover;
         background-position: right;
         background-repeat: no-repeat;
@@ -513,7 +513,7 @@
 /* body {
     margin: 0;
     height: 100vh;
-    background-image: url('/images/background.jpg');
+    background-image: url('/web2/images/background.jpg');
     background-size: cover;
     background-position: right;
     background-repeat: no-repeat;
