@@ -215,7 +215,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
