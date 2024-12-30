@@ -1,93 +1,217 @@
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>芝麻柚子 とんかつ | 菜單</title>
     <link href="/images/logo.ico" rel="shortcut icon" type="image/x-icon"/>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Microsoft JhengHei', sans-serif;
-            background-color: #f5f5f5;
-            background-image: linear-gradient(45deg, #f3f3f3 25%, transparent 25%, transparent 75%, #f3f3f3 75%, #f3f3f3), 
-                            linear-gradient(45deg, #f3f3f3 25%, transparent 25%, transparent 75%, #f3f3f3 75%, #f3f3f3);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
-        }
-
-        .container {
-            text-align: center;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 80%;
-            margin: 20px;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        .message {
-            color: #666;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .coming-soon {
-            color: #888;
-            font-style: italic;
-            font-size: 1rem;
-        }
-
-        .home-link {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 10px 20px;
-            background-color: #4a4a4a;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .home-link:hover {
-            background-color: #333;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-                margin: 15px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .message {
-                font-size: 1rem;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/menu.css">
 </head>
-<body>
-    <div class="container">
-        <h1>網頁尚未開放</h1>
-        <p class="message">
-            我們正在精心準備菜單內容<br>
-            期待為您帶來更好的瀏覽體驗
-        </p>
-        <a href="/" class="home-link">返回首頁</a>
+<body class="japanese-pattern">
+    <header class="hh">
+        <a href="index.html" class="home-icon">
+            <img src="/images/header-icon.png" alt="網站首頁" style="width:150px; height: auto;">
+        </a>
+        <nav id="menu">
+            <input type="checkbox" id="menu-toggle">
+            <label id="menu-toggle" for="menu-toggle">&#9776;</label> 
+            <a href="index.html">-首頁</a>
+            <a href="menu.html">-查看菜單</a>
+            <a href="form.html">-我要訂位</a>
+            <a href="questions.html">-常見問題</a>
+        </nav>
+    </header>
+
+    <div class="menu-container">
+        <header class="menu-header">
+            <h1 class="menu-title">菜單</h1>
+            <p class="menu-subtitle">Menu / メニュー</p>
+        </header>
+
+        <div class="description">
+            <p><span class="t1">餐點皆為</span><span class="t2">現點現做</span><span class="t1">需等待至少10-30分鐘不等，飲料以及甜點套餐皆有附贈，甜點為</span><span class="t2">當日限定無法選擇其他品項</span><span class="t1">，部分餐點價格與圖片可能有些許不同可致電或至FB、IG、LINE官方帳號詢問。</span>
+            </p>
+        </div>
+
+        <section>
+            <div class="menu-category">
+                <h2>季節限定</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <img src="/images/menu/summer.jpeg" alt="蔥花蒜泥鹽味豬排套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">蔥花蒜泥鹽味豬排套餐</h3>
+                        <p class="menu-item-description">夏季限定</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/autumn.jpeg" alt="葡萄柚里肌豬排套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">葡萄柚里肌豬排套餐</h3>
+                        <p class="menu-item-description">秋季限定</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/winter.jpeg" alt="酥炸鮮牡蠣豬排套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">酥炸鮮牡蠣豬排套餐</h3>
+                        <p class="menu-item-description">原冬季限定，更改後一年四季都可點</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/winter2.jpeg" alt="酥炸牡蠣腰內/里肌套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">酥炸牡蠣腰內/里肌套餐</h3>
+                        <p class="menu-item-description">原冬季限定，更改後一年四季都可點</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-category">
+                <h2>精選套餐</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <img src="/images/menu/fish.jpeg" alt="生薑燒鯖魚套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">生薑燒鯖魚套餐</h3>
+                        <p class="menu-item-description">每日漁場直送新鮮的鯖魚搭配特調的醬汁，濃厚的海味如同浪花在你口中散開，絕妙的口感值得您細細品嘗</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/yegu.jpeg" alt="綜合野菇里肌豬排鍋善">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">綜合野菇里肌豬排鍋善</h3>
+                        <p class="menu-item-description">嚴選油脂分布均勻的柔軟里肌肉，酥炸後放入熱鍋中，加入日式醬油、蘿蔔泥、青蔥，及多種野菇料理而成；這樣的黃金組合，創造每位新食感，讓身體與心靈溫暖的嶄新豬排料理誕生，請您細細品嘗。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/ming.jpeg" alt="明太子黑豚里肌豬排套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">明太子黑豚里肌豬排套餐</h3>
+                        <p class="menu-item-description">芝麻柚子嚴選黑豚里肌，搭配日本直輸色澤鮮豔飽滿的博多明太子，外酥內軟、鮮內多汁；海陸融合、鮮味濃厚。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/zeng.jpeg" alt="蔥花味曾里肌豬排套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">蔥花味曾里肌豬排套餐</h3>
+                        <p class="menu-item-description">嚴選油脂分布均勻的里肌肉，酥炸後撒上翠綠青蔥，以及獨家秘製的日式味增，這樣的黃金組合，創造美味新食感，請您細細品嘗。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/soxi.jpeg" alt="日式壽喜燒套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">日式壽喜燒套餐</h3>
+                        <p class="menu-item-description">【牛 / 豬】 濃厚的日式壽喜燒醬汁，搭配肉片豐富蔬菜，肉片沾上香濃蛋液搭配白飯，讓您大快朵頤。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/curry_noodles.jpeg" alt="咖哩烏龍三響套餐">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">咖哩烏龍三響套餐</h3>
+                        <p class="menu-item-description">精選三種不同的酥脆炸物，搭配日式咖哩湯頭與Q彈的烏龍麵，豐富的味覺饗宴，請您細細品嘗。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-category">
+                <h2>基本套餐</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <img src="/images/menu/1.jpeg" alt="嚴選黑豚">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">嚴選黑豚</h3>
+                        <p class="menu-item-description">選用安心、安全的台灣黑豬肉，讓您吃的安心、吃的美味、也吃的健康。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/2.jpeg" alt="柚子吟選">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">柚子吟選</h3>
+                        <p class="menu-item-description">特選香嫩豬排肉，口感鮮美，肉質軟柔適中。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/3.jpeg" alt="逸品自慢">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">逸品自慢</h3>
+                        <p class="menu-item-description">來自大海新鮮的蝦漿、草蝦，來驚豔你的味蕾。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/4.jpeg" alt="多彩味覺">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">多彩味覺</h3>
+                        <p class="menu-item-description">嚴選四季時令新鮮蔬果，搭配上日本直輸的專用麵包粉，組合成為風味絕佳，口感十足的酥炸野菜料理。</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/5.jpeg" alt="名物">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">名物</h3>
+                        <p class="menu-item-description">獨家的醬汁，充滿日式的風味料理，是最下飯的炸豬排料理。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-category">
+                <h2>單品料理 / 外帶便當</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <img src="/images/menu/last.jpeg" alt="單點料理">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">單點料理</h3>
+                        <p class="menu-item-description"></p> 
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/bang.jpeg" alt="外帶1">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">外帶便當</h3>
+                        <p class="menu-item-description">薑汁豬柳條與酥炸鮭魚已無提供</p> 
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <img src="/images/menu/bang2.jpeg" alt="外帶2">
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">外帶便當</h3>
+                        <p class="menu-item-description">薑汁豬柳條與酥炸鮭魚已無提供</p> 
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <footer>
+        &copy; 2024 ZYW
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightbox.style.display = 'block';
+            lightboxImg.src = imgSrc;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        document.querySelectorAll('.menu-item img').forEach(img => {
+            img.onclick = function() {
+                openLightbox(this.src);
+            }
+        });
+    </script>
 </body>
 </html>
