@@ -12,6 +12,16 @@ body {
     flex-direction: column;
 }
 
+.japanese-pattern {
+    background-color: #f5f5f5;
+    background-image: 
+        radial-gradient(circle at 100% 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
+        radial-gradient(circle at 0 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
+        radial-gradient(circle at 50% 100%, #e0e0e0 10%, #f5f5f5 11%, #f5f5f5 23%, #e0e0e0 24%, #e0e0e0 30%, #f5f5f5 31%, #f5f5f5 43%, #e0e0e0 44%, #e0e0e0 50%, #f5f5f5 51%, #f5f5f5 63%, #e0e0e0 64%, #e0e0e0 71%, transparent 71%, transparent);
+    background-size: 80px 50px;
+    padding: 2rem 0;
+}
+
 /* 上方橫條 / menu  */
 
 #menu-toggle{
