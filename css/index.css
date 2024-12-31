@@ -399,7 +399,7 @@
 
     nav {
         display: flex;
-        align-items: right;
+        align-items: center;
     }
     
     nav a {
