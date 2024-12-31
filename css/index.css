@@ -344,7 +344,8 @@ footer {
 
     .title {
         position: relative;
-        right: 10%;
+        left: -10%;
+        top: 0;
         text-align: center;
     }
 
