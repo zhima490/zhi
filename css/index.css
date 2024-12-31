@@ -286,7 +286,7 @@ footer {
         z-index: 100;
     }
 
-    #menu {
+    /* #menu {
         position: relative;
         float: right;
         top: 13px;
@@ -302,7 +302,23 @@ footer {
         top: 0; 
         right: 0; 
         z-index: 2; 
+    } */
+
+    #menu {
+        position: absolute;
+        top: 50%;
+        right: 15px; 
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
     }
+    
+    #menu label {
+        font-size: 30px;
+        color: black;
+        cursor: pointer;
+    }
+    
 
     #menu a {
         display: none;
@@ -324,6 +340,12 @@ footer {
 
     #menu input[type="checkbox"]:checked ~ a {
         display: block;
+    }
+
+    .title {
+        position: relative;
+        right: 10%;
+        text-align: center;
     }
 
     .p1 {
