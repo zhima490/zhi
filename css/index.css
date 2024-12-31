@@ -350,7 +350,6 @@ nav a {
     opacity: 1;
 }
 
-/* 手機版響應式設計 */
 @media screen and (max-width: 768px) {
     .home-icon {
         display: block; 
@@ -486,7 +485,38 @@ nav a {
     }
 }
 
-/* Footer */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .info-section-wrapper {
+        max-width: 90%;
+        gap: 20px;
+    }
+
+    .map-container {
+        width: 600px; 
+        height: 600px;
+    }
+
+    .info-content {
+        width: 350px; 
+        padding: 30px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    .news-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    .news-item img {
+        height: 250px;
+    }
+}
+
 footer {
     background-color: #f5f5f5;
     padding: 20px;
