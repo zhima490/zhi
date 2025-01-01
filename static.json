@@ -9,9 +9,9 @@
     },
     "/js/*.js": {
       "Content-Type": "application/javascript"
-    },
+    }
+  },
   "routes": {
     "/favicon.ico": "/favicon.ico"
-    }
   }
 }
