@@ -3,6 +3,7 @@ Allow: /
 Allow: /css/
 Allow: /images/
 Allow: /js/
+Allow: /favicon.ico
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.png$
