@@ -205,10 +205,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/favicon.ico', (req, res) => {
-    res.sendFile(path.join(__dirname, 'images', 'logo.ico'));
-});
-
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
