@@ -1,3 +1,15 @@
 User-agent: *
-Disallow:
+Allow: /
+Allow: /css/
+Allow: /images/
+Allow: /js/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+Disallow: /admin/
 Sitemap: https://zhimayouzi.onrender.com/sitemap.xml
