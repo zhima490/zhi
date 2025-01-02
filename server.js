@@ -277,18 +277,10 @@ app.use(helmet({
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
-                "https://code.jquery.com",         // 添加 jQuery CDN
-                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
+                "https://code.jquery.com",
+                "https://cdn.jsdelivr.net"
             ],
-            scriptSrcElem: [
-                "'self'",
-                (req, res) => `'nonce-${res.locals.nonce}'`,
-                "https://maps.googleapis.com",
-                "https://www.googletagmanager.com",
-                "https://www.google-analytics.com",
-                "https://code.jquery.com",         // 添加 jQuery CDN
-                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
-            ],
+            scriptSrcAttr: null,  // 移除這個限制
             styleSrc: [
                 "'self'",
                 "'unsafe-inline'",
