@@ -25,6 +25,8 @@ const reservationCancelTemplate = require('./line-templates/reservation-cancel.j
 const seatedNotificationTemplate = require('./line-templates/seated-notification.json');
 const manualCancelNotificationTemplate = require('./line-templates/manual-cancel-notification.json');
 const customerNotificationTemplate = require('./line-templates/customer-notification.json');
+const compression = require('compression');
+const helmet = require('helmet');
 
 
 const app = express();
@@ -187,7 +189,32 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// 安全性和快取控制中間件
 app.use((req, res, next) => {
+    // 安全性 headers
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    // 快取控制
+    if (req.path.includes('/api/') || req.path.includes('/form')) {
+        // 動態內容不快取
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    } else if (req.path.match(/\.(css|js|jpg|png|gif|ico|webp)$/)) {
+        // 靜態資源使用長期快取
+        res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1年
+    } else if (req.path.match(/\.html$/)) {
+        // HTML 文件使用較短的快取時間
+        res.setHeader('Cache-Control', 'public, max-age=3600'); // 1小時
+    } else {
+        // 其他頁面使用適當的快取
+        res.setHeader('Cache-Control', 'public, max-age=3600'); // 1小時
+    }
+    
+    // MIME 類型設定
     if (req.path.endsWith('.css')) {
         res.type('text/css');
     } else if (req.path.endsWith('.js')) {
@@ -195,15 +222,29 @@ app.use((req, res, next) => {
     } else if (req.path.endsWith('.ico')) {
         res.type('image/x-icon');
     }
+    
     next();
 });
 
-app.use((req, res, next) => {
-    if (req.path.endsWith('.js')) {
-        res.type('application/javascript');
+// 壓縮
+app.use(compression());
+
+// 安全性中間件
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://maps.googleapis.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", "https://api.example.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'self'", "https://www.google.com"]
+        }
     }
-    next();
-});
+}));
 
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
@@ -211,7 +252,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
