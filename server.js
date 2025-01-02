@@ -253,10 +253,21 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://maps.googleapis.com"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            // 使用 nonce 或 hash 替代 unsafe-inline
+            scriptSrc: [
+                "'self'",
+                "'nonce-{NONCE}'",  // 你需要生成一個 nonce
+                // 如果需要特定的外部腳本，明確列出
+                "https://maps.googleapis.com"
+            ],
+            // 樣式可以考慮使用 nonce，但通常 unsafe-inline 對 CSS 風險較小
+            styleSrc: [
+                "'self'",
+                "'unsafe-inline'",  // 如果真的需要的話
+                "https://fonts.googleapis.com"
+            ],
             imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'", "https://api.example.com"],
+            connectSrc: ["'self'"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             objectSrc: ["'none'"],
             mediaSrc: ["'self'"],
@@ -283,6 +294,13 @@ app.use(helmet({
     permittedCrossDomainPolicies: { permittedPolicies: "none" },
     hidePoweredBy: true
 }));
+
+// 生成 nonce 的中間件
+app.use((req, res, next) => {
+    // 為每個請求生成唯一的 nonce
+    res.locals.nonce = crypto.randomBytes(16).toString('base64');
+    next();
+});
 
 // 添加額外的安全性標頭
 app.use((req, res, next) => {
