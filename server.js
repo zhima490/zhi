@@ -277,35 +277,10 @@ app.use(helmet({
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
-                "https://code.jquery.com",
-                "https://cdn.jsdelivr.net"
+                "https://code.jquery.com"
             ],
-            scriptSrcAttr: null,  // 移除這個限制
-            styleSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "https://fonts.googleapis.com",
-                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
-            ],
-            imgSrc: [
-                "'self'", 
-                "data:", 
-                "https:",
-                "https://www.google-analytics.com",
-                "https://www.googletagmanager.com"
-            ],
-            connectSrc: [
-                "'self'",
-                "https://www.google-analytics.com",
-                "https://analytics.google.com"
-            ],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            objectSrc: ["'none'"],
-            mediaSrc: ["'self'"],
-            frameSrc: ["'self'", "https://www.google.com"],
-            baseUri: ["'self'"],
-            formAction: ["'self'"],
-            frameAncestors: ["'self'"]
+            // 移除 scriptSrcAttr
+            scriptSrcAttr: null
         }
     }
 }));
