@@ -14,7 +14,7 @@ const axios = require('axios');
 const nodemailer = require('nodemailer');
 const userStates = {};
 const jwt = require('jsonwebtoken');
-const CronJob = require('cron').CronJob;
+const CronJob = require('cron');
 const moment = require('moment-timezone');
 const reservationSuccessTemplate = require('./line-templates/reservation-success.json');
 const welcomeTemplate = require('./line-templates/welcome.json');
@@ -367,6 +367,7 @@ async function cleanExpiredData() {
     }
 }
 
+// 定時清理過期資料
 const cleanupSchedule = new CronJob('0 0 * * *', cleanExpiredData, null, true, 'Asia/Taipei');
 cleanupSchedule.start();
 
