@@ -27,6 +27,7 @@ const manualCancelNotificationTemplate = require('./line-templates/manual-cancel
 const customerNotificationTemplate = require('./line-templates/customer-notification.json');
 const compression = require('compression');
 const helmet = require('helmet');
+const cors = require('cors');
 
 
 const app = express();
@@ -50,7 +51,7 @@ const authenticateToken = (req, res, next) => {
         res.clearCookie('accessToken', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'lax',     // 改為 'lax'
             domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
             path: '/'
         });
@@ -68,7 +69,7 @@ const authenticateToken = (req, res, next) => {
                     res.cookie('accessToken', newAccessToken, {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
-                        sameSite: 'strict',
+                        sameSite: 'lax',     // 改為 'lax'
                         domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
                         path: '/',
                         maxAge: 15 * 60 * 1000
@@ -104,7 +105,7 @@ const authenticateToken = (req, res, next) => {
             res.clearCookie('accessToken', {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'lax',     // 改為 'lax'
                 domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
                 path: '/'
             });
@@ -196,7 +197,7 @@ app.use(session({
         maxAge: 120000,
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        sameSite: 'strict',     // 改為 'strict'
+        sameSite: 'lax',     // 改為 'lax' 以支援基本的跨站功能
         domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
         path: '/'
     }
@@ -1457,8 +1458,9 @@ app.post('/api/login', async (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 15 * 60 * 1000
+            sameSite: 'lax',     // 改為 'lax'
+            domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+            path: '/'
         });
 
         if (rememberMe) {
@@ -1476,7 +1478,9 @@ app.post('/api/login', async (req, res) => {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'lax',     // 改為 'lax'
+                domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+                path: '/',
                 maxAge: 30 * 24 * 60 * 60 * 1000  // 30天
             });
         }
@@ -1518,12 +1522,12 @@ app.post('/api/logout', async (req, res) => {
     res.clearCookie('accessToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'lax'
     });
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'lax'
     });
     
     res.json({ success: true });
