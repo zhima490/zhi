@@ -113,60 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-    // 綁定表單提交按鈕
-    document.getElementById('submitButton')?.addEventListener('click', submitForm);
-    
-    // 其他事件監聽器設定
-    setupFormListeners();
 });
-
-function setupFormListeners() {
-    // 其他表單相關的事件監聽
-    const form = document.getElementById('reservationForm');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitForm();
-        });
-    }
-}
-
-async function submitForm() {
-    try {
-        // 獲取表單數據
-        const formData = {
-            name: document.getElementById('name').value,
-            date: document.getElementById('date').value,
-            time: document.getElementById('time').value,
-            phone: document.getElementById('phone').value,
-            email: document.getElementById('email').value,
-            people: document.getElementById('people').value
-        };
-
-        // 發送 API 請求
-        const response = await fetch('/api/cancel-reservation', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData),
-            credentials: 'same-origin'
-        });
-
-        const result = await response.json();
-        
-        if (response.ok) {
-            alert('取消成功！');
-            window.location.href = '/';
-        } else {
-            alert(result.message || '取消失敗，請稍後再試');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('發生錯誤，請稍後再試');
-    }
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     const adultsSelect = document.getElementById('adults');
@@ -444,11 +391,8 @@ async function updateTimeButtons() {
 }
 
 function displayReservationInfo(results) {
-    console.log('Received results:', results); // 用於調試
-    
     const displayArea = document.getElementById('reservation-display');
     
-    // 如果沒有資料
     if (!results || (Array.isArray(results) && results.length === 0)) {
         displayArea.innerHTML = `
             <div class="reservation-info">
@@ -459,10 +403,9 @@ function displayReservationInfo(results) {
         return;
     }
 
-    // 確保 results 是陣列
     const reservations = Array.isArray(results) ? results : [results];
     
-    // 生成所有訂位資料的 HTML
+    // 修改 HTML 結構，移除內聯事件
     const reservationsHTML = reservations.map(reservation => `
         <div class="reservation-info">
             <h3>訂位資訊</h3>
@@ -476,20 +419,35 @@ function displayReservationInfo(results) {
                 <p>訂位代碼：${reservation.bookingCode}</p>
             </div>
             <div class="button-group">
-                <button onclick="confirmCancel('${reservation.bookingCode}')" class="confirm-btn">確認取消</button>
+                <button class="confirm-btn" data-booking-code="${reservation.bookingCode}">確認取消</button>
             </div>
         </div>
     `).join('');
 
-    // 顯示所有訂位資料和返回按鈕
     displayArea.innerHTML = `
         <div class="reservations-container">
             ${reservationsHTML}
             <div class="button-group">
-                <button onclick="cancelOperation()" class="cancel-btn">返回</button>
+                <button class="cancel-btn">返回</button>
             </div>
         </div>
     `;
+
+    // 使用事件委派綁定按鈕事件
+    displayArea.addEventListener('click', function(e) {
+        // 取消按鈕
+        if (e.target.classList.contains('cancel-btn')) {
+            cancelOperation();
+        }
+        
+        // 確認取消按鈕
+        if (e.target.classList.contains('confirm-btn')) {
+            const bookingCode = e.target.dataset.bookingCode;
+            if (bookingCode) {
+                confirmCancel(bookingCode);
+            }
+        }
+    });
 }
 
 // 確認取消訂位
@@ -507,7 +465,7 @@ async function confirmCancel(bookingCode) {
             body: JSON.stringify({ bookingCode })
         });
 
-        const data = await response.json(); // 獲取詳細的回應數據
+        const data = await response.json();
 
         if (!response.ok) {
             throw new Error(data.error || '取消失敗');
@@ -517,7 +475,7 @@ async function confirmCancel(bookingCode) {
         alert(data.message || '訂位已成功取消');
         location.reload();
     } catch (error) {
-        console.error('Cancel error details:', error); // 添加詳細錯誤日誌
+        console.error('Cancel error:', error);
         alert(error.message || '取消失敗，請稍後再試');
     }
 }
@@ -538,3 +496,94 @@ function cancelOperation() {
     document.getElementById('reservation-display').innerHTML = '';
     document.getElementById('cancelForm').reset();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('reservationForm');
+  
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+  
+        const formData = {
+            name: form.name.value,
+            phone: form.phone.value,
+            email: form.email.value,
+            gender: form.gender.value,
+            date: form.date.value,
+            time: form.time.value,
+            adults: form.adults.value,
+            children: form.children.value,
+            vegetarian: form.vegetarian.value,
+            specialNeeds: form.specialNeeds.value,
+            notes: form.notes.value,
+        };
+  
+        // 添加表單數據檢查
+        console.log('Submitting form data:', formData);
+  
+        try {
+            const response = await fetch('/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+                redirect: 'follow' 
+            });
+  
+            if (response.redirected) {
+                console.log('Reservation successful, waiting for redirect...');
+                
+                window.location.href = response.url;
+
+                setTimeout(() => {
+                    form.reset();
+                
+                // 重置預覽區域
+                document.getElementById('preview-adults').textContent = '1';
+                document.getElementById('preview-children').textContent = '0';
+                document.getElementById('preview-date').textContent = '尚未選擇';
+                document.getElementById('preview-time').textContent = '尚未選擇';
+                document.getElementById('preview-vegetarian').textContent = '否';
+                document.getElementById('preview-special').textContent = '無';
+                document.getElementById('preview-phone').textContent = '尚未填寫';
+                document.getElementById('preview-email').textContent = '尚未填寫';
+                document.getElementById('preview-notes').textContent = '無';
+                
+                // 重置日曆到當前月份
+                currentMonth = new Date().getMonth();
+                currentYear = new Date().getFullYear();
+                generateCalendar(currentMonth, currentYear);
+                
+                // 重置時間選擇
+                const days = document.querySelectorAll('#days-container .day');
+                days.forEach(day => day.classList.remove('selected'));
+                
+                document.querySelectorAll('.time-button').forEach(btn => 
+                    btn.classList.remove('selected')
+                );
+                
+                // 隱藏時間選擇器和表單欄位
+                document.getElementById('time-picker-container').style.display = 'none';
+                document.querySelectorAll('.form-row').forEach(row => {
+                    row.classList.remove('show');
+                });
+                
+                // 重置下拉選單
+                document.getElementById('adults').value = '1';
+                document.getElementById('children').value = '0';
+                document.getElementById('vegetarian').value = '否';
+                document.getElementById('specialNeeds').value = '無';
+                }, 100);
+                
+
+                return;
+
+            } else {
+                throw new Error(data.message || '預訂失敗，請稍後再試');
+            }
+        } catch (error) {
+            console.error('Reservation error details:', error);
+            alert(error.message);
+        }
+    });
+});
