@@ -224,15 +224,18 @@ app.use((req, res, next) => {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
-    } else if (req.path.match(/\.(css|js|jpg|png|gif|ico|webp)$/)) {
-        // 靜態資源使用長期快取
-        res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1年
+    } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|webp|svg)$/)) {
+        // 圖片快取1年
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (req.path.match(/\.(css|js)$/)) {
+        // CSS 和 JS 快取1小時
+        res.setHeader('Cache-Control', 'public, max-age=3600');
     } else if (req.path.match(/\.html$/)) {
-        // HTML 文件使用較短的快取時間
-        res.setHeader('Cache-Control', 'public, max-age=3600'); // 1小時
+        // HTML 文件快取5分鐘
+        res.setHeader('Cache-Control', 'public, max-age=300');
     } else {
-        // 其他頁面使用適當的快取
-        res.setHeader('Cache-Control', 'public, max-age=3600'); // 1小時
+        // 其他資源快取1小時
+        res.setHeader('Cache-Control', 'public, max-age=3600');
     }
     
     // MIME 類型設定
@@ -242,6 +245,10 @@ app.use((req, res, next) => {
         res.type('application/javascript');
     } else if (req.path.endsWith('.ico')) {
         res.type('image/x-icon');
+    } else if (req.path.endsWith('.svg')) {
+        res.type('image/svg+xml');
+    } else if (req.path.endsWith('.webp')) {
+        res.type('image/webp');
     }
     
     next();
