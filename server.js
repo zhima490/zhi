@@ -267,40 +267,43 @@ app.use(helmet({
             scriptSrc: [
                 "'self'",
                 (req, res) => `'nonce-${res.locals.nonce}'`,
-                "https://maps.googleapis.com"
-            ].filter(Boolean),
+                "https://maps.googleapis.com",
+                "https://www.googletagmanager.com",
+                "https://www.google-analytics.com"
+            ],
+            scriptSrcElem: [
+                "'self'",
+                (req, res) => `'nonce-${res.locals.nonce}'`,
+                "https://maps.googleapis.com",
+                "https://www.googletagmanager.com",
+                "https://www.google-analytics.com"
+            ],
             styleSrc: [
                 "'self'",
                 "'unsafe-inline'",
                 "https://fonts.googleapis.com"
             ],
-            imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'"],
+            imgSrc: [
+                "'self'", 
+                "data:", 
+                "https:",
+                "https://www.google-analytics.com",
+                "https://www.googletagmanager.com"
+            ],
+            connectSrc: [
+                "'self'",
+                "https://www.google-analytics.com",
+                "https://analytics.google.com"
+            ],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             objectSrc: ["'none'"],
             mediaSrc: ["'self'"],
             frameSrc: ["'self'", "https://www.google.com"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
-            frameAncestors: ["'self'"],
-            scriptSrcAttr: ["'none'"]
-        },
-        useDefaults: false
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginOpenerPolicy: { policy: "same-origin" },
-    crossOriginResourcePolicy: { policy: "same-origin" },
-    referrerPolicy: { policy: "no-referrer" },
-    strictTransportSecurity: {
-        maxAge: 15552000,
-        includeSubDomains: true
-    },
-    xContentTypeOptions: true,
-    dnsPrefetchControl: { allow: false },
-    ieNoOpen: true,
-    frameguard: { action: 'sameorigin' },
-    permittedCrossDomainPolicies: { permittedPolicies: "none" },
-    hidePoweredBy: true
+            frameAncestors: ["'self'"]
+        }
+    }
 }));
 
 // nonce 中間件必須在 helmet 之前
