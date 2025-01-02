@@ -389,6 +389,7 @@ app.use((err, req, res, next) => {
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
