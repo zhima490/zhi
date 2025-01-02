@@ -65,94 +65,81 @@ app.use(cors({
     exposedHeaders: ['Set-Cookie']
 }));
 
-const authenticateToken = (req, res, next) => {
+// 認證中間件
+const authenticateToken = async (req, res, next) => {
+    // 獲取客戶端 IP
+    const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || 
+               req.socket.remoteAddress || 
+               req.ip || 
+               'unknown';
+
     const accessToken = req.cookies.accessToken;
     
     if (!accessToken) {
-        res.clearCookie('accessToken', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',     // 改為 'lax'
-            domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-            path: '/'
-        });
+        res.clearCookie('accessToken', cookieConfig);
+        await logAuth('SESSION_ERROR', 'unknown', false, ip);
+        return res.status(401).json({ message: '未授權的訪問' });
+    }
+
+    try {
+        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+        req.user = decoded;
+        await logAuth('TOKEN_VALID', decoded.username, true, ip);
+        next();
+    } catch (error) {
+        await logAuth('TOKEN_ERROR', 'unknown', false, ip);
+        res.clearCookie('accessToken', cookieConfig);
         
         const refreshToken = req.cookies.refreshToken;
         if (refreshToken) {
-            redisClient.get(`auth_refresh_${refreshToken}`).then(username => {
-                if (username) {
-                    const newAccessToken = jwt.sign(
-                        { username }, 
-                        process.env.JWT_SECRET, 
-                        { expiresIn: '15m' }
-                    );
-                    
-                    res.cookie('accessToken', newAccessToken, {
-                        httpOnly: true,
-                        secure: process.env.NODE_ENV === 'production',
-                        sameSite: 'lax',     // 改為 'lax'
-                        domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-                        path: '/',
-                        maxAge: 15 * 60 * 1000
-                    });
-                    
-                    req.user = { username };
-                    logAuth('TOKEN_REFRESH', username, true, ip);
-                    return next();
-                }
-                logAuth('SESSION_EXPIRED', 'unknown', false, ip);
-                if (req.path.startsWith('/api/')) {
-                    return res.status(401).json({ error: 'Unauthorized' });
-                }
-                res.redirect('/bsl');
-            }).catch(() => {
-                logAuth('SESSION_ERROR', 'unknown', false, ip);
-                if (req.path.startsWith('/api/')) {
-                    return res.status(401).json({ error: 'Unauthorized' });
-                }
-                res.redirect('/bsl');
-            });
-            return;
+            try {
+                const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+                const newAccessToken = generateAccessToken({ username: decoded.username });
+                
+                res.cookie('accessToken', newAccessToken, {
+                    ...cookieConfig,
+                    maxAge: 15 * 60 * 1000
+                });
+                
+                req.user = decoded;
+                await logAuth('TOKEN_REFRESH', decoded.username, true, ip);
+                next();
+            } catch (error) {
+                await logAuth('REFRESH_ERROR', 'unknown', false, ip);
+                res.clearCookie('refreshToken', cookieConfig);
+                return res.status(401).json({ message: '請重新登入' });
+            }
+        } else {
+            return res.status(401).json({ message: '請重新登入' });
         }
-        logAuth('NO_TOKEN', 'unknown', false, ip);
-        if (req.path.startsWith('/api/')) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
-        return res.redirect('/bsl');
     }
-
-    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            res.clearCookie('accessToken', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',     // 改為 'lax'
-                domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-                path: '/'
-            });
-            
-            if (err.name === 'TokenExpiredError') {
-                logAuth('TOKEN_EXPIRED', user?.username || 'unknown', false, ip);
-            } else {
-                logAuth('TOKEN_INVALID', 'unknown', false, ip);
-            }
-            if (req.path.startsWith('/api/')) {
-                return res.status(401).json({ error: 'Unauthorized' });
-            }
-            return res.redirect('/bsl');
-        }
-        req.user = user;
-        next();
-    });
 };
 
-function logAuth(action, username, success, ip) {
-    const timestamp = new Date().toISOString();
-    const logEntry = `[Auth Log] ${timestamp} | ${action} | User: ${username} | Success: ${success} | IP: ${ip}`;
-    
-    // 使用 console.log 而不是寫入文件
-    console.log(logEntry);
-}
+// 記錄認證事件的函數
+const logAuth = async (type, username, success, ip) => {
+    try {
+        const log = new AuthLog({
+            type,
+            username,
+            success,
+            ip,
+            timestamp: new Date()
+        });
+        await log.save();
+        console.log(`Auth log saved: ${type} - ${username} - ${success} - ${ip}`);
+    } catch (error) {
+        console.error('Error logging auth event:', error);
+    }
+};
+
+// 確保 AuthLog model 已定義
+const AuthLog = mongoose.model('AuthLog', {
+    type: String,
+    username: String,
+    success: Boolean,
+    ip: String,
+    timestamp: Date
+});
 
 function generateToken(length = 8) {
     return crypto.randomBytes(length).toString('hex').slice(0, length);
