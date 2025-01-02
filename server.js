@@ -45,13 +45,16 @@ const PORT = process.env.PORT || 3000;
 
 const authenticateToken = (req, res, next) => {
     const accessToken = req.cookies.accessToken;
-    const ip = getClientIP(req);
     
     if (!accessToken) {
-        // 確保清除過期的 cookie
-        res.clearCookie('accessToken');
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+            path: '/'
+        });
         
-        // 嘗試使用 refresh token
         const refreshToken = req.cookies.refreshToken;
         if (refreshToken) {
             redisClient.get(`auth_refresh_${refreshToken}`).then(username => {
@@ -66,6 +69,8 @@ const authenticateToken = (req, res, next) => {
                         httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
                         sameSite: 'strict',
+                        domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+                        path: '/',
                         maxAge: 15 * 60 * 1000
                     });
                     
@@ -96,8 +101,13 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-            // Token 過期時，確保清除 cookie
-            res.clearCookie('accessToken');
+            res.clearCookie('accessToken', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+                path: '/'
+            });
             
             if (err.name === 'TokenExpiredError') {
                 logAuth('TOKEN_EXPIRED', user?.username || 'unknown', false, ip);
@@ -186,8 +196,8 @@ app.use(session({
         maxAge: 120000,
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        sameSite: 'lax',     // 改為 'lax' 以支援基本的跨站功能
-        domain: process.env.NODE_ENV === 'production' ? 'zhimayouzi.onrender.com' : 'localhost',
+        sameSite: 'strict',     // 改為 'strict'
+        domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
         path: '/'
     }
 }));
@@ -250,10 +260,36 @@ app.use(helmet({
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             objectSrc: ["'none'"],
             mediaSrc: ["'self'"],
-            frameSrc: ["'self'", "https://www.google.com"]
+            frameSrc: ["'self'", "https://www.google.com"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"],
+            scriptSrcAttr: ["'none'"],
+            upgradeInsecureRequests: true
         }
-    }
+    },
+    crossOriginEmbedderPolicy: false,  // 如果需要跨域資源
+    crossOriginOpenerPolicy: { policy: "same-origin" },
+    crossOriginResourcePolicy: { policy: "same-origin" },
+    referrerPolicy: { policy: "no-referrer" },
+    strictTransportSecurity: {
+        maxAge: 15552000,
+        includeSubDomains: true
+    },
+    xContentTypeOptions: true,
+    dnsPrefetchControl: { allow: false },
+    ieNoOpen: true,
+    frameguard: { action: 'sameorigin' },
+    permittedCrossDomainPolicies: { permittedPolicies: "none" },
+    hidePoweredBy: true
 }));
+
+// 添加額外的安全性標頭
+app.use((req, res, next) => {
+    res.setHeader('Origin-Agent-Cluster', '?1');
+    res.setHeader('X-XSS-Protection', '0');  // 現代瀏覽器建議設為 0
+    next();
+});
 
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
