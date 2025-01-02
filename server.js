@@ -14,7 +14,7 @@ const axios = require('axios');
 const nodemailer = require('nodemailer');
 const userStates = {};
 const jwt = require('jsonwebtoken');
-const CronJob = require('cron');
+const { CronJob } = require('cron');
 const moment = require('moment-timezone');
 const reservationSuccessTemplate = require('./line-templates/reservation-success.json');
 const welcomeTemplate = require('./line-templates/welcome.json');
@@ -362,13 +362,22 @@ async function cleanExpiredData() {
     try {
         await GLW.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
         await GLH.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
+        console.log('Cleaned expired data at:', new Date().toISOString());
     } catch (error) {
         console.error('Error cleaning expired data:', error);
     }
 }
 
-// 定時清理過期資料
-const cleanupSchedule = new CronJob('0 0 * * *', cleanExpiredData, null, true, 'Asia/Taipei');
+// 創建 CronJob
+const cleanupSchedule = new CronJob(
+    '0 0 * * *',         // 每天午夜執行
+    cleanExpiredData,    // 要執行的函數
+    null,               // onComplete
+    true,              // start
+    'Asia/Taipei'      // 時區
+);
+
+// 啟動排程
 cleanupSchedule.start();
 
 async function sendEmail(toEmail, reservationData) {
