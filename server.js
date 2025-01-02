@@ -317,11 +317,12 @@ app.use('/favicon.ico', express.static(path.join(__dirname, 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
-// 路由處理 - 確保這些在靜態文件中間件之後
+// 路由處理
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
-app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));
+app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
+app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
 app.get(['/bsl', '/backstage-login'], (req, res) => {
     const accessToken = req.cookies.accessToken;
@@ -341,15 +342,9 @@ app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
 });
 
 // 404 處理
-app.use((req, res, next) => {
-    console.log('404 for:', req.url); // 添加日誌
-    res.status(404).send('找不到頁面');
-});
-
-// 錯誤處理
-app.use((err, req, res, next) => {
-    console.error('Error:', err); // 添加錯誤日誌
-    res.status(500).send('伺服器錯誤');
+app.use((req, res) => {
+    console.log('404 for:', req.url);  // 添加日誌以便調試
+    res.status(404).sendFile(path.join(__dirname, 'html', '404.html'));
 });
 
 connectToDatabase();
