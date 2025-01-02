@@ -191,9 +191,6 @@ function getTimeSlot(time, date) {
 
 require('dotenv').config();
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 // Session 設定
 app.use(session({
     store: new RedisStore({ client: redisClient }),
@@ -264,10 +261,31 @@ app.use(helmet({
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
-                "https://code.jquery.com"
+                "https://code.jquery.com",
+                "https://cdn.jsdelivr.net"
             ],
-            // 移除 scriptSrcAttr
-            scriptSrcAttr: null
+            styleSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com"
+            ],
+            imgSrc: [
+                "'self'", 
+                "data:", 
+                "https:",
+                "https://zhimayouzi.onrender.com"
+            ],
+            connectSrc: [
+                "'self'",
+                "https://zhimayouzi.onrender.com"
+            ],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'self'", "https://www.google.com"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"]
         }
     }
 }));
@@ -288,6 +306,7 @@ app.use((req, res, next) => {
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/favicon.ico', express.static(path.join(__dirname, 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
