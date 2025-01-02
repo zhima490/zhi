@@ -310,88 +310,11 @@ app.use('/favicon.ico', express.static(path.join(__dirname, 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
-// 靜態文件中間件設定
-app.use(express.static('public', {
-    setHeaders: (res, path, stat) => {
-        // 為 CSS 文件設定快取
-        if (path.endsWith('.css')) {
-            res.setHeader('Cache-Control', 'public, max-age=3600');
-            res.setHeader('Vary', 'Accept-Encoding');
-        }
-        // 為圖片設定快取
-        if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
-            res.setHeader('Cache-Control', 'public, max-age=31536000');
-            res.setHeader('Vary', 'Accept-Encoding');
-        }
-    }
-}));
-
-// 更新 CSP 設定以允許所有需要的資源
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-                "'self'",
-                (req, res) => `'nonce-${res.locals.nonce}'`,
-                "https://maps.googleapis.com",
-                "https://www.googletagmanager.com",
-                "https://www.google-analytics.com",
-                "https://code.jquery.com",
-                "https://cdn.jsdelivr.net"
-            ],
-            styleSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "https://fonts.googleapis.com",
-                "https://cdn.jsdelivr.net"
-            ],
-            imgSrc: [
-                "'self'", 
-                "data:", 
-                "https:",
-                "https://zhimayouzi.onrender.com"  // 添加網站域名
-            ],
-            connectSrc: [
-                "'self'",
-                "https://zhimayouzi.onrender.com"  // 添加網站域名
-            ],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            objectSrc: ["'none'"],
-            mediaSrc: ["'self'"],
-            frameSrc: ["'self'", "https://www.google.com"],
-            baseUri: ["'self'"],
-            formAction: ["'self'"],
-            frameAncestors: ["'self'"]
-        }
-    }
-}));
-
-
-app.get('/robots.txt', (req, res) => {
-    res.type('text/plain');
-    res.send(`
-User-agent: *
-Allow: /
-Sitemap: https://zhimayouzi.onrender.com/sitemap.xml
-    `);
-});
-
-// 添加錯誤處理中間件
-app.use((req, res, next) => {
-    res.status(404).send('找不到頁面');
-});
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('伺服器錯誤');
-});
-
+// 路由處理 - 確保這些在靜態文件中間件之後
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));
-app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
 app.get(['/bsl', '/backstage-login'], (req, res) => {
     const accessToken = req.cookies.accessToken;
@@ -400,12 +323,26 @@ app.get(['/bsl', '/backstage-login'], (req, res) => {
             jwt.verify(accessToken, process.env.JWT_SECRET);
             return res.redirect('/bs');
         } catch (err) {
+            // 處理錯誤
         }
     }
     res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
 });
+
 app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
-res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
+    res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
+});
+
+// 404 處理
+app.use((req, res, next) => {
+    console.log('404 for:', req.url); // 添加日誌
+    res.status(404).send('找不到頁面');
+});
+
+// 錯誤處理
+app.use((err, req, res, next) => {
+    console.error('Error:', err); // 添加錯誤日誌
+    res.status(500).send('伺服器錯誤');
 });
 
 connectToDatabase();
