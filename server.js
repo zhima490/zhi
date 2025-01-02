@@ -175,19 +175,25 @@ require('dotenv').config();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(cookieParser(process.env.COOKIE_SECRET));
+// Session 設定
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
+    name: 'sessionId',  // 自定義 cookie 名稱
     cookie: { 
         maxAge: 120000,
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        sameSite: 'strict'  // 添加 sameSite 設定
+        sameSite: 'lax',     // 改為 'lax' 以支援基本的跨站功能
+        domain: process.env.NODE_ENV === 'production' ? 'zhimayouzi.onrender.com' : 'localhost',
+        path: '/'
     }
 }));
+
+// Cookie Parser 設定
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
