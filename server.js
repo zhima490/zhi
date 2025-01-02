@@ -44,6 +44,16 @@ const transporter = nodemailer.createTransport({
 
 const PORT = process.env.PORT || 3000;
 
+// Cookie 基本設定
+const cookieConfig = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',     // 使用 'lax' 而不是 'strict'
+    domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
+    path: '/',
+    partitioned: true    // 添加 Partitioned 屬性支援
+};
+
 // CORS 設定
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
@@ -51,7 +61,8 @@ app.use(cors({
         : ['http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Set-Cookie']
 }));
 
 const authenticateToken = (req, res, next) => {
@@ -202,14 +213,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    name: 'sessionId',  // 自定義 cookie 名稱
+    name: 'sessionId',
     cookie: { 
-        maxAge: 120000,
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        sameSite: 'lax',     // 改為 'lax' 以支援基本的跨站功能
-        domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-        path: '/'
+        ...cookieConfig,
+        maxAge: 120000
     }
 }));
 
