@@ -276,19 +276,24 @@ app.use(helmet({
                 (req, res) => `'nonce-${res.locals.nonce}'`,
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
-                "https://www.google-analytics.com"
+                "https://www.google-analytics.com",
+                "https://code.jquery.com",         // 添加 jQuery CDN
+                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
             ],
             scriptSrcElem: [
                 "'self'",
                 (req, res) => `'nonce-${res.locals.nonce}'`,
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
-                "https://www.google-analytics.com"
+                "https://www.google-analytics.com",
+                "https://code.jquery.com",         // 添加 jQuery CDN
+                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
             ],
             styleSrc: [
                 "'self'",
                 "'unsafe-inline'",
-                "https://fonts.googleapis.com"
+                "https://fonts.googleapis.com",
+                "https://cdn.jsdelivr.net"         // 添加 jsdelivr CDN
             ],
             imgSrc: [
                 "'self'", 
