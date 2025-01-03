@@ -268,32 +268,16 @@ const currentDate = `${yyyy}-${mm}-${dd}`;
 document.getElementById('date').setAttribute('min', currentDate);
 
 async function updateTimeButtons() {
-    const selectedDateStr = document.getElementById('date').value;
-    const selectedDate = new Date(selectedDateStr);
+    const selectedDate = new Date($('#date').val());
     const dayOfWeek = selectedDate.getDay();
+    const dateString = selectedDate.toISOString().split('T')[0];
     
-    const apiUrl = `/api/time-slots?date=${selectedDateStr}`;
-    
+    // 預先清空並顯示載入中的提示
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
     
     try {
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            credentials: 'same-origin'
-        });
-
-        if (!response.ok) {
-            console.error('API Response:', response.status, response.statusText);
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
+        // 預先定義時段模板
         const weekdaySlots = {
             morning: [
                 { time: '11:00', id: 'wm1' },
@@ -336,10 +320,16 @@ async function updateTimeButtons() {
             ]
         };
 
+        // 獲取預訂狀態
+        const response = await fetch(`/api/time-slots?date=${dateString}`);
+        const data = await response.json();
+
+        // 準備 HTML 字符串
         let html = '';
         const slots = (dayOfWeek >= 1 && dayOfWeek <= 5) ? weekdaySlots : holidaySlots;
         const limits = data.settings;
 
+        // 生成上午時段
         html += '<div class="time-section">';
         html += '<h3>上午</h3>';
         html += '<div class="time-buttons">';
@@ -353,6 +343,7 @@ async function updateTimeButtons() {
         });
         html += '</div></div>';
 
+        // 生成下午時段
         html += '<div class="time-section">';
         html += '<h3>下午</h3>';
         html += '<div class="time-buttons">';
@@ -366,8 +357,10 @@ async function updateTimeButtons() {
         });
         html += '</div></div>';
 
+        // 一次性更新 DOM
         timeContainer.html(html);
 
+        // 綁定事件監聽器
         timeContainer.find('.time-button').not('.disabled').on('click', function() {
             timeContainer.find('.time-button').removeClass('selected');
             $(this).addClass('selected');
@@ -380,7 +373,7 @@ async function updateTimeButtons() {
         });
 
     } catch (error) {
-        console.error('Error details:', error);
+        console.error('Error fetching time slots:', error);
         timeContainer.html('<div class="error">載入時段失敗，請重試</div>');
     }
 }
