@@ -280,15 +280,15 @@ const currentDate = `${yyyy}-${mm}-${dd}`;
 document.getElementById('date').setAttribute('min', currentDate);
 
 async function updateTimeButtons() {
-    const selectedDate = new Date($('#date').val());
+    const selectedDate = document.getElementById('date').value;
+    const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDate}`;
     const dayOfWeek = selectedDate.getDay();
-    const dateString = selectedDate.toISOString().split('T')[0];
     
-    // 預先清空並顯示載入中的提示
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
     
     try {
+        const response = await fetch(apiUrl);
         // 預先定義時段模板
         const weekdaySlots = {
             morning: [
@@ -331,10 +331,6 @@ async function updateTimeButtons() {
                 { time: '20:00', id: 'ha3' }
             ]
         };
-
-        // 獲取預訂狀態
-        const response = await fetch(`/api/time-slots?date=${dateString}`);
-        const data = await response.json();
 
         // 準備 HTML 字符串
         let html = '';
