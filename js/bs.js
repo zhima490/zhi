@@ -141,17 +141,27 @@ async function checkTokenValidity() {
     try {
         const response = await fetch('/api/check-auth', {
             method: 'GET',
-            credentials: 'same-origin' 
+            credentials: 'include',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
         });
 
-        if (!response.ok) {
-            window.location.href = '/bsl';
+        const data = await response.json();
+        if (!response.ok || !data.success) {  // 檢查 success 而不是 valid
+            console.log('Token validation failed:', response.status);
+            if (response.status === 401) {
+                window.location.href = '/bsl';
+            }
             return false;
         }
         return true;
     } catch (error) {
         console.error('Auth check failed:', error);
-        window.location.href = '/bsl';
+        if (error.name === 'TypeError') {
+            window.location.href = '/bsl';
+        }
         return false;
     }
 }
