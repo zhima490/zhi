@@ -295,7 +295,9 @@ app.use(helmet({
                 "https://zhimayouzi.com",
                 "https://www.zhimayouzi.com",
                 "http://zhimayouzi.com",
-                "http://www.zhimayouzi.com"
+                "http://www.zhimayouzi.com",
+                "wss://zhimayouzi.com",  // 如果使用 WebSocket
+                "https://api.zhimayouzi.com"  // 如果有獨立的 API 域名
             ],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             objectSrc: ["'none'"],
@@ -470,11 +472,18 @@ async function sendEmail(toEmail, reservationData) {
 app.get('/api/time-slots', async (req, res) => {
     try {
         const date = req.query.date;
+        console.log('Received request for date:', date);  // 添加日誌
+        
         const queryDate = moment.tz(date, 'Asia/Taipei');
+        console.log('Query date:', queryDate.format());   // 添加日誌
+        
         const dayOfWeek = queryDate.day();
+        console.log('Day of week:', dayOfWeek);          // 添加日誌
+        
         const settings = await Settings.findOne() || {
             wm: 2, wa: 2, hm: 3, ha: 3
         };
+        console.log('Settings:', settings);              // 添加日誌
 
         const today = moment.tz('Asia/Taipei').startOf('day');
         if (queryDate.isBefore(today)) {
@@ -517,7 +526,7 @@ app.get('/api/time-slots', async (req, res) => {
             });
         }
     } catch (error) {
-        console.error('Error fetching time slots:', error);
+        console.error('Detailed error:', error);         // 更詳細的錯誤日誌
         res.status(500).json({ error: '獲取時段資訊失敗' });
     }
 });
