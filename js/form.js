@@ -272,7 +272,7 @@ async function updateTimeButtons() {
     const selectedDate = new Date(selectedDateStr);
     const dayOfWeek = selectedDate.getDay();
     
-    const apiUrl = `https://zhimayouzi.onrender.com/api/time-slots?date=${selectedDateStr}`;
+    const apiUrl = `/api/time-slots?date=${selectedDateStr}`;
     
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
@@ -284,7 +284,7 @@ async function updateTimeButtons() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: 'include'
+            credentials: 'same-origin'
         });
 
         if (!response.ok) {
