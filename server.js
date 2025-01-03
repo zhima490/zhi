@@ -261,25 +261,13 @@ app.use(helmet({
             defaultSrc: ["'self'"],
             scriptSrc: [
                 "'self'",
-                (req, res) => `'nonce-${res.locals.nonce}'`,
+                "'unsafe-inline'",
+                "'unsafe-eval'",
                 "https://maps.googleapis.com",
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
                 "https://code.jquery.com",
-                "https://cdn.jsdelivr.net",
-                "'unsafe-inline'", 
-                "'unsafe-eval'"    
-            ],
-            styleSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "https://fonts.googleapis.com"
-            ],
-            imgSrc: [
-                "'self'", 
-                "data:", 
-                "https:",
-                "https://zhimayouzi.onrender.com"
+                "https://cdn.jsdelivr.net"
             ],
             connectSrc: [
                 "'self'",
@@ -288,18 +276,15 @@ app.use(helmet({
                 "https://www.zhimayouzi.com",
                 "http://zhimayouzi.com",
                 "http://www.zhimayouzi.com",
-                "wss://zhimayouzi.com",  // 如果使用 WebSocket
-                "https://api.zhimayouzi.com"  // 如果有獨立的 API 域名
+                "wss://zhimayouzi.com",
+                "https://api.zhimayouzi.com",
+                "https://*.zhimayouzi.com"  // 添加這行
             ],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            objectSrc: ["'none'"],
-            mediaSrc: ["'self'"],
-            frameSrc: ["'self'", "https://www.google.com"],
-            baseUri: ["'self'"],
-            formAction: ["'self'"],
-            frameAncestors: ["'self'"]
+            // 其他設定保持不變
         }
-    }
+    },
+    crossOriginEmbedderPolicy: false,  // 添加這行
+    crossOriginResourcePolicy: { policy: "cross-origin" }  // 修改這行
 }));
 
 app.use((req, res, next) => {
