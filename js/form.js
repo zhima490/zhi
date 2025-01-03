@@ -280,9 +280,11 @@ const currentDate = `${yyyy}-${mm}-${dd}`;
 document.getElementById('date').setAttribute('min', currentDate);
 
 async function updateTimeButtons() {
-    const selectedDate = document.getElementById('date').value;
-    const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDate}`;
-    const dayOfWeek = selectedDate.getDay();
+    const selectedDateStr = document.getElementById('date').value;
+    const selectedDate = new Date(selectedDateStr);  // 轉換為 Date 物件
+    const dayOfWeek = selectedDate.getDay();  // 現在可以使用 getDay()
+    
+    const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDateStr}`;
     
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
