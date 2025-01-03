@@ -21,42 +21,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 處理取消訂位表單的選項切換
     const cancelMethodRadios = document.querySelectorAll('input[name="cancelMethod"]');
     const codeInput = document.getElementById('codeInput');
     const infoInput = document.getElementById('infoInput');
     const reservationDisplay = document.getElementById('reservation-display');
 
-    // 清除函數
     function clearForm() {
-        // 清除所有輸入框的值
         codeInput.querySelector('input').value = '';
         infoInput.querySelectorAll('input').forEach(input => {
             input.value = '';
         });
-        // 清除查詢結果
         reservationDisplay.innerHTML = '';
     }
 
     cancelMethodRadios.forEach(radio => {
         radio.addEventListener('change', function() {
-            // 切換選項時先清除表單和查詢結果
             clearForm();
             
             if (this.value === 'code') {
-                // 顯示代碼輸入，隱藏姓名電話輸入
                 codeInput.style.display = 'block';
                 infoInput.style.display = 'none';
-                // 設置必填項
                 codeInput.querySelector('input').required = true;
                 infoInput.querySelectorAll('input').forEach(input => {
                     input.required = false;
                 });
             } else {
-                // 顯示姓名電話輸入，隱藏代碼輸入
                 codeInput.style.display = 'none';
                 infoInput.style.display = 'block';
-                // 設置必填項
                 codeInput.querySelector('input').required = false;
                 infoInput.querySelectorAll('input').forEach(input => {
                     input.required = true;
@@ -71,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     console.log('jQuery is loaded');
 
-    // 處理取消訂位表單提交
     const cancelForm = document.getElementById('cancelForm');
     if (cancelForm) {
         cancelForm.addEventListener('submit', async function(e) {
@@ -197,7 +187,6 @@ function generateCalendar(month = currentMonth, year = currentYear) {
                        currentDate.getMonth() === today.getMonth() &&
                        currentDate.getFullYear() === today.getFullYear();
 
-        // 如果是今天，添加底線
         if (isToday) {
             const underline = document.createElement('div');
             underline.classList.add('day-underline');
@@ -244,7 +233,6 @@ function selectDate(day, month, year) {
         }
     });
 
-    // 顯示時間選擇器，確保表單欄位保持隱藏
     document.getElementById('time-picker-container').style.display = 'block';
     
     updateTimeButtons();
@@ -281,8 +269,8 @@ document.getElementById('date').setAttribute('min', currentDate);
 
 async function updateTimeButtons() {
     const selectedDateStr = document.getElementById('date').value;
-    const selectedDate = new Date(selectedDateStr);  // 轉換為 Date 物件
-    const dayOfWeek = selectedDate.getDay();  // 現在可以使用 getDay()
+    const selectedDate = new Date(selectedDateStr);
+    const dayOfWeek = selectedDate.getDay();
     
     const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDateStr}`;
     
@@ -291,7 +279,11 @@ async function updateTimeButtons() {
     
     try {
         const response = await fetch(apiUrl);
-        // 預先定義時段模板
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
         const weekdaySlots = {
             morning: [
                 { time: '11:00', id: 'wm1' },
@@ -334,12 +326,10 @@ async function updateTimeButtons() {
             ]
         };
 
-        // 準備 HTML 字符串
         let html = '';
         const slots = (dayOfWeek >= 1 && dayOfWeek <= 5) ? weekdaySlots : holidaySlots;
         const limits = data.settings;
 
-        // 生成上午時段
         html += '<div class="time-section">';
         html += '<h3>上午</h3>';
         html += '<div class="time-buttons">';
@@ -353,7 +343,6 @@ async function updateTimeButtons() {
         });
         html += '</div></div>';
 
-        // 生成下午時段
         html += '<div class="time-section">';
         html += '<h3>下午</h3>';
         html += '<div class="time-buttons">';
@@ -367,10 +356,8 @@ async function updateTimeButtons() {
         });
         html += '</div></div>';
 
-        // 一次性更新 DOM
         timeContainer.html(html);
 
-        // 綁定事件監聽器
         timeContainer.find('.time-button').not('.disabled').on('click', function() {
             timeContainer.find('.time-button').removeClass('selected');
             $(this).addClass('selected');
@@ -402,8 +389,7 @@ function displayReservationInfo(results) {
     }
 
     const reservations = Array.isArray(results) ? results : [results];
-    
-    // 修改 HTML 結構，移除內聯事件
+
     const reservationsHTML = reservations.map(reservation => `
         <div class="reservation-info">
             <h3>訂位資訊</h3>
@@ -431,14 +417,11 @@ function displayReservationInfo(results) {
         </div>
     `;
 
-    // 使用事件委派綁定按鈕事件
     displayArea.addEventListener('click', function(e) {
-        // 取消按鈕
         if (e.target.classList.contains('cancel-btn')) {
             cancelOperation();
         }
         
-        // 確認取消按鈕
         if (e.target.classList.contains('confirm-btn')) {
             const bookingCode = e.target.dataset.bookingCode;
             if (bookingCode) {
@@ -448,7 +431,6 @@ function displayReservationInfo(results) {
     });
 }
 
-// 確認取消訂位
 async function confirmCancel(bookingCode) {
     if (!confirm('確定要取消此訂位嗎？')) return;
 
@@ -478,7 +460,6 @@ async function confirmCancel(bookingCode) {
     }
 }
 
-// 確認取消選中的訂位
 async function confirmCancelSelected() {
     const selected = document.querySelector('input[name="reservation"]:checked');
     if (!selected) {
@@ -489,7 +470,6 @@ async function confirmCancelSelected() {
     await confirmCancel(selected.value);
 }
 
-// 放棄取消操作
 function cancelOperation() {
     document.getElementById('reservation-display').innerHTML = '';
     document.getElementById('cancelForm').reset();
@@ -515,7 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
             notes: form.notes.value,
         };
   
-        // 添加表單數據檢查
         console.log('Submitting form data:', formData);
   
         try {
@@ -536,7 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     form.reset();
                 
-                // 重置預覽區域
                 document.getElementById('preview-adults').textContent = '1';
                 document.getElementById('preview-children').textContent = '0';
                 document.getElementById('preview-date').textContent = '尚未選擇';
@@ -547,12 +525,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('preview-email').textContent = '尚未填寫';
                 document.getElementById('preview-notes').textContent = '無';
                 
-                // 重置日曆到當前月份
                 currentMonth = new Date().getMonth();
                 currentYear = new Date().getFullYear();
                 generateCalendar(currentMonth, currentYear);
                 
-                // 重置時間選擇
                 const days = document.querySelectorAll('#days-container .day');
                 days.forEach(day => day.classList.remove('selected'));
                 
@@ -560,13 +536,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.classList.remove('selected')
                 );
                 
-                // 隱藏時間選擇器和表單欄位
                 document.getElementById('time-picker-container').style.display = 'none';
                 document.querySelectorAll('.form-row').forEach(row => {
                     row.classList.remove('show');
                 });
                 
-                // 重置下拉選單
                 document.getElementById('adults').value = '1';
                 document.getElementById('children').value = '0';
                 document.getElementById('vegetarian').value = '否';
