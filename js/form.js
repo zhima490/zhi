@@ -271,17 +271,26 @@ async function updateTimeButtons() {
     const selectedDateStr = document.getElementById('date').value;
     const selectedDate = new Date(selectedDateStr);
     const dayOfWeek = selectedDate.getDay();
-    
     const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDateStr}`;
     
+    // 預先清空並顯示載入中的提示
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
     
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'  // 添加這行以包含 cookies
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
         
         const weekdaySlots = {
