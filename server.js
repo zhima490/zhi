@@ -62,6 +62,9 @@ app.use(cors({
     credentials: true
 }));
 
+const apiRouter = express.Router();
+app.use('/api', apiRouter);
+
 // 添加 HTTPS 重定向中間件
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'production' && !req.secure && req.headers['x-forwarded-proto'] !== 'https') {
@@ -324,26 +327,6 @@ app.get(['/bsl', '/backstage-login'], (req, res) => {
 
 app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
-});
-
-// 404 處理
-app.use((req, res, next) => {
-    try {
-        res.status(404).sendFile(path.join(__dirname, 'html', '404.html'));
-    } catch (error) {
-        console.error('Error serving 404 page:', error);
-        res.status(404).send('404 - Page Not Found');
-    }
-});
-
-// 錯誤處理中間件
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    try {
-        res.status(500).sendFile(path.join(__dirname, 'html', '500.html'));
-    } catch (error) {
-        res.status(500).send('500 - Internal Server Error');
-    }
 });
 
 connectToDatabase();
