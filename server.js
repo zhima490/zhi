@@ -56,9 +56,25 @@ const cookieConfig = {
 
 // CORS 設定
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://zhimayouzi.onrender.com']
-        : ['http://localhost:3000'],
+    origin: function(origin, callback) {
+        const allowedOrigins = process.env.NODE_ENV === 'production'
+            ? [
+                'https://zhimayouzi.onrender.com',
+                'https://zhimayouzi.com',
+                'https://www.zhimayouzi.com',
+                'http://zhimayouzi.com',
+                'http://www.zhimayouzi.com'
+              ]
+            : ['http://localhost:3000'];
+            
+        // 允許來自允許列表的請求或沒有 origin 的請求
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('Blocked by CORS:', origin); // 用於調試
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -115,7 +131,6 @@ const authenticateToken = async (req, res, next) => {
     }
 };
 
-// 記錄認證事件的函數
 const logAuth = async (type, username, success, ip) => {
     try {
         const log = new AuthLog({
@@ -132,7 +147,6 @@ const logAuth = async (type, username, success, ip) => {
     }
 };
 
-// 確保 AuthLog model 已定義
 const AuthLog = mongoose.model('AuthLog', {
     type: String,
     username: String,
@@ -156,7 +170,6 @@ async function generateUniqueBookingCode() {
             code += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         
-        // 檢查代碼是否已存在
         const existingReservation = await Reservation.findOne({ bookingCode: code });
         if (!existingReservation) {
             isUnique = true;
@@ -191,7 +204,6 @@ function getTimeSlot(time, date) {
 
 require('dotenv').config();
 
-// Session 設定
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -204,45 +216,34 @@ app.use(session({
     }
 }));
 
-// Cookie Parser 設定
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// 安全性和快取控制中間件
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // 允許所有來源訪問
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    
-    // 安全性 headers
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     
-    // 快取控制
     if (req.path.includes('/api/') || req.path.includes('/form')) {
-        // 動態內容不快取
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
     } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|webp|svg)$/)) {
-        // 圖片快取1年
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     } else if (req.path.match(/\.(css|js)$/)) {
-        // CSS 和 JS 快取1小時
         res.setHeader('Cache-Control', 'public, max-age=3600');
     } else if (req.path.match(/\.html$/)) {
-        // HTML 文件快取5分鐘
         res.setHeader('Cache-Control', 'public, max-age=300');
     } else {
-        // 其他資源快取1小時
         res.setHeader('Cache-Control', 'public, max-age=3600');
     }
     
-    // MIME 類型設定
     if (req.path.endsWith('.css')) {
         res.type('text/css');
     } else if (req.path.endsWith('.js')) {
@@ -273,7 +274,9 @@ app.use(helmet({
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
                 "https://code.jquery.com",
-                "https://cdn.jsdelivr.net"
+                "https://cdn.jsdelivr.net",
+                "'unsafe-inline'", 
+                "'unsafe-eval'"    
             ],
             styleSrc: [
                 "'self'",
@@ -288,7 +291,11 @@ app.use(helmet({
             ],
             connectSrc: [
                 "'self'",
-                "https://zhimayouzi.onrender.com"
+                "https://zhimayouzi.onrender.com",
+                "https://zhimayouzi.com",
+                "https://www.zhimayouzi.com",
+                "http://zhimayouzi.com",
+                "http://www.zhimayouzi.com"
             ],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             objectSrc: ["'none'"],
@@ -301,16 +308,14 @@ app.use(helmet({
     }
 }));
 
-// nonce 中間件必須在 helmet 之前
 app.use((req, res, next) => {
     res.locals.nonce = crypto.randomBytes(16).toString('base64');
     next();
 });
 
-// 添加額外的安全性標頭
 app.use((req, res, next) => {
     res.setHeader('Origin-Agent-Cluster', '?1');
-    res.setHeader('X-XSS-Protection', '0');  // 現代瀏覽器建議設為 0
+    res.setHeader('X-XSS-Protection', '0'); 
     next();
 });
 
