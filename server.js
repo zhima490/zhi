@@ -267,7 +267,18 @@ app.use(helmet({
                 "https://www.googletagmanager.com",
                 "https://www.google-analytics.com",
                 "https://code.jquery.com",
-                "https://cdn.jsdelivr.net"
+                "https://cdn.jsdelivr.net",
+                "https://cdnjs.cloudflare.com"  // 添加 cdnjs
+            ],
+            styleSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
+                "https:"
+            ],
+            scriptSrcAttr: [
+                "'unsafe-inline'"  // 允許內聯事件處理器
             ],
             connectSrc: [
                 "'self'",
@@ -282,17 +293,20 @@ app.use(helmet({
             imgSrc: [
                 "'self'",
                 "data:",
-                "https:",  // 允許所有 HTTPS 圖片
-                "https://*.line-apps.com",  // 特別允許 Line 的域名
+                "https:",
+                "https://*.line-apps.com",
                 "https://scdn.line-apps.com"
             ],
-            // 其他設定保持不變
-            styleSrc: ["'self'", "'unsafe-inline'", "https:"],
-            fontSrc: ["'self'", "https:", "data:"],
+            fontSrc: [
+                "'self'",
+                "https:",
+                "data:",
+                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
+                "https://fonts.gstatic.com"
+            ],
             formAction: ["'self'"],
             frameAncestors: ["'self'"],
             objectSrc: ["'none'"],
-            scriptSrcAttr: ["'none'"],
             upgradeInsecureRequests: []
         }
     },
