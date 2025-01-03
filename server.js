@@ -228,13 +228,14 @@ app.use((req, res, next) => {
         res.setHeader('Expires', '0');
     } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|webp|svg)$/)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    } else if (req.path.match(/\.(css|js)$/)) {
-        res.setHeader('Cache-Control', 'public, max-age=3600');
-    } else if (req.path.match(/\.html$/)) {
-        res.setHeader('Cache-Control', 'public, max-age=300');
-    } else {
-        res.setHeader('Cache-Control', 'public, max-age=3600');
-    }
+    } 
+    // else if (req.path.match(/\.(css|js)$/)) {
+    //     res.setHeader('Cache-Control', 'public, max-age=3600');
+    // } else if (req.path.match(/\.html$/)) {
+    //     res.setHeader('Cache-Control', 'public, max-age=300');
+    // } else {
+    //     res.setHeader('Cache-Control', 'public, max-age=3600');
+    // }
     
     if (req.path.endsWith('.css')) {
         res.type('text/css');
