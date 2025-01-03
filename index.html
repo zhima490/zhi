@@ -12,7 +12,16 @@
               "@context" : "https://zhimayouzi.com/",
               "@type" : "WebSite",
               "name" : "芝麻柚子",
-              "url" : "https://zhimayouzi.com/"
+              "alternateName" : "芝麻柚子 とんかつ",
+              "url" : "https://zhimayouzi.com/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://query.example.com/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
             }
           </script>
         <meta property="og:title" content="芝麻柚子豬排專賣店">
