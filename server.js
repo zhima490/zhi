@@ -42,7 +42,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 10000;
 
 // Cookie 基本設定
 const cookieConfig = {
@@ -463,10 +463,9 @@ async function sendEmail(toEmail, reservationData) {
 }
 
 app.get('/api/time-slots', async (req, res) => {
+    console.log('Received request for time slots:', req.query);  // 添加日誌
     try {
         const date = req.query.date;
-        console.log('Received request for date:', date);  // 添加日誌
-        
         const queryDate = moment.tz(date, 'Asia/Taipei');
         console.log('Query date:', queryDate.format());   // 添加日誌
         
@@ -519,7 +518,7 @@ app.get('/api/time-slots', async (req, res) => {
             });
         }
     } catch (error) {
-        console.error('Detailed error:', error);         // 更詳細的錯誤日誌
+        console.error('Error in time-slots route:', error);  // 添加錯誤日誌
         res.status(500).json({ error: '獲取時段資訊失敗' });
     }
 });
@@ -2192,7 +2191,7 @@ app.post('/api/reservations/manual-cancel', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
     console.log(`Connected to database: ${mongoose.connection.name}`);
 });
