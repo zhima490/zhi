@@ -57,28 +57,21 @@ const cookieConfig = {
 // CORS 設定
 app.use(cors({
     origin: function(origin, callback) {
-        const allowedOrigins = process.env.NODE_ENV === 'production'
-            ? [
-                'https://zhimayouzi.onrender.com',
-                'https://zhimayouzi.com',
-                'https://www.zhimayouzi.com',
-                'http://zhimayouzi.com',
-                'http://www.zhimayouzi.com'
-              ]
-            : ['http://localhost:3000'];
-            
-        // 允許來自允許列表的請求或沒有 origin 的請求
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        const allowedOrigins = [
+            'https://zhimayouzi.onrender.com',
+            'https://zhimayouzi.com',
+            'https://www.zhimayouzi.com'
+        ];
+        
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            console.log('Blocked by CORS:', origin); // 用於調試
             callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Set-Cookie']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 // 認證中間件
