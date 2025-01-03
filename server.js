@@ -74,6 +74,14 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
+// 添加 HTTPS 重定向中間件
+app.use((req, res, next) => {
+    if (process.env.NODE_ENV === 'production' && !req.secure && req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect('https://' + req.headers.host + req.url);
+    }
+    next();
+});
+
 // 認證中間件
 const authenticateToken = async (req, res, next) => {
     // 獲取客戶端 IP
