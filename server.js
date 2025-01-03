@@ -214,9 +214,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    // res.setHeader('Access-Control-Allow-Origin', '*'); 
-    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
@@ -277,14 +277,27 @@ app.use(helmet({
                 "http://zhimayouzi.com",
                 "http://www.zhimayouzi.com",
                 "wss://zhimayouzi.com",
-                "https://api.zhimayouzi.com",
-                "https://*.zhimayouzi.com"  // 添加這行
+                "https://api.zhimayouzi.com"
+            ],
+            imgSrc: [
+                "'self'",
+                "data:",
+                "https:",  // 允許所有 HTTPS 圖片
+                "https://*.line-apps.com",  // 特別允許 Line 的域名
+                "https://scdn.line-apps.com"
             ],
             // 其他設定保持不變
+            styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+            fontSrc: ["'self'", "https:", "data:"],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"],
+            objectSrc: ["'none'"],
+            scriptSrcAttr: ["'none'"],
+            upgradeInsecureRequests: []
         }
     },
-    crossOriginEmbedderPolicy: false,  // 添加這行
-    crossOriginResourcePolicy: { policy: "cross-origin" }  // 修改這行
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
 app.use((req, res, next) => {
