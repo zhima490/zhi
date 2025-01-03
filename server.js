@@ -1499,11 +1499,10 @@ app.post('/api/login', async (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',     // 改為 'lax'
-            domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-            path: '/'
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000  // 24小時
         });
-
+        
         if (rememberMe) {
             // 生成 refresh token
             const refreshToken = crypto.randomBytes(64).toString('hex');
@@ -1519,9 +1518,7 @@ app.post('/api/login', async (req, res) => {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',     // 改為 'lax'
-                domain: process.env.NODE_ENV === 'production' ? '.zhimayouzi.onrender.com' : 'localhost',
-                path: '/',
+                sameSite: 'lax',
                 maxAge: 30 * 24 * 60 * 60 * 1000  // 30天
             });
         }
@@ -1576,7 +1573,7 @@ app.post('/api/logout', async (req, res) => {
 
 // 添加 check-auth 路由
 app.get('/api/check-auth', authenticateToken, (req, res) => {
-    res.json({ success: true });
+    res.json({ valid: true });
 });
 
 app.get('/api/vip/phones', async (req, res) => {
