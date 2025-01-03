@@ -271,9 +271,9 @@ async function updateTimeButtons() {
     const selectedDateStr = document.getElementById('date').value;
     const selectedDate = new Date(selectedDateStr);
     const dayOfWeek = selectedDate.getDay();
-    const apiUrl = `${window.location.origin}/api/time-slots?date=${selectedDateStr}`;
     
-    // 預先清空並顯示載入中的提示
+    const apiUrl = `https://zhimayouzi.onrender.com/api/time-slots?date=${selectedDateStr}`;
+    
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
     
@@ -284,10 +284,11 @@ async function updateTimeButtons() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: 'include'  // 添加這行以包含 cookies
+            credentials: 'include'
         });
 
         if (!response.ok) {
+            console.error('API Response:', response.status, response.statusText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -379,7 +380,7 @@ async function updateTimeButtons() {
         });
 
     } catch (error) {
-        console.error('Error fetching time slots:', error);
+        console.error('Error details:', error);
         timeContainer.html('<div class="error">載入時段失敗，請重試</div>');
     }
 }
