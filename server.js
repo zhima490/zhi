@@ -57,17 +57,8 @@ const cookieConfig = {
 // CORS 設定
 app.use(cors({
     origin: function(origin, callback) {
-        const allowedOrigins = [
-            'https://zhimayouzi.onrender.com',
-            'https://zhimayouzi.com',
-            'https://www.zhimayouzi.com'
-        ];
-        
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
+        // 允許所有來源，方便測試
+        callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
