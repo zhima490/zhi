@@ -351,9 +351,23 @@ app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
 });
 
 // 404 處理
-app.use((req, res) => {
-    console.log('404 for:', req.url);  // 添加日誌以便調試
-    res.status(404).sendFile(path.join(__dirname, 'html', '404.html'));
+app.use((req, res, next) => {
+    try {
+        res.status(404).sendFile(path.join(__dirname, 'html', '404.html'));
+    } catch (error) {
+        console.error('Error serving 404 page:', error);
+        res.status(404).send('404 - Page Not Found');
+    }
+});
+
+// 錯誤處理中間件
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    try {
+        res.status(500).sendFile(path.join(__dirname, 'html', '500.html'));
+    } catch (error) {
+        res.status(500).send('500 - Internal Server Error');
+    }
 });
 
 connectToDatabase();
