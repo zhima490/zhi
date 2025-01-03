@@ -56,13 +56,10 @@ const cookieConfig = {
 
 // CORS 設定
 app.use(cors({
-    origin: function(origin, callback) {
-        // 允許所有來源，方便測試
-        callback(null, true);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+    origin: true,  // 允許所有來源
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 // 添加 HTTPS 重定向中間件
@@ -214,9 +211,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); 
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // res.setHeader('Access-Control-Allow-Origin', '*'); 
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
