@@ -212,6 +212,10 @@ app.use(bodyParser.json());
 
 // 安全性和快取控制中間件
 app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 允許所有來源訪問
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
     // 安全性 headers
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
