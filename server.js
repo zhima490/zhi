@@ -255,14 +255,6 @@ app.use((req, res, next) => {
 // 壓縮
 app.use(compression());
 
-app.use((req, res, next) => {
-  if (req.hostname === 'zhimayouzi.onrender.com') {
-    res.redirect(301, 'https://zhimayouzi.com' + req.originalUrl);
-  } else {
-    next();
-  }
-});
-
 // 安全性中間件
 app.use(helmet({
     contentSecurityPolicy: {
@@ -1048,10 +1040,28 @@ app.post('/reservations', async (req, res) => {
 
 app.post('/line/webhook', async (req, res) => {
     console.log('Received webhook:', JSON.stringify(req.body, null, 2));
+
+    if (events.length > 0) {
+        events.forEach(event => {
+            // 檢查事件類型
+            if (event.type === 'message' && event.message.type === 'text') {
+                const groupId = event.source.groupId; // 提取群組 ID
+                const userId = event.source.userId; // 提取用戶 ID
+                const replyToken = event.replyToken; // 用於回覆的 token
+
+                console.log(`Received message from group: ${groupId}`);
+                console.log(`User ID: ${userId}`);
+                console.log(`Message: ${event.message.text}`);
+
+                // 您可以在這裡進行其他操作，例如回覆訊息
+            }
+        });
+    }
     
     try {
         const events = req.body.events;
         for (const event of events) {
+            
             const lineUserId = event.source.userId;
             
             // 檢查用戶是否已綁定 (移到最外層)
@@ -1581,7 +1591,7 @@ app.post('/api/logout', async (req, res) => {
 
 // 添加 check-auth 路由
 app.get('/api/check-auth', authenticateToken, (req, res) => {
-    res.json({ valid: true });
+    res.json({ success: true });
 });
 
 app.get('/api/vip/phones', async (req, res) => {
@@ -2106,7 +2116,7 @@ app.post('/api/reservations/manual-cancel', async (req, res) => {
         
 
         // 使用正確格式發送LINE通知
-        await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+        await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
             type: 'flex',
             altText: '手動訂位取消通知',
             contents: messageTemplate
