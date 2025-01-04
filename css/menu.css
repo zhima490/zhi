@@ -62,7 +62,7 @@ nav a {
 }
 
 .menu-header {
-    background: url("/images/menu/tea.jpeg") no-repeat center;
+    background: url("/images/header-image/menu.jpg") no-repeat center;
     background-size: cover;
     background-position: center 80%;
     margin-top: 35px;
