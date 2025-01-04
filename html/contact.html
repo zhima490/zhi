@@ -62,7 +62,7 @@
         <h1>需要幫助嗎？</h1>
         <p>填寫基本資訊以及您遇到的問題來提問<br>最慢1天內回覆</p>
 
-        <form action="/send-email" method="post">
+        <form id="contactForm">
             <label for="name">姓名</label>
             <input type="text" id="name" name="name" required>
 
@@ -84,5 +84,33 @@
             <p>© 2024-2025 ZYW. All rights reserved.<br>本網站所使用之圖片及相關素材版權歸<b>家岑譽有限公司</b>所有。</p>
         </div>
     </footer>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+        
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+        
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('郵件發送失敗！');
+                }
+                return response.text();
+            })
+            .then(message => {
+                alert(message); 
+            })
+            .catch(error => {
+                alert(error.message); 
+            });
+        });
+    </script>
 </body>
 </html>
