@@ -40,3 +40,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('發生錯誤，請重新整理頁面或聯繫客服');
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButton = document.getElementById('close-btn');
+    const announcementBox = document.getElementById('announcement');
+
+    document.body.style.overflow = 'hidden';
+
+    closeButton.addEventListener('click', function () {
+        announcementBox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeButton.addEventListener('click', function () {
+        announcementBox.style.display = 'none';
+    });
+});
