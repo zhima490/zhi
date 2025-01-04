@@ -55,31 +55,37 @@ nav a {
 }
 
 .menu-container {
+    width: 100%;
     max-width: 1200px;
-    margin: 4rem auto;
-    padding: 2rem;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 6rem;
+    margin: 0 auto;
+    padding: 3rem;
 }
 
-.menu-header {
+.header-overlay {
+    background-image: url(/images/br.png);
+    width: 100%;
+    height: 460px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-content {
+    color: #fff;
+    position: relative;
     text-align: center;
-    margin-bottom: 4rem;
-    padding: 2rem 0;
-    border-bottom: 2px solid #e0e0e0;
+    width: 100%;
+    z-index: 2;
 }
 
 .menu-title {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 1rem;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
     font-family: "Noto Serif JP", serif;
 }
 
 .menu-subtitle {
-    font-size: 1.2rem;
-    color: #666;
+    font-size: 1.5rem;
     font-family: "Noto Sans JP", sans-serif;
 }
 
@@ -106,7 +112,7 @@ nav a {
 
 .menu-item img {
     width: 100%;
-    height: 300px;
+    height: 400px;
     object-fit: cover;
     cursor: pointer;
 }
@@ -129,11 +135,6 @@ nav a {
     line-height: 1.6;
 }
 
-.menu-item-price {
-    font-size: 1.2rem;
-    color: #e65100;
-    font-weight: bold;
-}
 
 .menu-category {
     text-align: center;
@@ -150,7 +151,6 @@ nav a {
 
 .menu-category h2 {
     display: inline-block;
-    background: #fff;
     padding: 0 2rem;
     color: #333;
     font-family: "Noto Serif JP", serif;
@@ -272,13 +272,53 @@ nav a {
 }
 
 .japanese-pattern {
-    background-color: #f5f5f5;
+    background-color: #f0f2ef;
     background-image: 
-        radial-gradient(circle at 100% 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
-        radial-gradient(circle at 0 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
-        radial-gradient(circle at 50% 100%, #e0e0e0 10%, #f5f5f5 11%, #f5f5f5 23%, #e0e0e0 24%, #e0e0e0 30%, #f5f5f5 31%, #f5f5f5 43%, #e0e0e0 44%, #e0e0e0 50%, #f5f5f5 51%, #f5f5f5 63%, #e0e0e0 64%, #e0e0e0 71%, transparent 71%, transparent);
-    background-size: 80px 50px;
+        linear-gradient(rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(rgba(220, 225, 218, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 225, 218, 0.3) 1px, transparent 1px);
+    background-size: 
+        80px 80px,
+        80px 80px,
+        16px 16px,
+        16px 16px;
+    position: relative;
     padding: 2rem 0;
+}
+
+.japanese-pattern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(135deg, 
+            rgba(238, 241, 237, 0.07) 0%,
+            rgba(228, 232, 227, 0.05) 100%
+        );
+    backdrop-filter: blur(0.3px);
+    -webkit-backdrop-filter: blur(0.3px);
+    pointer-events: none;
+}
+
+.japanese-pattern::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(45deg, 
+            rgba(215, 220, 214, 0.02) 0px, 
+            rgba(215, 220, 214, 0.02) 1px, 
+            transparent 1px, 
+            transparent 2px
+        );
+    pointer-events: none;
 }
 
 .lightbox {
@@ -307,6 +347,7 @@ nav a {
 .description {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
+    text-align: center;
 }
 
 .t2 {
@@ -315,11 +356,8 @@ nav a {
 }
 
 footer {
-    background-color: #17140c;
-    font-size: 12px;
-    color: white;
-    text-align: right;
-    padding: 1rem 1rem 1rem 0;
-    width: 100%;
-    margin-top: auto;
+    background-color: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+    color: #333;
 }
