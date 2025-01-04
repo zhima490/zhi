@@ -255,6 +255,14 @@ app.use((req, res, next) => {
 // 壓縮
 app.use(compression());
 
+app.use((req, res, next) => {
+  if (req.hostname === 'zhimayouzi.onrender.com') {
+    res.redirect(301, 'https://zhimayouzi.com' + req.originalUrl);
+  } else {
+    next();
+  }
+});
+
 // 安全性中間件
 app.use(helmet({
     contentSecurityPolicy: {
