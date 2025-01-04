@@ -308,7 +308,11 @@ app.use(helmet({
             formAction: ["'self'"],
             frameAncestors: ["'self'"],
             objectSrc: ["'none'"],
-            upgradeInsecureRequests: []
+            upgradeInsecureRequests: [],
+            frameSrc: [
+                "'self'",
+                "https://www.google.com"  // 允許 Google 網站被嵌入 iframe
+            ]
         }
     },
     crossOriginEmbedderPolicy: false,
@@ -1040,24 +1044,6 @@ app.post('/reservations', async (req, res) => {
 
 app.post('/line/webhook', async (req, res) => {
     console.log('Received webhook:', JSON.stringify(req.body, null, 2));
-
-    if (events.length > 0) {
-        events.forEach(event => {
-            // 檢查事件類型
-            if (event.type === 'message' && event.message.type === 'text') {
-                const groupId = event.source.groupId; // 提取群組 ID
-                const userId = event.source.userId; // 提取用戶 ID
-                const replyToken = event.replyToken; // 用於回覆的 token
-
-                console.log(`Received message from group: ${groupId}`);
-                console.log(`User ID: ${userId}`);
-                console.log(`Message: ${event.message.text}`);
-
-                // 您可以在這裡進行其他操作，例如回覆訊息
-            }
-        });
-    }
-    
     try {
         const events = req.body.events;
         for (const event of events) {
