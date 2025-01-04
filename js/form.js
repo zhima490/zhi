@@ -109,6 +109,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const adultsSelect = document.getElementById('adults');
     const childrenSelect = document.getElementById('children');
 
+    function updateChildrenOptions() {
+        const maxAdults = parseInt(adultsSelect.value);
+        const maxChildren = 6 - maxAdults;
+
+        // 清空小孩選項
+        childrenSelect.innerHTML = '';
+
+        // 重新添加小孩選項
+        for (let i = 0; i <= maxChildren; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i}位小孩`;
+            childrenSelect.appendChild(option);
+        }
+
+        // 如果目前小孩數量超出範圍，自動調整為範圍內最大值
+        if (parseInt(childrenSelect.value) > maxChildren) {
+            childrenSelect.value = maxChildren;
+        }
+
+        // 更新小孩的預覽文字
+        document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
+    }
+
+    // 初始化大人選項
     for (let i = 1; i <= 6; i++) {
         const option = document.createElement('option');
         option.value = i;
@@ -116,23 +141,26 @@ document.addEventListener('DOMContentLoaded', function () {
         adultsSelect.appendChild(option);
     }
 
-    for (let i = 0; i <= 6; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = `${i}位小孩`;
-        childrenSelect.appendChild(option);
-    }
+    // 初始化小孩選項
+    updateChildrenOptions();
 
+    // 初始化預覽文字
     adultsSelect.value = 1;
     document.getElementById('preview-adults').textContent = '1位大人';
     document.getElementById('preview-children').textContent = '0位小孩';
 
+    // 大人數量變更時更新小孩選項
     adultsSelect.addEventListener('change', () => {
-        document.getElementById('preview-adults').textContent = adultsSelect.value;
+        document.getElementById('preview-adults').textContent = `${adultsSelect.value}位大人`;
+        updateChildrenOptions();
     });
+
+    // 小孩數量變更時更新預覽文字
     childrenSelect.addEventListener('change', () => {
-        document.getElementById('preview-children').textContent = childrenSelect.value;
+        document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
     });
+
+    // 其他輸入欄位的事件監聽
     document.getElementById('phone').addEventListener('input', () => {
         document.getElementById('preview-phone').textContent = document.getElementById('phone').value;
     });
@@ -142,11 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('notes').addEventListener('input', () => {
         document.getElementById('preview-notes').textContent = document.getElementById('notes').value;
     });
-
     document.getElementById('vegetarian').addEventListener('input', () => {
         document.getElementById('preview-vegetarian').textContent = document.getElementById('vegetarian').value;
     });
-
     document.getElementById('specialNeeds').addEventListener('input', () => {
         document.getElementById('preview-special').textContent = document.getElementById('specialNeeds').value;
     });
