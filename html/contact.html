@@ -105,7 +105,8 @@
                 return response.text();
             })
             .then(message => {
-                alert(message); 
+                alert(message);
+                this.reset();
             })
             .catch(error => {
                 alert(error.message); 
