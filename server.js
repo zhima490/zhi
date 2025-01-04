@@ -2188,6 +2188,24 @@ app.post('/api/reservations/manual-cancel', async (req, res) => {
     }
 });
 
+app.post('/send-email', (req, res) => {
+    const { name, phone, email, message } = req.body;
+
+    const mailOptions = {
+        from: email, 
+        to: 'zhima.youzi@gmail.com', 
+        subject: '聯絡我們表單提交',
+        text: `姓名: ${name}\n電話: ${phone}\n電子郵件: ${email}\n問題: ${message}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return res.status(500).send('郵件發送失敗！');
+        }
+        res.status(200).send('郵件發送成功！');
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
     console.log(`Connected to database: ${mongoose.connection.name}`);
