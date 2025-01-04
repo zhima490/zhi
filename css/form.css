@@ -13,13 +13,52 @@ body {
 }
 
 .japanese-pattern {
-    background-color: #f5f5f5;
+    background-color: #f0f2ef;
     background-image: 
-        radial-gradient(circle at 100% 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
-        radial-gradient(circle at 0 150%, #f5f5f5 24%, #e0e0e0 25%, #e0e0e0 28%, #f5f5f5 29%, #f5f5f5 36%, #e0e0e0 36%, #e0e0e0 40%, transparent 40%, transparent),
-        radial-gradient(circle at 50% 100%, #e0e0e0 10%, #f5f5f5 11%, #f5f5f5 23%, #e0e0e0 24%, #e0e0e0 30%, #f5f5f5 31%, #f5f5f5 43%, #e0e0e0 44%, #e0e0e0 50%, #f5f5f5 51%, #f5f5f5 63%, #e0e0e0 64%, #e0e0e0 71%, transparent 71%, transparent);
-    background-size: 80px 50px;
-    padding: 2rem 0;
+        linear-gradient(rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(rgba(220, 225, 218, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 225, 218, 0.3) 1px, transparent 1px);
+    background-size: 
+        80px 80px,
+        80px 80px,
+        16px 16px,
+        16px 16px;
+    position: relative;
+}
+
+.japanese-pattern::before {
+    content: '';
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(135deg, 
+            rgba(238, 241, 237, 0.07) 0%,
+            rgba(228, 232, 227, 0.05) 100%
+        );
+    backdrop-filter: blur(0.3px);
+    -webkit-backdrop-filter: blur(0.3px);
+    pointer-events: none;
+}
+
+.japanese-pattern::after {
+    content: '';
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(45deg, 
+            rgba(215, 220, 214, 0.02) 0px, 
+            rgba(215, 220, 214, 0.02) 1px, 
+            transparent 1px, 
+            transparent 2px
+        );
+    pointer-events: none;
 }
 
 /* 上方橫條 / menu  */
