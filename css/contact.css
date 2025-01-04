@@ -1,0 +1,256 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+#menu-toggle{
+    display: none;
+}
+
+.hh {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 7%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.home-icon {
+    position: absolute;
+    left: 9%;
+    top: 50%;
+    transform: translateY(-52%);
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 30px;
+    font-size: 18px;
+}
+
+.japanese-pattern {
+    background-color: #f0f2ef;
+    background-image: 
+        linear-gradient(rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 230, 225, 0.5) 1px, transparent 1px),
+        linear-gradient(rgba(220, 225, 218, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 225, 218, 0.3) 1px, transparent 1px);
+    background-size: 
+        80px 80px,
+        80px 80px,
+        16px 16px,
+        16px 16px;
+    position: relative;
+}
+
+.japanese-pattern::before {
+    content: '';
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(135deg, 
+            rgba(238, 241, 237, 0.07) 0%,
+            rgba(228, 232, 227, 0.05) 100%
+        );
+    backdrop-filter: blur(0.3px);
+    -webkit-backdrop-filter: blur(0.3px);
+    pointer-events: none;
+}
+
+.japanese-pattern::after {
+    content: '';
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(45deg, 
+            rgba(215, 220, 214, 0.02) 0px, 
+            rgba(215, 220, 214, 0.02) 1px, 
+            transparent 1px, 
+            transparent 2px
+        );
+    pointer-events: none;
+}
+
+.container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 600px; /* 最大寬度 */
+    width: 100%; /* 寬度自適應 */
+    margin: 100px auto; /* 上方邊距 */
+    text-align: left; /* 文字左對齊 */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea {
+    height: 100px; 
+    resize: none; 
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    width: 100%; 
+}
+
+button:hover {
+    background-color: #C8E6C9; 
+}
+
+footer {
+    background-color: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+    color: #333;
+}
+
+@media (max-width: 1280px) {
+
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        text-decoration: none;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .home-icon {
+        display: block; 
+        position: absolute; 
+        left: 5px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        z-index: 101; 
+        color: white; 
+    }
+
+    .hh {
+        background: rgba(255, 255, 255);
+        width: 100%;
+        height: 70px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    nav {
+        display: block;
+    }
+    #menu {
+        position: absolute;
+        float: right;
+        top: 13px;
+        right: 15px;
+    }
+
+    #menu label {
+        font-size: 30px;
+        color: black;
+        cursor: pointer;
+        display: block;
+        position: absolute;
+        top: 0; 
+        right: 0; 
+        z-index: 2; 
+    }
+
+    #menu a {
+        display: none;
+        font-size: 18px;
+        color: white;
+        padding: 1.5rem 0;
+        text-align: center;
+        background-color: #17140c;
+        width: 150px;
+        position: relative;
+        top: 57;
+        margin-right: -15px;
+        z-index: 1;
+    }
+
+    #menu input[type="checkbox"] {
+        display: none;
+    }
+
+    #menu input[type="checkbox"]:checked ~ a {
+        display: block;
+    }
+}
