@@ -1,22 +1,15 @@
-// 輪播圖片功能
-const images = [
-    '/images/index_photo/br1.webp',
-    '/images/index_photo/br2.webp',
-    '/images/index_photo/br3.webp',
-    '/images/index_photo/br4.webp'
-];
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButton = document.getElementById('close-btn');
+    const announcementBox = document.getElementById('announcement');
 
-let currentIndex = 0;
-const slideshowImage = document.getElementById('slideshow-image');
+    document.body.style.overflow = 'hidden';
 
-function changeImage() {
-    slideshowImage.style.opacity = '0';
-    
-    setTimeout(() => {
-        currentIndex = (currentIndex + 1) % images.length;
-        slideshowImage.src = images[currentIndex];
-        slideshowImage.style.opacity = '1';
-    }, 500);
-}
+    closeButton.addEventListener('click', function () {
+        announcementBox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
 
-setInterval(changeImage, 10000);
+    closeButton.addEventListener('click', function () {
+        announcementBox.style.display = 'none';
+    });
+});
