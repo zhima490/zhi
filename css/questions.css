@@ -55,7 +55,7 @@ nav a {
 }
 
 .questions-header {
-    background: url("/zhimayouzi/images/header-image/questions.jpg") no-repeat center;
+    background: url("/images/header-image/questions.jpg") no-repeat center;
     background-size: cover;
     background-position: center 60%;
     margin-top: 35px;
