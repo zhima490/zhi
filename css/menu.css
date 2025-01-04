@@ -165,15 +165,24 @@ nav a {
     z-index: 1;
 }
 
-.menu-category::before {
+.menu-category::before,
+.menu-category::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: #e0e0e0;
-    z-index: 0;
+    top: 50%; 
+    height: 1px; 
+    background: #bebebe; 
+    z-index: 0; 
+}
+
+.menu-category::before {
+    left: 0; 
+    right: calc(60% + 5px);
+}
+
+.menu-category::after {
+    right: 0; 
+    left: calc(60% + 5px);
 }
 
 @media (max-width: 1200px) {
