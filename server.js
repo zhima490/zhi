@@ -2098,7 +2098,8 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
                                 timeZone: 'Asia/Taipei', // 指定時區
                                 hour: '2-digit',
                                 minute: '2-digit'
-                            })}</p>
+                            }).format(new Date())
+                        }</p>
                         </div>
 
                         <p style="color: #666;">祝您用餐愉快！</p>
