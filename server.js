@@ -1033,7 +1033,36 @@ app.post('/reservations', async (req, res) => {
 
                 // 跳轉到成功頁面
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                
+
+                reservationInfo.forEach(box => {
+                    switch(label) {
+                        case "姓名":
+                            box.contents[1].text = name;
+                            break;
+                        case "日期":
+                            box.contents[1].text = date;
+                            break;
+                        case "時間":
+                            box.contents[1].text = time;
+                            break;
+                        case "人數":
+                            box.contents[1].text = `${adults}大${children}小`;
+                            break;
+                        case "素食":
+                            box.contents[1].text = vegetarian;
+                            break;
+                        case "特殊需求":
+                            box.contents[1].text = specialNeeds;
+                            break;
+                        case "備註":
+                            box.contents[1].text = notes || '無';
+                            break;
+                        case "訂位代碼":
+                            box.contents[1].text = bookingCode;
+                            break;
+                    }
+                });
+
                 await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
                     altText: '訂位成功通知',
