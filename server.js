@@ -1032,6 +1032,12 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 // 跳轉到成功頁面
+                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                    type: 'flex',
+                    altText: '訂位成功通知',
+                    contents: messageTemplate
+                });
+
                 return res.redirect(`/${token}/success`);
             }
         }
