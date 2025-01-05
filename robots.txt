@@ -13,4 +13,4 @@ Allow: /*.gif$
 Allow: /*.svg$
 Allow: /*.webp$
 Disallow: /admin/
-Sitemap: https://zhimayouzi.onrender.com/sitemap.xml
+Sitemap: https://zhimayouzi.com/sitemap.xml
