@@ -352,8 +352,8 @@ async function updateTimeButtons() {
             const slotTime = hour * 60 + minute;
             const count = data[slot.id] || 0;
             const limit = limits[slot.id.substring(0, 2)] || 0;
-            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime) ? 'disabled' : '';
-            html += `<button type="button" class="time-button ${disabled}" 
+            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime);
+            html += `<button type="button" class="time-button" 
                      data-slot-id="${slot.id}" data-time="${slot.time}" 
                      ${disabled ? 'disabled' : ''}>${slot.time}</button>`;
         });
@@ -367,8 +367,8 @@ async function updateTimeButtons() {
             const slotTime = hour * 60 + minute;
             const count = data[slot.id] || 0;
             const limit = limits[slot.id.substring(0, 2)] || 0;
-            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime) ? 'disabled' : '';
-            html += `<button type="button" class="time-button ${disabled}" 
+            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime);
+            html += `<button type="button" class="time-button" 
                      data-slot-id="${slot.id}" data-time="${slot.time}" 
                      ${disabled ? 'disabled' : ''}>${slot.time}</button>`;
         });
@@ -376,7 +376,7 @@ async function updateTimeButtons() {
 
         timeContainer.html(html);
 
-        timeContainer.find('.time-button').not('.disabled').on('click', function() {
+        timeContainer.find('.time-button').not(':disabled').on('click', function() {
             timeContainer.find('.time-button').removeClass('selected');
             $(this).addClass('selected');
             
