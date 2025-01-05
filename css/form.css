@@ -580,7 +580,7 @@ footer {
     background: transparent;
     cursor: pointer;
     font-size: 17px;
-    font-weight: 900;
+    font-weight: 500;
     color: #666;
     transition: all 0.3s ease;
     position: relative;
@@ -841,6 +841,13 @@ body.show-cancel #reservation-summary {
 #reservation-display {
     margin: 20px 0;
     flex: 1;
+}
+
+footer {
+    background-color: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+    color: #333;
 }
 /* 取消訂位 */
 
