@@ -2132,9 +2132,8 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
                 const label = box.contents[0].text;
                 switch(label) {
                     case "日期":
-                        // 使用 en-CA 格式但轉換為繁體中文顯示
                         const formattedDate = new Date(updatedBooking.date)
-                            .toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' })
+                            .toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })
                             .replace(/-/g, '年')
                             .replace(/年(\d{2})年/, '年$1月')
                             .replace(/月(\d{2})$/, '月$1日');
