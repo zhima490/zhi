@@ -702,6 +702,7 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                messageTemplate.body.contents[0].text = `管理者您好`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
@@ -850,6 +851,7 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                messageTemplate.body.contents[0].text = `管理者您好`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
@@ -995,6 +997,7 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                messageTemplate.body.contents[0].text = `管理者您好`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
@@ -1143,6 +1146,7 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                messageTemplate.body.contents[0].text = `管理者您好`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
@@ -1179,7 +1183,7 @@ app.post('/reservations', async (req, res) => {
                     altText: '訂位成功通知',
                     contents: messageTemplate
                 });
-                
+
                 return res.redirect(`/${token}/success`);
             }
         }
