@@ -706,6 +706,7 @@ app.post('/reservations', async (req, res) => {
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
+                    const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
                             box.contents[1].text = name;
@@ -855,6 +856,7 @@ app.post('/reservations', async (req, res) => {
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
+                    const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
                             box.contents[1].text = name;
@@ -1001,6 +1003,7 @@ app.post('/reservations', async (req, res) => {
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
+                    const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
                             box.contents[1].text = name;
@@ -1150,6 +1153,7 @@ app.post('/reservations', async (req, res) => {
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
+                    const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
                             box.contents[1].text = name;
@@ -2090,7 +2094,8 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
                         <p style="color: #666;">${updatedBooking.name} 您好，</p>
                         
                         <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                            <p style="margin: 5px 0;">入座時間：${new Date().toLocaleTimeString('zh-TW', {
+                            <p style="margin: 5px 0;">入座時間：${new Intl.DateTimeFormat('zh-TW', {
+                                timeZone: 'Asia/Taipei', // 指定時區
                                 hour: '2-digit',
                                 minute: '2-digit'
                             })}</p>
