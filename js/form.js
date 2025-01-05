@@ -113,10 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const maxAdults = parseInt(adultsSelect.value);
         const maxChildren = 6 - maxAdults;
 
-        // 清空小孩選項
         childrenSelect.innerHTML = '';
 
-        // 重新添加小孩選項
         for (let i = 0; i <= maxChildren; i++) {
             const option = document.createElement('option');
             option.value = i;
@@ -124,16 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
             childrenSelect.appendChild(option);
         }
 
-        // 如果目前小孩數量超出範圍，自動調整為範圍內最大值
         if (parseInt(childrenSelect.value) > maxChildren) {
             childrenSelect.value = maxChildren;
         }
 
-        // 更新小孩的預覽文字
         document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
     }
 
-    // 初始化大人選項
     for (let i = 1; i <= 6; i++) {
         const option = document.createElement('option');
         option.value = i;
@@ -141,26 +136,21 @@ document.addEventListener('DOMContentLoaded', function () {
         adultsSelect.appendChild(option);
     }
 
-    // 初始化小孩選項
     updateChildrenOptions();
 
-    // 初始化預覽文字
     adultsSelect.value = 1;
     document.getElementById('preview-adults').textContent = '1位大人';
     document.getElementById('preview-children').textContent = '0位小孩';
 
-    // 大人數量變更時更新小孩選項
     adultsSelect.addEventListener('change', () => {
         document.getElementById('preview-adults').textContent = `${adultsSelect.value}位大人`;
         updateChildrenOptions();
     });
 
-    // 小孩數量變更時更新預覽文字
     childrenSelect.addEventListener('change', () => {
         document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
     });
 
-    // 其他輸入欄位的事件監聽
     document.getElementById('phone').addEventListener('input', () => {
         document.getElementById('preview-phone').textContent = document.getElementById('phone').value;
     });
@@ -298,12 +288,10 @@ async function updateTimeButtons() {
     const dayOfWeek = selectedDate.getDay();
     const dateString = selectedDate.toISOString().split('T')[0];
     
-    // 預先清空並顯示載入中的提示
     const timeContainer = $('#time-picker-container');
     timeContainer.html('<div class="loading">載入時段中...</div>').show();
     
     try {
-        // 預先定義時段模板
         const weekdaySlots = {
             morning: [
                 { time: '11:00', id: 'wm1' },
@@ -346,47 +334,48 @@ async function updateTimeButtons() {
             ]
         };
 
-        // 獲取預訂狀態
         const response = await fetch(`/api/time-slots?date=${dateString}`);
         const data = await response.json();
 
-        // 準備 HTML 字符串
         let html = '';
         const slots = (dayOfWeek >= 1 && dayOfWeek <= 5) ? weekdaySlots : holidaySlots;
         const limits = data.settings;
 
-        // 生成上午時段
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+
         html += '<div class="time-section">';
         html += '<h3>上午</h3>';
         html += '<div class="time-buttons">';
         slots.morning.forEach(slot => {
+            const [hour, minute] = slot.time.split(':').map(Number);
+            const slotTime = hour * 60 + minute;
             const count = data[slot.id] || 0;
             const limit = limits[slot.id.substring(0, 2)] || 0;
-            const disabled = count >= limit ? 'disabled' : '';
+            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime) ? 'disabled' : '';
             html += `<button type="button" class="time-button ${disabled}" 
                      data-slot-id="${slot.id}" data-time="${slot.time}" 
                      ${disabled ? 'disabled' : ''}>${slot.time}</button>`;
         });
         html += '</div></div>';
 
-        // 生成下午時段
         html += '<div class="time-section">';
         html += '<h3>下午</h3>';
         html += '<div class="time-buttons">';
         slots.afternoon.forEach(slot => {
+            const [hour, minute] = slot.time.split(':').map(Number);
+            const slotTime = hour * 60 + minute;
             const count = data[slot.id] || 0;
             const limit = limits[slot.id.substring(0, 2)] || 0;
-            const disabled = count >= limit ? 'disabled' : '';
+            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime) ? 'disabled' : '';
             html += `<button type="button" class="time-button ${disabled}" 
                      data-slot-id="${slot.id}" data-time="${slot.time}" 
                      ${disabled ? 'disabled' : ''}>${slot.time}</button>`;
         });
         html += '</div></div>';
 
-        // 一次性更新 DOM
         timeContainer.html(html);
 
-        // 綁定事件監聽器
         timeContainer.find('.time-button').not('.disabled').on('click', function() {
             timeContainer.find('.time-button').removeClass('selected');
             $(this).addClass('selected');
@@ -464,7 +453,7 @@ async function confirmCancel(bookingCode) {
     if (!confirm('確定要取消此訂位嗎？')) return;
 
     try {
-        console.log('Attempting to cancel booking:', bookingCode); // 添加日誌
+        console.log('Attempting to cancel booking:', bookingCode); 
 
         const response = await fetch('/api/reservations/cancel', {
             method: 'POST',
@@ -480,7 +469,7 @@ async function confirmCancel(bookingCode) {
             throw new Error(data.error || '取消失敗');
         }
 
-        console.log('Cancel response:', data); // 添加日誌
+        console.log('Cancel response:', data); 
         alert(data.message || '訂位已成功取消');
         location.reload();
     } catch (error) {
