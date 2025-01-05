@@ -2117,12 +2117,11 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
         // 檢查是否有綁定 LINE 帳號並發送通知
         const lineUser = await UserID.findOne({ phone: updatedBooking.phone });
         if (lineUser) {
-            const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-            const weekDay = dayMapping[new Date(`${updatedBooking.date}T00:00:00Z`).getDay()];
-            const seatedTime = new Date().toLocaleTimeString('zh-TW', {
+            const seatedTime = new Intl.DateTimeFormat('zh-TW', {
+                timeZone: 'Asia/Taipei', 
                 hour: '2-digit',
                 minute: '2-digit'
-            });
+            }).format(new Date())
             
             const messageTemplate = JSON.parse(JSON.stringify(seatedNotificationTemplate));
             messageTemplate.body.contents[0].text = `${updatedBooking.name}，您好！`;
@@ -2131,14 +2130,6 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
             reservationInfo.forEach(box => {
                 const label = box.contents[0].text;
                 switch(label) {
-                    case "日期":
-                        const formattedDate = new Date(`${updatedBooking.date}T00:00:00Z`)
-                            .toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })
-                            .replace(/-/g, '年')
-                            .replace(/年(\d{2})年/, '年$1月')
-                            .replace(/月(\d{2})$/, '月$1日');
-                        box.contents[1].text = `${formattedDate} ${weekDay}`;
-                        break;
                     case "入座時間":
                         box.contents[1].text = seatedTime;
                         break;
