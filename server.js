@@ -2118,7 +2118,7 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
         const lineUser = await UserID.findOne({ phone: updatedBooking.phone });
         if (lineUser) {
             const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-            const weekDay = dayMapping[new Date(updatedBooking.date).getDay()];
+            const weekDay = dayMapping[new Date(`${updatedBooking.date}T00:00:00Z`).getDay()];
             const seatedTime = new Date().toLocaleTimeString('zh-TW', {
                 hour: '2-digit',
                 minute: '2-digit'
@@ -2132,7 +2132,7 @@ app.post('/api/bookings/:id/seat', async (req, res) => {
                 const label = box.contents[0].text;
                 switch(label) {
                     case "日期":
-                        const formattedDate = new Date(updatedBooking.date)
+                        const formattedDate = new Date(`${updatedBooking.date}T00:00:00Z`)
                             .toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })
                             .replace(/-/g, '年')
                             .replace(/年(\d{2})年/, '年$1月')
