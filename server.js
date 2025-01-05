@@ -735,7 +735,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '訂位成功通知',
                     contents: messageTemplate
@@ -885,7 +885,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '訂位成功通知',
                     contents: messageTemplate
@@ -1032,7 +1032,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '訂位成功通知',
                     contents: messageTemplate
@@ -1182,7 +1182,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '訂位成功通知',
                     contents: messageTemplate
