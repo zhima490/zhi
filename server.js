@@ -1032,6 +1032,8 @@ app.post('/reservations', async (req, res) => {
                 }
 
                 // 跳轉到成功頁面
+                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                
                 await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
                     altText: '訂位成功通知',
