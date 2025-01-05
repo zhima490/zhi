@@ -1033,6 +1033,7 @@ app.post('/reservations', async (req, res) => {
 
                 // 跳轉到成功頁面
                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+                const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
                     switch(label) {
