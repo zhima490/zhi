@@ -336,7 +336,7 @@ async function loadBookings(selectedDate = null) {
                 
                 if (isStillNew) {
                     newBookings.set(booking._id, currentTime);
-                    showAlert(booking);
+                    // showAlert(booking);
                     setTimeout(() => {
                         newBookings.delete(booking._id);
                         loadBookings(selectedDate); // 重新載入以更新顯示
@@ -392,63 +392,63 @@ async function loadBookings(selectedDate = null) {
     }
 }
 
-// 顯示提示框
-function showAlert(booking) {
-    // 創建通知的 div
-    alertBox = document.createElement('div');
-    alertBox.className = 'alert-box';
-    alertBox.innerHTML = `
-        <p>**新訂位通知**<br>有一組或多組新訂位，請前往查看！</p>
-        <button class="close-alert">關閉</button>
-    `;
-    document.body.appendChild(alertBox);
+// // 顯示提示框
+// function showAlert(booking) {
+//     // 創建通知的 div
+//     alertBox = document.createElement('div');
+//     alertBox.className = 'alert-box';
+//     alertBox.innerHTML = `
+//         <p>**新訂位通知**<br>有一組或多組新訂位，請前往查看！</p>
+//         <button class="close-alert">關閉</button>
+//     `;
+//     document.body.appendChild(alertBox);
 
-    // 添加關閉按鈕的事件
-    document.getElementById('close-alert').addEventListener('click', () => {
-        document.body.removeChild(alertBox);
-        alertBox = null; // 重置通知變量
-        audio.pause();  // 停止音效
-        audio.currentTime = 0;  // 重置音效
-    });
+//     // 添加關閉按鈕的事件
+//     document.getElementById('close-alert').addEventListener('click', () => {
+//         document.body.removeChild(alertBox);
+//         alertBox = null; // 重置通知變量
+//         audio.pause();  // 停止音效
+//         audio.currentTime = 0;  // 重置音效
+//     });
 
-    // 創建並播放靜音的 MP4 以解鎖音頻上下文
-    const silentVideo = document.createElement('video');
-    silentVideo.style.display = 'none';
-    silentVideo.muted = true;  // 靜音
-    silentVideo.autoplay = true;
-    silentVideo.src = '/sound/notification-sound.mp4';  // 替換為您的靜音 MP4 文件路徑
-    document.body.appendChild(silentVideo);
+//     // 創建並播放靜音的 MP4 以解鎖音頻上下文
+//     const silentVideo = document.createElement('video');
+//     silentVideo.style.display = 'none';
+//     silentVideo.muted = true;  // 靜音
+//     silentVideo.autoplay = true;
+//     silentVideo.src = '/sound/notification-sound.mp4';  // 替換為您的靜音 MP4 文件路徑
+//     document.body.appendChild(silentVideo);
 
-    // 播放靜音 MP4 並解除靜音播放音效
-    silentVideo.play().then(() => {
-        console.log('靜音 MP4 播放成功，音頻上下文解鎖');
+//     // 播放靜音 MP4 並解除靜音播放音效
+//     silentVideo.play().then(() => {
+//         console.log('靜音 MP4 播放成功，音頻上下文解鎖');
 
-        // 播放正常的音效
-        const audio = new Audio('/sound/notification-sound.mp3');
-        audio.play().then(() => {
-            console.log('音效播放成功');
-        }).catch(error => {
-            console.error('音效播放失敗:', error);
-        });
+//         // 播放正常的音效
+//         const audio = new Audio('/sound/notification-sound.mp3');
+//         audio.play().then(() => {
+//             console.log('音效播放成功');
+//         }).catch(error => {
+//             console.error('音效播放失敗:', error);
+//         });
 
-        // 移除靜音 MP4
-        silentVideo.onended = () => {
-            silentVideo.pause();
-            silentVideo.remove();
-        };
+//         // 移除靜音 MP4
+//         silentVideo.onended = () => {
+//             silentVideo.pause();
+//             silentVideo.remove();
+//         };
 
-        // 設置30秒後自動停止音效（如果用戶沒有關閉通知）
-        setTimeout(() => {
-            audio.pause();  // 停止音效
-            audio.currentTime = 0;  // 重置音效
-            if (document.body.contains(alertBox)) {
-                document.body.removeChild(alertBox);  // 移除通知
-            }
-        }, 30000);
-    }).catch(error => {
-        console.error('靜音 MP4 播放失敗:', error);
-    });
-}
+//         // 設置30秒後自動停止音效（如果用戶沒有關閉通知）
+//         setTimeout(() => {
+//             audio.pause();  // 停止音效
+//             audio.currentTime = 0;  // 重置音效
+//             if (document.body.contains(alertBox)) {
+//                 document.body.removeChild(alertBox);  // 移除通知
+//             }
+//         }, 30000);
+//     }).catch(error => {
+//         console.error('靜音 MP4 播放失敗:', error);
+//     });
+// }
 
 // 常客管理相關函數
 async function checkAndAddVIP() {
