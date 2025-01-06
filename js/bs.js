@@ -411,7 +411,7 @@ function showAlert(booking) {
     });
 
     // 添加關閉按鈕的事件
-    document.getElementById('close-alert').addEventListener('click', () => {
+    alertBox.querySelector('.close-alert').addEventListener('click', () => {
         document.body.removeChild(alertBox); // 移除通知
         audio.pause(); // 停止音效
         audio.currentTime = 0; // 重置音效
