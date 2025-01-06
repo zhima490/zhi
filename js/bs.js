@@ -394,26 +394,37 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
+    // 播放音效
     const audio = new Audio('/sound/notification-sound.mp3');
-    audio.muted = true; // 靜音播放
     audio.play().then(() => {
         console.log('音效播放成功');
-        // 在這裡可以在用戶交互後取消靜音
-        audio.muted = false; // 取消靜音
     }).catch(error => {
         console.error('音效播放失敗:', error);
     });
 
-    alert(`**新訂位通知**\n於 ${booking.time} 有一組新訂位，請前往查看！`);
+    // 創建通知的 div
+    const alertBox = document.createElement('div');
+    alertBox.className = 'alert-box';
+    alertBox.innerHTML = `
+        <p>**新訂位通知**<br>於 ${booking.time} 有一組新訂位，請前往查看！</p>
+        <button id="close-alert">關閉</button>
+    `;
+    document.body.appendChild(alertBox);
 
-    // 在用戶關閉 alert 後停止音效
-    audio.pause(); // 停止音效
-    audio.currentTime = 0; // 重置音效
+    // 添加關閉按鈕的事件
+    document.getElementById('close-alert').addEventListener('click', () => {
+        document.body.removeChild(alertBox); // 移除通知
+        audio.pause(); // 停止音效
+        audio.currentTime = 0; // 重置音效
+    });
 
-    // 設置30秒後自動停止音效（如果用戶沒有關閉 alert）
+    // 設置30秒後自動停止音效（如果用戶沒有關閉通知）
     setTimeout(() => {
         audio.pause(); // 停止音效
         audio.currentTime = 0; // 重置音效
+        if (document.body.contains(alertBox)) {
+            document.body.removeChild(alertBox); // 移除通知
+        }
     }, 30000);
 }
 
