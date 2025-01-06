@@ -117,7 +117,15 @@
                     },
                     {
                         "type": "text",
-                        "text": "開始綁定後，請於一分鐘內完成，否則將重新開始",
+                        "text": "開始綁定後，請於一分鐘內完成",
+                        "margin": "sm",
+                        "size": "xs",
+                        "color": "#ff5551",
+                        "align": "center"
+                    },
+                    {
+                        "type": "text",
+                        "text": "否則將取消綁定程序",
                         "margin": "sm",
                         "size": "xs",
                         "color": "#ff5551",
