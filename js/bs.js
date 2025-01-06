@@ -17,8 +17,6 @@ let selectedBooking = null;
 let audio; // 用於播放音效
 let alertTimeout; // 用於控制提示框顯示時間
 
-let alertBox;
-
 // 切換編輯模式
 function toggleEdit() {
     isEditing = !isEditing;
@@ -396,11 +394,6 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
-    // 如果已經存在通知，則不創建新的通知
-    if (alertBox) {
-        return; // 直接返回，不創建新的通知
-    }
-
     // 創建通知的 div
     alertBox = document.createElement('div');
     alertBox.className = 'alert-box';
