@@ -29,6 +29,8 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
+// 在文件的頂部定義 userTimeouts
+const userTimeouts = {}; // 用於存儲每個用戶的計時器
 
 const app = express();
 const redisClient = createClient({
