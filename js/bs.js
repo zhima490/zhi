@@ -394,30 +394,21 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
-    const alertBox = document.createElement('div');
-    alertBox.className = 'alert-box';
-    alertBox.innerHTML = `
-        <p>新訂位通知: ${booking.name} 的訂位在 ${booking.time}。</p>
-        <button id="confirm-alert">確認</button>
-    `;
-    document.body.appendChild(alertBox);
-
     // 播放音效
     audio = new Audio('/sound/notification-sound.mp3'); // 替換為你的音效文件路徑
     audio.play();
 
-    // 確認按鈕事件
-    document.getElementById('confirm-alert').addEventListener('click', () => {
-        audio.pause(); // 停止音效
-        audio.currentTime = 0; // 重置音效
-        document.body.removeChild(alertBox); // 移除提示框
-    });
+    // 使用 alert 顯示新訂位通知
+    alert(`新訂位通知於 ${booking.time}。`);
 
-    // 設置30秒後自動關閉
-    alertTimeout = setTimeout(() => {
+    // 在用戶關閉 alert 後停止音效
+    audio.pause(); // 停止音效
+    audio.currentTime = 0; // 重置音效
+
+    // 設置30秒後自動停止音效（如果用戶沒有關閉 alert）
+    setTimeout(() => {
         audio.pause(); // 停止音效
         audio.currentTime = 0; // 重置音效
-        document.body.removeChild(alertBox); // 移除提示框
     }, 30000);
 }
 
