@@ -17,6 +17,8 @@ let selectedBooking = null;
 let audio; // 用於播放音效
 let alertTimeout; // 用於控制提示框顯示時間
 
+let alertBox;
+
 // 切換編輯模式
 function toggleEdit() {
     isEditing = !isEditing;
@@ -403,14 +405,14 @@ function showAlert(booking) {
     alertBox = document.createElement('div');
     alertBox.className = 'alert-box';
     alertBox.innerHTML = `
-        <p>**新訂位通知**<br>於 ${booking.time} 有一組新訂位，請前往查看！</p>
+        <p>**新訂位通知**<br>有一組或多組新訂位，請前往查看！</p>
         <button class="close-alert">關閉</button>
     `;
     document.body.appendChild(alertBox);
 
     // 添加關閉按鈕的事件
-    alertBox.querySelector('.close-alert').addEventListener('click', () => {
-        document.body.removeChild(alertBox);  // 移除通知
+    document.getElementById('close-alert').addEventListener('click', () => {
+        document.body.removeChild(alertBox);
         alertBox = null; // 重置通知變量
         audio.pause();  // 停止音效
         audio.currentTime = 0;  // 重置音效
