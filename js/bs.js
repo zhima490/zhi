@@ -394,14 +394,6 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
-    // 播放音效
-    const audio = new Audio('/sound/notification-sound.mp3');
-    audio.play().then(() => {
-        console.log('音效播放成功');
-    }).catch(error => {
-        console.error('音效播放失敗:', error);
-    });
-
     // 創建通知的 div
     const alertBox = document.createElement('div');
     alertBox.className = 'alert-box';
@@ -410,6 +402,13 @@ function showAlert(booking) {
         <button id="close-alert">關閉</button>
     `;
     document.body.appendChild(alertBox);
+
+    const audio = new Audio('/sound/notification-sound.mp3');
+    audio.play().then(() => {
+        console.log('音效播放成功');
+    }).catch(error => {
+        console.error('音效播放失敗:', error);
+    });
 
     // 添加關閉按鈕的事件
     document.getElementById('close-alert').addEventListener('click', () => {
