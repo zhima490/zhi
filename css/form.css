@@ -417,9 +417,8 @@ button[type="submit"]:hover {
 }
 
 .time-button.disabled {
-    background: #f5f5f5;
+    background-color: #f5f5f5;
     color: #bdbdbd;
-    border-color: #e0e0e0;
     cursor: not-allowed;
 }
 
