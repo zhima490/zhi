@@ -394,17 +394,16 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
-    // 播放音效
-    const audio = new Audio('/sound/notification-sound.mp3'); // 確保這個路徑是正確的
+    const audio = new Audio('/sound/notification-sound.mp3');
+    audio.muted = true; // 靜音播放
     audio.play().then(() => {
-        // 音效成功播放
         console.log('音效播放成功');
+        // 在這裡可以在用戶交互後取消靜音
+        audio.muted = false; // 取消靜音
     }).catch(error => {
-        // 音效播放失敗
         console.error('音效播放失敗:', error);
     });
 
-    // 使用 alert 顯示新訂位通知
     alert(`**新訂位通知**\n於 ${booking.time} 有一組新訂位，請前往查看！`);
 
     // 在用戶關閉 alert 後停止音效
