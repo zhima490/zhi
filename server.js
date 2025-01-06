@@ -1242,6 +1242,20 @@ app.post('/line/webhook', async (req, res) => {
                                 type: 'text',
                                 text: '請輸入您的手機號碼（例：0912345678）'
                             });
+
+                            // 設置計時器，限制用戶操作時間為1分鐘
+                            if (userTimeouts[lineUserId]) {
+                                clearTimeout(userTimeouts[lineUserId]); // 清除之前的計時器
+                            }
+                            userTimeouts[lineUserId] = setTimeout(async () => {
+                                // 超過1分鐘後的操作
+                                userStates[lineUserId] = 'DEFAULT_STATE'; // 重置用戶狀態
+                                await sendLineMessage(lineUserId, {
+                                    type: 'text',
+                                    text: '您已超過操作時間，請至最上方綁定訊息重新開始。'
+                                });
+                                delete userTimeouts[lineUserId]; // 清除計時器
+                            }, 60000); // 60000毫秒 = 1分鐘
                             break;
 
                         case 'confirm_recent_reservation':
