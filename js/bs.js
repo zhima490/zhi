@@ -394,37 +394,65 @@ async function loadBookings(selectedDate = null) {
 
 // 顯示提示框
 function showAlert(booking) {
+    // 如果已經存在通知，則不創建新的通知
+    if (alertBox) {
+        return; // 直接返回，不創建新的通知
+    }
+
     // 創建通知的 div
-    const alertBox = document.createElement('div');
+    alertBox = document.createElement('div');
     alertBox.className = 'alert-box';
     alertBox.innerHTML = `
         <p>**新訂位通知**<br>於 ${booking.time} 有一組新訂位，請前往查看！</p>
-        <button id="close-alert">關閉</button>
+        <button class="close-alert">關閉</button>
     `;
     document.body.appendChild(alertBox);
 
-    const audio = new Audio('/sound/notification-sound.mp3');
-    audio.play().then(() => {
-        console.log('音效播放成功');
-    }).catch(error => {
-        console.error('音效播放失敗:', error);
-    });
-
     // 添加關閉按鈕的事件
     alertBox.querySelector('.close-alert').addEventListener('click', () => {
-        document.body.removeChild(alertBox); // 移除通知
-        audio.pause(); // 停止音效
-        audio.currentTime = 0; // 重置音效
+        document.body.removeChild(alertBox);  // 移除通知
+        alertBox = null; // 重置通知變量
+        audio.pause();  // 停止音效
+        audio.currentTime = 0;  // 重置音效
     });
 
-    // 設置30秒後自動停止音效（如果用戶沒有關閉通知）
-    setTimeout(() => {
-        audio.pause(); // 停止音效
-        audio.currentTime = 0; // 重置音效
-        if (document.body.contains(alertBox)) {
-            document.body.removeChild(alertBox); // 移除通知
-        }
-    }, 30000);
+    // 創建並播放靜音的 MP4 以解鎖音頻上下文
+    const silentVideo = document.createElement('video');
+    silentVideo.style.display = 'none';
+    silentVideo.muted = true;  // 靜音
+    silentVideo.autoplay = true;
+    silentVideo.src = '/sound/notification-sound.mp4';  // 替換為您的靜音 MP4 文件路徑
+    document.body.appendChild(silentVideo);
+
+    // 播放靜音 MP4 並解除靜音播放音效
+    silentVideo.play().then(() => {
+        console.log('靜音 MP4 播放成功，音頻上下文解鎖');
+
+        // 播放正常的音效
+        const audio = new Audio('/sound/notification-sound.mp3');
+        audio.play().then(() => {
+            console.log('音效播放成功');
+        }).catch(error => {
+            console.error('音效播放失敗:', error);
+        });
+
+        // 移除靜音 MP4
+        silentVideo.onended = () => {
+            silentVideo.pause();
+            silentVideo.remove();
+        };
+
+        // 設置30秒後自動停止音效（如果用戶沒有關閉通知）
+        setTimeout(() => {
+            audio.pause();  // 停止音效
+            audio.currentTime = 0;  // 重置音效
+            if (document.body.contains(alertBox)) {
+                document.body.removeChild(alertBox);  // 移除通知
+            }
+        }, 30000);
+    }).catch(error => {
+        console.error('靜音 MP4 播放失敗:', error);
+    });
 }
 
 // 常客管理相關函數
