@@ -340,7 +340,7 @@ async function loadBookings(selectedDate = null) {
                     setTimeout(() => {
                         newBookings.delete(booking._id);
                         loadBookings(selectedDate); // 重新載入以更新顯示
-                    }, 600000);
+                    }, 300000);
                 }
 
                 const totalPeople = booking.adults + booking.children;
@@ -395,11 +395,17 @@ async function loadBookings(selectedDate = null) {
 // 顯示提示框
 function showAlert(booking) {
     // 播放音效
-    audio = new Audio('/sound/notification-sound.mp3'); // 替換為你的音效文件路徑
-    audio.play();
+    const audio = new Audio('/sound/notification-sound.mp3'); // 確保這個路徑是正確的
+    audio.play().then(() => {
+        // 音效成功播放
+        console.log('音效播放成功');
+    }).catch(error => {
+        // 音效播放失敗
+        console.error('音效播放失敗:', error);
+    });
 
     // 使用 alert 顯示新訂位通知
-    alert(`新訂位通知於 ${booking.time}。`);
+    alert(`**新訂位通知**\n於 ${booking.time} 有一組新訂位，請前往查看！`);
 
     // 在用戶關閉 alert 後停止音效
     audio.pause(); // 停止音效
