@@ -14,6 +14,9 @@ const newBookings = new Map();
 // 全局變量
 let selectedBooking = null;
 
+let audio; // 用於播放音效
+let alertTimeout; // 用於控制提示框顯示時間
+
 // 切換編輯模式
 function toggleEdit() {
     isEditing = !isEditing;
@@ -333,6 +336,7 @@ async function loadBookings(selectedDate = null) {
                 
                 if (isStillNew) {
                     newBookings.set(booking._id, currentTime);
+                    showAlert(booking);
                     setTimeout(() => {
                         newBookings.delete(booking._id);
                         loadBookings(selectedDate); // 重新載入以更新顯示
@@ -386,6 +390,35 @@ async function loadBookings(selectedDate = null) {
     } catch (error) {
         console.error('載入訂位失敗:', error);
     }
+}
+
+// 顯示提示框
+function showAlert(booking) {
+    const alertBox = document.createElement('div');
+    alertBox.className = 'alert-box';
+    alertBox.innerHTML = `
+        <p>新訂位通知: ${booking.name} 的訂位在 ${booking.time}。</p>
+        <button id="confirm-alert">確認</button>
+    `;
+    document.body.appendChild(alertBox);
+
+    // 播放音效
+    audio = new Audio('/sound/notification-sound.mp3'); // 替換為你的音效文件路徑
+    audio.play();
+
+    // 確認按鈕事件
+    document.getElementById('confirm-alert').addEventListener('click', () => {
+        audio.pause(); // 停止音效
+        audio.currentTime = 0; // 重置音效
+        document.body.removeChild(alertBox); // 移除提示框
+    });
+
+    // 設置30秒後自動關閉
+    alertTimeout = setTimeout(() => {
+        audio.pause(); // 停止音效
+        audio.currentTime = 0; // 重置音效
+        document.body.removeChild(alertBox); // 移除提示框
+    }, 30000);
 }
 
 // 常客管理相關函數
