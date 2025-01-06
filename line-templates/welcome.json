@@ -109,7 +109,15 @@
                     },
                     {
                         "type": "text",
-                        "text": "以確保能收到訂位資訊。",
+                        "text": "以確保能收到訂位資訊",
+                        "margin": "sm",
+                        "size": "xs",
+                        "color": "#ff5551",
+                        "align": "center"
+                    },
+                    {
+                        "type": "text",
+                        "text": "開始綁定後，請於一分鐘內完成，否則將重新開始",
                         "margin": "sm",
                         "size": "xs",
                         "color": "#ff5551",
