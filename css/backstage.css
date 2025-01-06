@@ -708,18 +708,6 @@ body {
     transform: translateY(-2px);
 }
 
-.alert-box {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 20px;
-    z-index: 1000; /* 確保在最上層 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 /* 電腦版樣式 */
 @media (min-width: 769px) {
     .booking-item {
