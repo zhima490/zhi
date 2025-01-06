@@ -59,10 +59,11 @@ nav a {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem;
+    flex: 1;
 }
 
 .menu-header {
-    background: url("/images/header-image/menu.jpg") no-repeat center;
+    background: url("/zhimayouzi/images/header-image/menu.jpg") no-repeat center;
     background-size: cover;
     background-position: center 80%;
     margin-top: 35px;
@@ -237,7 +238,7 @@ nav a {
     #menu {
         position: absolute;
         float: right;
-        top: 13px;
+        top: 71px;
         right: 15px;
     }
 
@@ -247,7 +248,7 @@ nav a {
         cursor: pointer;
         display: block;
         position: absolute;
-        top: 0; 
+        top: -55px; 
         right: 0; 
         z-index: 2; 
     }
@@ -261,7 +262,6 @@ nav a {
         background-color: #17140c;
         width: 150px;
         position: relative;
-        top: 57;
         margin-right: -15px;
         z-index: 1;
     }
