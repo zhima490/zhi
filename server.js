@@ -1237,7 +1237,7 @@ app.post('/line/webhook', async (req, res) => {
             }
 
             // 只處理未綁定用戶的消息
-            if (!existingUser) {
+            if (!existingUser && userStates[lineUserId] !== 'BINDING_COMPLETE') {
                 // 2. 處理按鈕回應
                 if (event.type === 'postback') {
                     const data = new URLSearchParams(event.postback.data);
@@ -1363,6 +1363,8 @@ app.post('/line/webhook', async (req, res) => {
                                 });
                                 await newUserID.save();
 
+                                userStates[lineUserId] = 'BINDING_COMPLETE';
+
                                 await sendLineMessage(lineUserId, {
                                     type: 'text',
                                     text: '電話號碼綁定成功！未來訂位時輸入此電話號碼將會收到通知。'
@@ -1487,7 +1489,7 @@ app.post('/line/webhook', async (req, res) => {
                         }
                         
                         // 清除用戶狀態
-                        delete userStates[lineUserId];
+                        // delete userStates[lineUserId];
                     }
                 }
             }
