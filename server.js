@@ -1211,6 +1211,13 @@ app.post('/line/webhook', async (req, res) => {
             // 檢查用戶是否已綁定 (移到最外層)
             const existingUser = await UserID.findOne({ lineUserId });
 
+            if (event.type === 'unfollow') {
+                // 從 userids 集合中刪除用戶
+                await UserID.deleteOne({ lineUserId });
+                console.log(`User ${lineUserId} has unfollowed and has been removed from the database.`);
+                return; // 退出循環，因為不需要處理其他事件
+            }
+
             // 1. 處理加入好友事件
             if (event.type === 'follow') {
                 const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
@@ -1245,19 +1252,22 @@ app.post('/line/webhook', async (req, res) => {
                                 text: '請輸入您的手機號碼（例：0912345678）'
                             });
 
-                            // 設置計時器，限制用戶操作時間為1分鐘
-                            if (userTimeouts[lineUserId]) {
-                                clearTimeout(userTimeouts[lineUserId]); // 清除之前的計時器
+                            // 檢查用戶是否已經綁定
+                            if (userStates[lineUserId] !== 'BINDING_COMPLETE') {
+                                // 設置計時器，限制用戶操作時間為1分鐘
+                                if (userTimeouts[lineUserId]) {
+                                    clearTimeout(userTimeouts[lineUserId]); // 清除之前的計時器
+                                }
+                                userTimeouts[lineUserId] = setTimeout(async () => {
+                                    // 超過1分鐘後的操作
+                                    userStates[lineUserId] = 'DEFAULT_STATE'; // 重置用戶狀態
+                                    await sendLineMessage(lineUserId, {
+                                        type: 'text',
+                                        text: '您已超過操作時間，請至最上方綁定訊息重新開始。'
+                                    });
+                                    delete userTimeouts[lineUserId]; // 清除計時器
+                                }, 60000); // 60000毫秒 = 1分鐘
                             }
-                            userTimeouts[lineUserId] = setTimeout(async () => {
-                                // 超過1分鐘後的操作
-                                userStates[lineUserId] = 'DEFAULT_STATE'; // 重置用戶狀態
-                                await sendLineMessage(lineUserId, {
-                                    type: 'text',
-                                    text: '您已超過操作時間，請至最上方綁定訊息重新開始。'
-                                });
-                                delete userTimeouts[lineUserId]; // 清除計時器
-                            }, 60000); // 60000毫秒 = 1分鐘
                             break;
 
                         case 'confirm_recent_reservation':
