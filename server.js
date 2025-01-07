@@ -1365,6 +1365,11 @@ app.post('/line/webhook', async (req, res) => {
 
                                 userStates[lineUserId] = 'BINDING_COMPLETE';
 
+                                if (userTimeouts[lineUserId]) {
+                                    clearTimeout(userTimeouts[lineUserId]);
+                                    delete userTimeouts[lineUserId]; // 清除計時器
+                                }
+
                                 await sendLineMessage(lineUserId, {
                                     type: 'text',
                                     text: '電話號碼綁定成功！未來訂位時輸入此電話號碼將會收到通知。'
