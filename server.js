@@ -1491,6 +1491,13 @@ app.post('/line/webhook', async (req, res) => {
                                 altText: '確認綁定電話',
                                 contents: messageTemplate
                             });
+
+                            userStates[lineUserId] = 'BINDING_COMPLETE';
+
+                                if (userTimeouts[lineUserId]) {
+                                    clearTimeout(userTimeouts[lineUserId]);
+                                    delete userTimeouts[lineUserId]; // 清除計時器
+                                }
                         }
                         
                         // 清除用戶狀態
