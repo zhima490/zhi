@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             customerEmail.textContent = reservationData.email;
         }
 
+        const bookingCode = document.getElementById('bookingCode');
+        if (reservationData.email) {
+            bookingCode.textContent = reservationData.bookingCode;
+        }
+
         const lineBtn = document.getElementById('lineBtn');
         if (lineBtn) {
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
