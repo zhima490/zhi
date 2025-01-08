@@ -1239,7 +1239,7 @@ app.post('/line/webhook', async (req, res) => {
             }
 
             // 只處理未綁定用戶的消息
-            if (!existingUser && userStates[lineUserId] !== 'BINDING_COMPLETE') {
+            if (!existingUser) {
                 // 2. 處理按鈕回應
                 if (event.type === 'postback') {
                     const data = new URLSearchParams(event.postback.data);
