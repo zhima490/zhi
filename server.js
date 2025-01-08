@@ -73,10 +73,6 @@ app.use((req, res, next) => {
         return res.redirect('https://' + req.headers.host + req.url);
     }
 
-    if (req.path !== '/comingsoon') {
-        return res.redirect('/comingsoon'); // 即將開放
-    }
-
     next();
 });
 
