@@ -1264,7 +1264,7 @@ app.post('/line/webhook', async (req, res) => {
             }
 
             // 只處理未綁定用戶的消息
-            if (!existingUser && userStates[lineUserId] !== 'BINDING_COMPLETE') {
+            if (!existingUser) {
                 // 2. 處理按鈕回應
                 if (event.type === 'postback') {
                     const data = new URLSearchParams(event.postback.data);
@@ -1313,6 +1313,13 @@ app.post('/line/webhook', async (req, res) => {
                                     phone
                                 });
                                 await newUserID.save();
+
+                                userStates[lineUserId] = 'BINDING_COMPLETE';
+
+                                if (userTimeouts[lineUserId]) {
+                                    clearTimeout(userTimeouts[lineUserId]);
+                                    delete userTimeouts[lineUserId]; // 清除計時器
+                                }
 
                                 // 獲取完整訂位資訊
                                 const reservation = await Reservation.findOne({
@@ -1365,6 +1372,7 @@ app.post('/line/webhook', async (req, res) => {
                                         altText: '電話號碼綁定成功',
                                         contents: messageTemplate
                                     });
+                                    
                                 }
                             } catch (error) {
                                 console.error('Error in confirm_recent_reservation:', error);
@@ -1521,10 +1529,10 @@ app.post('/line/webhook', async (req, res) => {
 
                             userStates[lineUserId] = 'BINDING_COMPLETE';
 
-                                if (userTimeouts[lineUserId]) {
-                                    clearTimeout(userTimeouts[lineUserId]);
-                                    delete userTimeouts[lineUserId]; // 清除計時器
-                                }
+                            if (userTimeouts[lineUserId]) {
+                                clearTimeout(userTimeouts[lineUserId]);
+                                delete userTimeouts[lineUserId]; // 清除計時器
+                            }
                         }
                         
                         // 清除用戶狀態
