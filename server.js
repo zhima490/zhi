@@ -73,6 +73,7 @@ app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'production' && !req.secure && req.headers['x-forwarded-proto'] !== 'https') {
         return res.redirect('https://' + req.headers.host + req.url);
     }
+    
     next();
 });
 
@@ -713,7 +714,7 @@ app.post('/reservations', async (req, res) => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name, gender;
+                            box.contents[1].text = `${name} ${gender}`;
                             break;
                         case "電話":
                             box.contents[1].text = phone;
@@ -869,7 +870,7 @@ app.post('/reservations', async (req, res) => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name, gender;
+                            box.contents[1].text = `${name} ${gender}`;
                             break;
                         case "電話":
                             box.contents[1].text = phone;
@@ -1022,7 +1023,7 @@ app.post('/reservations', async (req, res) => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name, gender;
+                            box.contents[1].text = `${name} ${gender}`;
                             break;
                         case "電話":
                             box.contents[1].text = phone;
@@ -1178,7 +1179,7 @@ app.post('/reservations', async (req, res) => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name, gender;
+                            box.contents[1].text = `${name} ${gender}`;
                             break;
                         case "電話":
                             box.contents[1].text = phone;
