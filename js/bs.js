@@ -361,7 +361,7 @@ async function loadBookings(selectedDate = null) {
                 bookingItem.innerHTML = `
                     ${isStillNew ? `<div class="new-booking-label">*新訂位</div>` : ''}
                     <div class="booking-cell" data-label="時段">${periodText} ${booking.time}</div>
-                    <div class="booking-cell" data-label="姓名">${booking.name} ${vipStar} ${booking.gender}</div>
+                    <div class="booking-cell" data-label="姓名">${vipStar} ${booking.name} ${booking.gender}</div>
                     <div class="booking-cell" data-label="電話">${booking.phone}</div>
                     <div class="booking-cell" data-label="人數">${totalPeople}人</div>
                     <div class="booking-cell" data-label="備註">${noteText}</div>
