@@ -73,11 +73,6 @@ app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'production' && !req.secure && req.headers['x-forwarded-proto'] !== 'https') {
         return res.redirect('https://' + req.headers.host + req.url);
     }
-
-    if (req.path !== '/comingsoon') {
-        return res.redirect('/comingsoon'); // 即將開放
-    }
-
     next();
 });
 
