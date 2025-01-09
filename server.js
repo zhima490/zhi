@@ -17,6 +17,7 @@ const jwt = require('jsonwebtoken');
 const { CronJob } = require('cron');
 const moment = require('moment-timezone');
 const reservationSuccessTemplate = require('./line-templates/reservation-success.json');
+const reservationSuccessMangerTemplate = require('./line-templates/reservation-success-manger.json');
 const welcomeTemplate = require('./line-templates/welcome.json');
 const bindingSuccessTemplate = require('./line-templates/binding-success.json');
 const confirmReservationTemplate = require('./line-templates/confirm-reservation.json');
@@ -71,6 +72,10 @@ app.use('/api', apiRouter);
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'production' && !req.secure && req.headers['x-forwarded-proto'] !== 'https') {
         return res.redirect('https://' + req.headers.host + req.url);
+    }
+
+    if (req.path !== '/comingsoon') {
+        return res.redirect('/comingsoon'); // 即將開放
     }
 
     next();
@@ -705,15 +710,21 @@ app.post('/reservations', async (req, res) => {
                     });
                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                messageTemplate.body.contents[0].text = `管理者您好`;
+                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+                messageTemplate.body.contents[0].text = `管理者，您好！`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name;
+                            box.contents[1].text = name, gender;
+                            break;
+                        case "電話":
+                            box.contents[1].text = phone;
+                            break;
+                        case "電子郵件":
+                            box.contents[1].text = email;
                             break;
                         case "日期":
                             box.contents[1].text = date;
@@ -739,9 +750,9 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
-                    altText: '訂位成功通知',
+                    altText: '新訂位通知',
                     contents: messageTemplate
                 });
 
@@ -855,15 +866,21 @@ app.post('/reservations', async (req, res) => {
                     });
                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                messageTemplate.body.contents[0].text = `管理者您好`;
+                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+                messageTemplate.body.contents[0].text = `管理者，您好！`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name;
+                            box.contents[1].text = name, gender;
+                            break;
+                        case "電話":
+                            box.contents[1].text = phone;
+                            break;
+                        case "電子郵件":
+                            box.contents[1].text = email;
                             break;
                         case "日期":
                             box.contents[1].text = date;
@@ -889,9 +906,9 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
-                    altText: '訂位成功通知',
+                    altText: '新訂位通知',
                     contents: messageTemplate
                 });
 
@@ -1002,15 +1019,21 @@ app.post('/reservations', async (req, res) => {
                     });
                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                messageTemplate.body.contents[0].text = `管理者您好`;
+                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+                messageTemplate.body.contents[0].text = `管理者，您好！`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name;
+                            box.contents[1].text = name, gender;
+                            break;
+                        case "電話":
+                            box.contents[1].text = phone;
+                            break;
+                        case "電子郵件":
+                            box.contents[1].text = email;
                             break;
                         case "日期":
                             box.contents[1].text = date;
@@ -1036,9 +1059,9 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
-                    altText: '訂位成功通知',
+                    altText: '新訂位通知',
                     contents: messageTemplate
                 });
 
@@ -1152,15 +1175,21 @@ app.post('/reservations', async (req, res) => {
                     });
                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                messageTemplate.body.contents[0].text = `管理者您好`;
+                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+                messageTemplate.body.contents[0].text = `管理者，您好！`;
                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
                 reservationInfo.forEach(box => {
                     const label = box.contents[0].text;
                     switch(label) {
                         case "姓名":
-                            box.contents[1].text = name;
+                            box.contents[1].text = name, gender;
+                            break;
+                        case "電話":
+                            box.contents[1].text = phone;
+                            break;
+                        case "電子郵件":
+                            box.contents[1].text = email;
                             break;
                         case "日期":
                             box.contents[1].text = date;
@@ -1186,9 +1215,9 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
                     type: 'flex',
-                    altText: '訂位成功通知',
+                    altText: '新訂位通知',
                     contents: messageTemplate
                 });
 
@@ -1239,7 +1268,7 @@ app.post('/line/webhook', async (req, res) => {
             }
 
             // 只處理未綁定用戶的消息
-            if (!existingUser) {
+            if (!existingUser && userStates[lineUserId] !== 'BINDING_COMPLETE') {
                 // 2. 處理按鈕回應
                 if (event.type === 'postback') {
                     const data = new URLSearchParams(event.postback.data);
@@ -2292,7 +2321,7 @@ app.post('/api/reservations/manual-cancel', async (req, res) => {
         
 
         // 使用正確格式發送LINE通知
-        await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+        await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
             type: 'flex',
             altText: '手動訂位取消通知',
             contents: messageTemplate
