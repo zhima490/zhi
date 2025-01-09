@@ -746,7 +746,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '新訂位通知',
                     contents: messageTemplate
@@ -902,7 +902,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '新訂位通知',
                     contents: messageTemplate
@@ -1055,7 +1055,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '新訂位通知',
                     contents: messageTemplate
@@ -1211,7 +1211,7 @@ app.post('/reservations', async (req, res) => {
                     }
                 });
 
-                await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
                     type: 'flex',
                     altText: '新訂位通知',
                     contents: messageTemplate
@@ -2317,7 +2317,7 @@ app.post('/api/reservations/manual-cancel', async (req, res) => {
         
 
         // 使用正確格式發送LINE通知
-        await sendLineMessage('U249a6f35efe3b1f769228683a1d36e13', {
+        await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
             type: 'flex',
             altText: '手動訂位取消通知',
             contents: messageTemplate
