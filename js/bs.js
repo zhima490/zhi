@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showPage(pageId);
 
             // 在移動端切換顯示
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1024) {
                 sidebar.style.display = 'none';
                 content.style.display = 'block';
                 content.classList.add('show');
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 處理視窗大小變化
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 1024) {
+        if (window.innerWidth > 1025) {
             sidebar.style.display = 'block';
             content.style.display = 'block';
             content.classList.remove('show');
