@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 處理視窗大小變化
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1024) {
             sidebar.style.display = 'block';
             content.style.display = 'block';
             content.classList.remove('show');
