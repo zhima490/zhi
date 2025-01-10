@@ -709,7 +709,7 @@ body {
 }
 
 /* 電腦版樣式 */
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
     .booking-item {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 0.5fr 1.5fr 0.5fr; 
@@ -734,7 +734,7 @@ body {
 }
 
 /* 手機版樣式 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .layout {
         flex-direction: column;
     }
