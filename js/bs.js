@@ -279,7 +279,8 @@ function getPeriodText(time) {
 async function loadBookings(selectedDate = null) {
     try {
         const targetDate = selectedDate || new Date();
-        const dateString = today.toLocaleDateString('zh-TW');
+        targetDate.setHours(0, 0, 0, 0);
+        const dateString = targetDate.toLocaleDateString('zh-TW');
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
