@@ -282,7 +282,7 @@ async function loadBookings(selectedDate = null) {
         const targetDate = selectedDate || new Date();
         const yesterday = new Date(nowUTC);
         yesterday.setDate(nowUTC.getDate() - 1);
-        const dateString = yesterday.toLocaleDateString('zh-TW').split('T')[0];
+        const dateString = yesterday.toLocaleDateString('zh-TW');
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
@@ -305,7 +305,8 @@ async function loadBookings(selectedDate = null) {
         // 更新日期選擇器的值
         const dateSelector = document.getElementById('booking-date');
         if (dateSelector) {
-            dateSelector.value = dateString;
+            const isoDateString = yesterday.toISOString().split('T')[0];
+            dateSelector.value = isoDateString;
         }
 
         // 分開獲取訂位資料和常客資料
