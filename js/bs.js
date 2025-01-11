@@ -278,7 +278,7 @@ function getPeriodText(time) {
 // 載入今日訂位
 async function loadBookings(selectedDate = null) {
     try {
-        const targetDate = selectedDate || new Date();
+        const targetDate = selectedDate ? new Date(selectedDate) : new Date();
         targetDate.setHours(0, 0, 0, 0);
         const dateString = targetDate.toISOString().split('T')[0];
 
