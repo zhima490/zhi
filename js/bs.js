@@ -280,7 +280,7 @@ async function loadBookings(selectedDate = null) {
     try {
         const targetDate = selectedDate || new Date();
         targetDate.setHours(0, 0, 0, 0);
-        const dateString = targetDate.toLocaleDateString('zh-TW');
+        const dateString = targetDate.toISOString().split('T')[0];
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
