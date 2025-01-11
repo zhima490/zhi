@@ -278,9 +278,8 @@ function getPeriodText(time) {
 // 載入今日訂位
 async function loadBookings(selectedDate = null) {
     try {
-        const targetDate = selectedDate ? new Date(selectedDate) : new Date();
-        targetDate.setHours(0, 0, 0, 0);
-        const dateString = targetDate.toISOString().split('T')[0];
+        const targetDate = selectedDate || new Date();
+        const dateString = targetDate.toLocaleDateString('zh-TW');
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
