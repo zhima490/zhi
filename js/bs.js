@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showPage(pageId);
 
             // 在移動端切換顯示
-            if (window.innerWidth <= 1024) {
+            if (window.innerWidth <= 768) {
                 sidebar.style.display = 'none';
                 content.style.display = 'block';
                 content.classList.add('show');
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 處理視窗大小變化
     window.addEventListener('resize', function() {
-        if (window.innerWidth > 1025) {
+        if (window.innerWidth > 768) {
             sidebar.style.display = 'block';
             content.style.display = 'block';
             content.classList.remove('show');
@@ -278,13 +278,13 @@ function getPeriodText(time) {
 // 載入今日訂位
 async function loadBookings(selectedDate = null) {
     try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const targetDate = selectedDate || new Date();
-        const dateString = targetDate.toLocaleDateString('en-CA');
+        // const dateString = today;
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
         
         // 格式化日期
         const weekDay = targetDate.toLocaleString('zh-TW', { weekday: 'long' });
@@ -307,7 +307,7 @@ async function loadBookings(selectedDate = null) {
 
         // 分開獲取訂位資料和常客資料
         const [bookingsResponse, vipResponse] = await Promise.all([
-            fetch(`/api/bookings?date=${dateString}`),
+            fetch(`/api/bookings?date=${today}`),
             fetch('/api/vip/phones')
         ]);
 
