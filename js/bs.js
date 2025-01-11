@@ -278,13 +278,16 @@ function getPeriodText(time) {
 // 載入今日訂位
 async function loadBookings(selectedDate = null) {
     try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const nowUTC = new Date(Date.now() + (8 * 60 * 60 * 1000));
         const targetDate = selectedDate || new Date();
-        // const dateString = today;
+        const yesterday = new Date(nowUTC);
+        yesterday.setDate(nowUTC.getDate() - 1);
+        const dateString = yesterday.toLocaleDateString('zh-TW');
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
         
         // 格式化日期
         const weekDay = targetDate.toLocaleString('zh-TW', { weekday: 'long' });
@@ -307,7 +310,7 @@ async function loadBookings(selectedDate = null) {
 
         // 分開獲取訂位資料和常客資料
         const [bookingsResponse, vipResponse] = await Promise.all([
-            fetch(`/api/bookings?date=${today}`),
+            fetch(`/api/bookings?date=${dateString}`),
             fetch('/api/vip/phones')
         ]);
 
