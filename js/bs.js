@@ -278,11 +278,8 @@ function getPeriodText(time) {
 // 載入今日訂位
 async function loadBookings(selectedDate = null) {
     try {
-        const nowUTC = new Date(Date.now() + (8 * 60 * 60 * 1000));
         const targetDate = selectedDate || new Date();
-        const yesterday = new Date(nowUTC);
-        yesterday.setDate(nowUTC.getDate() - 1);
-        const dateString = yesterday.toLocaleDateString('zh-TW');
+        const dateString = today.toLocaleDateString('zh-TW');
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
@@ -305,8 +302,7 @@ async function loadBookings(selectedDate = null) {
         // 更新日期選擇器的值
         const dateSelector = document.getElementById('booking-date');
         if (dateSelector) {
-            const isoDateString = yesterday.toISOString().split('T')[0];
-            dateSelector.value = isoDateString;
+            dateSelector.value = dateString;
         }
 
         // 分開獲取訂位資料和常客資料
