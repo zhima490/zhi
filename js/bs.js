@@ -282,7 +282,7 @@ async function loadBookings(selectedDate = null) {
         const targetDate = selectedDate || new Date();
         const yesterday = new Date(nowUTC);
         yesterday.setDate(nowUTC.getDate() - 1);
-        const dateString = yesterday.toLocaleDateString('zh-TW');
+        const dateString = yesterday.toLocaleDateString('zh-TW').split('T')[0];
 
         // 更新標題
         const titleElement = document.querySelector('.header-left h2');
