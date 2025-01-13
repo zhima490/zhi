@@ -208,7 +208,8 @@ function generateCalendar(month = currentMonth, year = currentYear) {
             dayElement.style.pointerEvents = 'none';
         }
 
-        if (currentDate < today) {
+        if (currentDate < today || 
+            (month === 0 && (day === 28 || day === 29 || day === 30))) {
             dayElement.classList.add('disabled');
             dayElement.style.pointerEvents = 'none';
         } else {
