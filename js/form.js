@@ -204,9 +204,8 @@ function generateCalendar(month = currentMonth, year = currentYear) {
                        currentDate.getFullYear() === today.getFullYear();
 
         if (isToday) {
-            const underline = document.createElement('div');
-            underline.classList.add('day-underline');
-            dayElement.appendChild(underline);
+            dayElement.classList.add('disabled');
+            dayElement.style.pointerEvents = 'none';
         }
 
         if (currentDate < today) {
@@ -352,7 +351,7 @@ async function updateTimeButtons() {
             const slotTime = hour * 60 + minute;
             const count = data[slot.id] || 0;
             const limit = limits[slot.id.substring(0, 2)] || 0;
-            const disabled = count >= limit || (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime);
+            const disabled = count >= limit ; //|| (selectedDate.toDateString() === now.toDateString() && slotTime < currentTime);
             html += `<button type="button" class="time-button ${disabled ? 'disabled' : ''}" 
                      data-slot-id="${slot.id}" data-time="${slot.time}" 
                      ${disabled ? 'disabled' : ''}>${slot.time}</button>`;
