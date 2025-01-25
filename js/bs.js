@@ -140,36 +140,36 @@ function logout() {
     });
 }
 
-async function checkTokenValidity() {
-    try {
-        const response = await fetch('/api/check-auth', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        });
+// async function checkTokenValidity() {
+//   try {
+//        const response = await fetch('/api/check-auth', {
+//           method: 'GET',
+//            credentials: 'include',
+//            headers: {
+//                'Cache-Control': 'no-cache',
+ //               'Pragma': 'no-cache'
+//            }
+ //       });
 
-        const data = await response.json();
-        if (!response.ok || !data.success) {  // 檢查 success 而不是 valid
-            console.log('Token validation failed:', response.status);
-            if (response.status === 401) {
-                window.location.href = '/bsl';
-            }
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error('Auth check failed:', error);
-        if (error.name === 'TypeError') {
-            window.location.href = '/bsl';
-        }
-        return false;
-    }
-}
+//        const data = await response.json();
+ //       if (!response.ok || !data.success) {  // 檢查 success 而不是 valid
+//            console.log('Token validation failed:', response.status);
+ //           if (response.status === 401) {
+ //               window.location.href = '/bsl';
+ //           }
+ //           return false;
+//        }
+ //       return true;
+ //   } catch (error) {
+//        console.error('Auth check failed:', error);
+ //       if (error.name === 'TypeError') {
+ //           window.location.href = '/bsl';
+ //       }
+//        return false;
+//    }
+//}
 
-setInterval(checkTokenValidity, 60000); 
+//setInterval(checkTokenValidity, 60000);
 
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadSettings();
     loadBookings();
-    checkTokenValidity();
+    // checkTokenValidity();
     loadVIPList(1);
     showPage('reservations');
 });
