@@ -207,7 +207,10 @@ function generateCalendar(month = currentMonth, year = currentYear) {
             dayElement.classList.add('disabled');
             dayElement.style.pointerEvents = 'none';
         }
-        
+
+        if (currentDate < today) {
+            dayElement.classList.add('disabled');
+            dayElement.style.pointerEvents = 'none';
         } else {
             dayElement.addEventListener('click', () => selectDate(day, month, year));
         }
