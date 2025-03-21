@@ -29,11 +29,17 @@ const customerNotificationTemplate = require('./line-templates/customer-notifica
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
+const ALLOWED_IP = process.env.ALLOWED_IP;
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
 
 const app = express();
+
+// 獲取請求者的 IP（處理代理伺服器情況）
+function getClientIP(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
+}
 
 const redisClient = createClient({
     url: redisUrl,
@@ -395,13 +401,19 @@ app.use(express.static(__dirname));
 
 // 路由處理
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
-//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
-app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+app.use((req, res, next) => {
+    if (req.path === '/form.html' && clientIP !== ALLOWED_IP) {
+        return res.redirect('/comingsoon.html');
+    }
+    
+    next();
+});
+//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
-// app.get('/comingsoon', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+app.get('/comingsoon', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
 app.get(['/bsl', '/backstage-login'], (req, res) => {
     const accessToken = req.cookies.accessToken;
     if (accessToken) {
