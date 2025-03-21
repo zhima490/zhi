@@ -36,11 +36,6 @@ const userTimeouts = {}; // 用於存儲每個用戶的計時器
 
 const app = express();
 
-// 獲取請求者的 IP（處理代理伺服器情況）
-function getClientIP(req) {
-    return req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
-}
-
 const redisClient = createClient({
     url: redisUrl,
     socket: {
@@ -400,10 +395,16 @@ app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
 // 路由處理
+
+// 獲取請求者的 IP（處理代理伺服器情況）
+function getClientIP(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
+}
+
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form', (req, res) => {
-    const clientIP = getClientIP(req);
+    const clientIP = getClientIP(req); 
     if (clientIP !== ALLOWED_IP) {
         return res.redirect('/comingsoon.html'); 
     }
