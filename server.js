@@ -43,8 +43,8 @@ const redisClient = createClient({
 });
 
 async function connectRedis() {
-    if (redisClient.isReady) {
-        console.log('🔄 Redis 已準備就緒，跳過重連');
+    if (redisClient.isReady || redisClient.isOpen) {
+        console.log('🔄 Redis 已準備就緒或正在連線中，跳過重連');
         return;
     }
 
@@ -57,9 +57,10 @@ async function connectRedis() {
     }
 }
 
-// 初始連線
+// **初始連線**
 connectRedis();
 
+// **監聽 Redis 事件**
 redisClient.on('error', (err) => {
     console.error('⚠️ Redis 連線錯誤:', err);
 });
@@ -67,9 +68,9 @@ redisClient.on('error', (err) => {
 redisClient.on('end', async () => {
     console.log('🔄 Redis 連線已關閉，檢查是否需要重連...');
     
-    await new Promise(resolve => setTimeout(resolve, 5000)); // 延遲 5 秒
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
-    if (!redisClient.isReady) {
+    if (!redisClient.isReady && !redisClient.isOpen) {
         console.log('🔄 重新嘗試連線...');
         await connectRedis();
     } else {
@@ -81,7 +82,7 @@ redisClient.on('ready', () => {
     console.log('✅ Redis 連線已準備就緒');
 });
 
-// 確保程式關閉時，Redis 連線正確關閉
+// **確保伺服器關閉時，Redis 也正確關閉**
 process.on('SIGINT', async () => {
     console.log('⚠️  伺服器關閉，正在關閉 Redis 連線...');
     await redisClient.quit();
@@ -394,8 +395,8 @@ app.use(express.static(__dirname));
 
 // 路由處理
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
-//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
-app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
