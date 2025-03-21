@@ -405,6 +405,7 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form', (req, res) => {
     const clientIP = getClientIP(req);  // 獲取請求者的 IP 地址
+    console.log(`訪問 IP: ${clientIP}`);
     if (!ALLOWED_IPS.includes(clientIP)) { // 檢查 IP 是否在允許的範圍內
         return res.redirect('/comingsoon.html'); 
     }
