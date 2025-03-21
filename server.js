@@ -29,7 +29,7 @@ const customerNotificationTemplate = require('./line-templates/customer-notifica
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const ALLOWED_IP = process.env.ALLOWED_IP;
+const ALLOWED_IPS = process.env.ALLOWED_IPS.split(',');
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
@@ -404,9 +404,8 @@ function getClientIP(req) {
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form', (req, res) => {
-    const clientIP = getClientIP(req);
-    console.log(`訪問 IP: ${clientIP}`);
-    if (clientIP !== ALLOWED_IP) {
+    const clientIP = getClientIP(req);  // 獲取請求者的 IP 地址
+    if (!ALLOWED_IPS.includes(clientIP)) { // 檢查 IP 是否在允許的範圍內
         return res.redirect('/comingsoon.html'); 
     }
 
