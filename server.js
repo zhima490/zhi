@@ -404,7 +404,8 @@ function getClientIP(req) {
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form', (req, res) => {
-    const clientIP = getClientIP(req); 
+    const clientIP = getClientIP(req);
+    console.log(`訪問 IP: ${clientIP}`);
     if (clientIP !== ALLOWED_IP) {
         return res.redirect('/comingsoon.html'); 
     }
