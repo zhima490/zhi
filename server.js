@@ -38,40 +38,54 @@ const app = express();
 const redisClient = createClient({
     url: redisUrl,
     socket: {
-        reconnectStrategy: retries => Math.min(retries * 100, 3000) // 指數回退策略
+        reconnectStrategy: retries => Math.min(retries * 100, 3000)
     }
 });
 
 async function connectRedis() {
-    if (redisClient.isOpen) {
-        console.log('🔄 Redis 已經連線，跳過重連');
+    if (redisClient.isReady) {
+        console.log('🔄 Redis 已準備就緒，跳過重連');
         return;
     }
 
     try {
         await redisClient.connect();
-        console.log('Redis 連線成功');
+        console.log('✅ Redis 連線成功');
     } catch (error) {
-        console.error('Redis 連線失敗:', error);
-        setTimeout(connectRedis, 5000); // 5 秒後重新嘗試連線
+        console.error('❌ Redis 連線失敗:', error);
+        setTimeout(connectRedis, 5000);
     }
 }
 
 // 初始連線
 connectRedis();
 
-// 監聽 Redis 錯誤事件
 redisClient.on('error', (err) => {
-    console.error('⚠Redis 連線錯誤:', err);
+    console.error('⚠️ Redis 連線錯誤:', err);
 });
 
-redisClient.on('end', () => {
-    console.log('Redis 連線已關閉，正在嘗試重連...');
-    setTimeout(connectRedis, 5000);
+redisClient.on('end', async () => {
+    console.log('🔄 Redis 連線已關閉，檢查是否需要重連...');
+    
+    await new Promise(resolve => setTimeout(resolve, 5000)); // 延遲 5 秒
+
+    if (!redisClient.isReady) {
+        console.log('🔄 重新嘗試連線...');
+        await connectRedis();
+    } else {
+        console.log('✅ Redis 已重新連線，無需重試');
+    }
 });
 
 redisClient.on('ready', () => {
-    console.log('Redis 連線已準備就緒');
+    console.log('✅ Redis 連線已準備就緒');
+});
+
+// 確保程式關閉時，Redis 連線正確關閉
+process.on('SIGINT', async () => {
+    console.log('⚠️  伺服器關閉，正在關閉 Redis 連線...');
+    await redisClient.quit();
+    process.exit(0);
 });
 
 const transporter = nodemailer.createTransport({
