@@ -34,9 +34,46 @@ const cors = require('cors');
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
 
 const app = express();
+
 const redisClient = createClient({
-    url: redisUrl
-  });
+    url: redisUrl,
+    socket: {
+        reconnectStrategy: retries => Math.min(retries * 100, 3000) // 指數回退策略
+    }
+});
+
+async function connectRedis() {
+    if (redisClient.isOpen) {
+        console.log('🔄 Redis 已經連線，跳過重連');
+        return;
+    }
+
+    try {
+        await redisClient.connect();
+        console.log('Redis 連線成功');
+    } catch (error) {
+        console.error('Redis 連線失敗:', error);
+        setTimeout(connectRedis, 5000); // 5 秒後重新嘗試連線
+    }
+}
+
+// 初始連線
+connectRedis();
+
+// 監聽 Redis 錯誤事件
+redisClient.on('error', (err) => {
+    console.error('⚠Redis 連線錯誤:', err);
+});
+
+redisClient.on('end', () => {
+    console.log('Redis 連線已關閉，正在嘗試重連...');
+    setTimeout(connectRedis, 5000);
+});
+
+redisClient.on('ready', () => {
+    console.log('Redis 連線已準備就緒');
+});
+
 const transporter = nodemailer.createTransport({
     service: 'Gmail', 
     auth: {
@@ -343,7 +380,8 @@ app.use(express.static(__dirname));
 
 // 路由處理
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
-app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
