@@ -403,6 +403,7 @@ app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form', (req, res) => {
+    const clientIP = getClientIP(req);
     if (clientIP !== ALLOWED_IP) {
         return res.redirect('/comingsoon.html'); 
     }
