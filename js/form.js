@@ -216,6 +216,7 @@ function selectDate(day, month, year) {
     });
 
     document.getElementById('time-picker-container').style.display = 'block';
+    document.getElementById('next-step-container').style.display = 'block';
     
     updateTimeButtons();
 }
@@ -351,6 +352,7 @@ async function updateTimeButtons() {
             $('#preview-time').text(selectedTime);
             
             $('.form-row, .pe-note').addClass('show');
+            document.getElementById('next-step-btn').disabled = false;
         });
 
     } catch (error) {
@@ -542,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (date && time) {
             sessionStorage.setItem('selectedDate', date);
             sessionStorage.setItem('selectedTime', time);
-            window.location.href = '/form/info';
+            window.location.href = '/uf/info';
         }
     });
 });
