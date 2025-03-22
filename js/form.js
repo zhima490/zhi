@@ -534,9 +534,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', function() {
     const nextStepBtn = document.getElementById('next-step-btn');
+    
     nextStepBtn.addEventListener('click', function() {
         const date = document.getElementById('date').value;
-        sessionStorage.setItem('selectedDate', date);
-        window.location.href = '/form/info';
+        const time = document.getElementById('time').value;
+        
+        if (date && time) {
+            sessionStorage.setItem('selectedDate', date);
+            sessionStorage.setItem('selectedTime', time);
+            window.location.href = '/form/info';
+        }
+    });
+});
     });
 });
