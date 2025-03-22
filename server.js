@@ -399,11 +399,10 @@ app.use(express.static(__dirname));
 // 獲取請求者的 IP（處理代理伺服器情況）
 function getClientIP(req) {
     const forwarded = req.headers['x-forwarded-for'];
-    let ip = forwarded ? forwarded.split(',')[0].trim() : req.connection.remoteAddress;
-    if (ip.includes('::ffff:')) {
-        ip = ip.split('::ffff:')[1]; // 處理 IPv4 映射的 IPv6
+    if (forwarded) {
+        return forwarded.split(',')[0].trim();
     }
-    return ip;
+    return req.connection.remoteAddress;
 }
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
