@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleBtns = document.querySelectorAll('.toggle-btn');
     const reservationForm = document.getElementById('reservationForm');
     const cancelContainer = document.getElementById('cancel-container');
-    const reservationSummary = document.getElementById('reservation-summary');
 
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -125,8 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (parseInt(childrenSelect.value) > maxChildren) {
             childrenSelect.value = maxChildren;
         }
-
-        document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
     }
 
     for (let i = 1; i <= 6; i++) {
@@ -137,37 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateChildrenOptions();
-
     adultsSelect.value = 1;
-    document.getElementById('preview-adults').textContent = '1位大人';
-    document.getElementById('preview-children').textContent = '0位小孩';
 
     adultsSelect.addEventListener('change', () => {
-        document.getElementById('preview-adults').textContent = `${adultsSelect.value}位大人`;
         updateChildrenOptions();
     });
-
-    childrenSelect.addEventListener('change', () => {
-        document.getElementById('preview-children').textContent = `${childrenSelect.value}位小孩`;
-    });
-
-    document.getElementById('phone').addEventListener('input', () => {
-        document.getElementById('preview-phone').textContent = document.getElementById('phone').value;
-    });
-    document.getElementById('email').addEventListener('input', () => {
-        document.getElementById('preview-email').textContent = document.getElementById('email').value;
-    });
-    document.getElementById('notes').addEventListener('input', () => {
-        document.getElementById('preview-notes').textContent = document.getElementById('notes').value;
-    });
-    document.getElementById('vegetarian').addEventListener('input', () => {
-        document.getElementById('preview-vegetarian').textContent = document.getElementById('vegetarian').value;
-    });
-    document.getElementById('specialNeeds').addEventListener('input', () => {
-        document.getElementById('preview-special').textContent = document.getElementById('specialNeeds').value;
-    });
 });
-
 
 const today = new Date();
 today.setHours(0, 0, 0, 0)
@@ -235,11 +207,6 @@ function selectDate(day, month, year) {
     const localDate = selectedDate.toLocaleDateString('en-CA'); 
     document.getElementById('date').value = localDate;
 
-    const formattedDate = `${year}/${String(month + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}`;
-    const weekdays = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
-    const weekday = weekdays[selectedDate.getDay()];
-    document.getElementById('preview-date').textContent = `${formattedDate} (${weekday})`;
-
     const days = document.querySelectorAll('#days-container .day');
     days.forEach(dayElement => {
         dayElement.classList.remove('selected');
@@ -293,7 +260,7 @@ async function updateTimeButtons() {
     try {
         const weekdaySlots = {
             morning: [
-                { time: '11:10', id: 'wm1' },
+                { time: '11:00', id: 'wm1' },
                 { time: '11:30', id: 'wm1' },
                 { time: '12:00', id: 'wm2' },
                 { time: '12:30', id: 'wm2' },
@@ -313,7 +280,7 @@ async function updateTimeButtons() {
 
         const holidaySlots = {
             morning: [
-                { time: '11:10', id: 'hm1' },
+                { time: '11:00', id: 'hm1' },
                 { time: '11:30', id: 'hm1' },
                 { time: '12:00', id: 'hm2' },
                 { time: '12:30', id: 'hm2' },
@@ -531,42 +498,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 setTimeout(() => {
                     form.reset();
-                
-                document.getElementById('preview-adults').textContent = '1';
-                document.getElementById('preview-children').textContent = '0';
-                document.getElementById('preview-date').textContent = '尚未選擇';
-                document.getElementById('preview-time').textContent = '尚未選擇';
-                document.getElementById('preview-vegetarian').textContent = '否';
-                document.getElementById('preview-special').textContent = '無';
-                document.getElementById('preview-phone').textContent = '尚未填寫';
-                document.getElementById('preview-email').textContent = '尚未填寫';
-                document.getElementById('preview-notes').textContent = '無';
-                
-                currentMonth = new Date().getMonth();
-                currentYear = new Date().getFullYear();
-                generateCalendar(currentMonth, currentYear);
-                
-                const days = document.querySelectorAll('#days-container .day');
-                days.forEach(day => day.classList.remove('selected'));
-                
-                document.querySelectorAll('.time-button').forEach(btn => 
-                    btn.classList.remove('selected')
-                );
-                
-                document.getElementById('time-picker-container').style.display = 'none';
-                document.querySelectorAll('.form-row').forEach(row => {
-                    row.classList.remove('show');
-                });
-                
-                document.getElementById('adults').value = '1';
-                document.getElementById('children').value = '0';
-                document.getElementById('vegetarian').value = '否';
-                document.getElementById('specialNeeds').value = '無';
+                    
+                    currentMonth = new Date().getMonth();
+                    currentYear = new Date().getFullYear();
+                    generateCalendar(currentMonth, currentYear);
+                    
+                    const days = document.querySelectorAll('#days-container .day');
+                    days.forEach(day => day.classList.remove('selected'));
+                    
+                    document.querySelectorAll('.time-button').forEach(btn => 
+                        btn.classList.remove('selected')
+                    );
+                    
+                    document.getElementById('time-picker-container').style.display = 'none';
+                    document.querySelectorAll('.form-row').forEach(row => {
+                        row.classList.remove('show');
+                    });
+                    
+                    document.getElementById('adults').value = '1';
+                    document.getElementById('children').value = '0';
+                    document.getElementById('vegetarian').value = '否';
+                    document.getElementById('specialNeeds').value = '無';
                 }, 100);
                 
-
                 return;
-
             } else {
                 throw new Error(data.message || '預訂失敗，請稍後再試');
             }
