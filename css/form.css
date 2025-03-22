@@ -112,24 +112,17 @@ nav a {
     padding: 20px 40px;
     justify-content: center;
     margin-top: 0;
-    margin-left: 360px;
+    margin-left: 0; 
     flex: 1;
 }
 
 #reservationForm {
-    flex: 2;
     max-width: 35%;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-#title {
-    margin-top: 0;
-    text-align: center;
-}
-
 /* 日曆  */
 
 #calendar-container {
@@ -143,8 +136,9 @@ nav a {
 
 #calendar-header {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; 
     align-items: center;
+    justify-content: center;
     margin-top: 20px;
     gap: 15px;
     margin-bottom: 25px;
@@ -158,27 +152,19 @@ nav a {
 }
 
 #calendar-buttons {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    width: 100%;
+    display: flex;
     align-items: center;
+    justify-content: space-between; 
+    width: auto; 
 }
 
-#prevMonth {
-    grid-column: 1;
-    justify-self: center;
-}
-
-#nextMonth {
-    grid-column: 7;
-    justify-self: center;
-}
 
 /* 左右箭頭按鈕 */
 #prevMonth,
 #nextMonth {
     width: 40px;
     height: 40px;
+    position: static;
     background-color: #E8F5E9;
     color: #4CAF50;
     border: none;
@@ -529,36 +515,6 @@ footer {
 }
 
 /* 右側填寫  */
-
-/* 左側預覽  */
-
-#reservation-summary,
-#reservationForm {
-    position: relative;
-    flex: 1 1 45%; 
-    min-width: 300px; 
-    transition: width 0.3s ease;
-}
-
-#reservation-summary {
-    flex: 1;
-    position: fixed;
-    left: 25%;
-    width: 300px;
-    height: 400px;
-    background-color: #f8f8f8;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#left-title {
-    text-align: center;
-    font-size: 32px;
-    margin-top: 0;
-}
-
-/* 左側預覽  */
 
 /* 取消訂位 */
 
