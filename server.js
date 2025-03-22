@@ -29,7 +29,6 @@ const customerNotificationTemplate = require('./line-templates/customer-notifica
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const ALLOWED_IPS = process.env.ALLOWED_IPS ? process.env.ALLOWED_IPS.split(',').map(ip => ip.trim()) : [];
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
@@ -396,36 +395,9 @@ app.use(express.static(__dirname));
 
 // 路由處理
 
-// 獲取請求者的 IP
-function getClientIP(req) {
-    const forwarded = req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For'];
-    console.log(`X-Forwarded-For: ${forwarded}`);
-    if (forwarded) {
-        const ips = forwarded.split(',');
-        console.log(`分割後的 IPs: ${JSON.stringify(ips)}`);
-        const firstIP = ips[0].trim();
-        console.log(`提取的第一個 IP: ${firstIP}`);
-        return firstIP;
-    }
-    const remoteAddr = req.connection.remoteAddress;
-    console.log(`Remote Address: ${remoteAddr}`);
-    return remoteAddr;
-}
-
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
-
-app.get('/form', (req, res) => {
-    const clientIP = getClientIP(req);
-    console.log(`訪問 IP: ${clientIP}`);
-    console.log(`ALLOWED_IPS: ${JSON.stringify(ALLOWED_IPS)}`);
-    if (!ALLOWED_IPS.includes(clientIP)) {
-        console.log(`IP ${clientIP} 未在 ALLOWED_IPS 中`);
-        return res.redirect('/comingsoon');
-    }
-    res.sendFile(path.join(__dirname, 'html', 'form.html'));
-});
-
+app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
