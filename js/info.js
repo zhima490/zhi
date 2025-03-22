@@ -20,48 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('displayDate').textContent = formattedDate;
     document.getElementById('displayTime').textContent = selectedTime;
 
-    // 人數計數器邏輯
-    const maxTotal = 6; // 最大總人數
-    let adults = 1;
-    let children = 0;
-
-    function updateCounts() {
-        document.getElementById('adultsCount').textContent = adults;
-        document.getElementById('childrenCount').textContent = children;
-        document.getElementById('adults').value = adults;
-        document.getElementById('children').value = children;
-
-        // 更新按鈕狀態
-        document.querySelector('[data-target="adults"].minus').disabled = adults <= 1;
-        document.querySelector('[data-target="adults"].plus').disabled = adults + children >= maxTotal;
-        document.querySelector('[data-target="children"].minus').disabled = children <= 0;
-        document.querySelector('[data-target="children"].plus').disabled = adults + children >= maxTotal;
-    }
-
-    // 綁定計數器按鈕事件
-    document.querySelectorAll('.counter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const target = this.dataset.target;
-            const isPlus = this.classList.contains('plus');
-            
-            if (target === 'adults') {
-                if (isPlus && adults + children < maxTotal) {
-                    adults++;
-                } else if (!isPlus && adults > 1) {
-                    adults--;
-                }
-            } else if (target === 'children') {
-                if (isPlus && adults + children < maxTotal) {
-                    children++;
-                } else if (!isPlus && children > 0) {
-                    children--;
-                }
-            }
-            
-            updateCounts();
-        });
-    });
-
     // 表單提交處理
     const form = document.getElementById('reservationForm');
     form.addEventListener('submit', async (event) => {
@@ -92,7 +50,4 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(error.message || '預訂失敗，請稍後再試');
         }
     });
-
-    // 初始化顯示
-    updateCounts();
 }); 
