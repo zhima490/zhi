@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (date && time) {
             sessionStorage.setItem('selectedDate', date);
             sessionStorage.setItem('selectedTime', time);
-            window.location.href = '/uf/info';
+            window.location.href = '/form/info';
         }
     });
 });
