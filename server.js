@@ -396,12 +396,14 @@ app.use(express.static(__dirname));
 
 // 路由處理
 
-// 獲取請求者的 IP（處理代理伺服器情況）
+// 獲取請求者的 IP
 function getClientIP(req) {
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
         const ips = forwarded.split(',');
-        return ips[0].trim(); 
+        const clientIP = ips[0].trim();
+        console.log(`提取的 IP: ${clientIP}`); // 檢查輸出
+        return clientIP;
     }
     return req.connection.remoteAddress;
 }
@@ -415,7 +417,7 @@ app.get('/form', (req, res) => {
     console.log(`ALLOWED_IPS: ${JSON.stringify(ALLOWED_IPS)}`);
     if (!ALLOWED_IPS.includes(clientIP)) {
         console.log(`IP ${clientIP} 未在 ALLOWED_IPS 中`);
-        return res.redirect('/comingsoon.html');
+        return res.redirect('/comingsoon');
     }
     res.sendFile(path.join(__dirname, 'html', 'form.html'));
 });
