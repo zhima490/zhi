@@ -12,7 +12,6 @@
     <div class="container">
         <form id="reservationForm" action="/reservations" method="POST">
             <div class="reservation-summary">
-            <h2>訂位資訊</h2>
             <div class="summary-content">
                 <div class="summary-item">
                     <label>日期</label>
@@ -24,31 +23,17 @@
                 </div>
                 <div class="summary-item">
                     <label>人數</label>
-                    <div class="people-counter">
-                        <div class="counter-item">
-                            <label>大人</label>
-                            <div class="counter-controls">
-                                <button type="button" class="counter-btn minus" data-target="adults">-</button>
-                                <span id="adultsCount">1</span>
-                                <button type="button" class="counter-btn plus" data-target="adults">+</button>
-                            </div>
-                        </div>
-                        <div class="counter-item">
-                            <label>小孩</label>
-                            <div class="counter-controls">
-                                <button type="button" class="counter-btn minus" data-target="children">-</button>
-                                <span id="childrenCount">0</span>
-                                <button type="button" class="counter-btn plus" data-target="children">+</button>
-                            </div>
-                        </div>
-                    </div>
+                    <span id="displayPeople"></span>
                 </div>
             </div>
         </div>
+
+        <!-- 右側表單 -->
+        <form id="reservationForm" action="/reservations" method="POST">
             <input type="hidden" id="date" name="date">
             <input type="hidden" id="time" name="time">
-            <input type="hidden" id="adults" name="adults" value="1">
-            <input type="hidden" id="children" name="children" value="0">
+            <input type="hidden" id="adults" name="adults">
+            <input type="hidden" id="children" name="children">
             
             <div class="form-section">
                 <div class="form-row">
