@@ -29,7 +29,7 @@ const customerNotificationTemplate = require('./line-templates/customer-notifica
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const ALLOWED_IPS = process.env.ALLOWED_IPS.split(',');
+const ALLOWED_IPS = process.env.ALLOWED_IPS ? process.env.ALLOWED_IPS.split(',').map(ip => ip.trim()) : [];
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
@@ -398,20 +398,28 @@ app.use(express.static(__dirname));
 
 // 獲取請求者的 IP（處理代理伺服器情況）
 function getClientIP(req) {
-    return req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
+    const forwarded = req.headers['x-forwarded-for'];
+    let ip = forwarded ? forwarded.split(',')[0].trim() : req.connection.remoteAddress;
+    if (ip.includes('::ffff:')) {
+        ip = ip.split('::ffff:')[1]; // 處理 IPv4 映射的 IPv6
+    }
+    return ip;
 }
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
-app.get('/form', (req, res) => {
-    const clientIP = getClientIP(req);  // 獲取請求者的 IP 地址
-    console.log(`訪問 IP: ${clientIP}`);
-    if (!ALLOWED_IPS.includes(clientIP)) { // 檢查 IP 是否在允許的範圍內
-        return res.redirect('/comingsoon.html'); 
-    }
 
+app.get('/form', (req, res) => {
+    const clientIP = getClientIP(req);
+    console.log(`訪問 IP: ${clientIP}`);
+    console.log(`ALLOWED_IPS: ${JSON.stringify(ALLOWED_IPS)}`);
+    if (!ALLOWED_IPS.includes(clientIP)) {
+        console.log(`IP ${clientIP} 未在 ALLOWED_IPS 中`);
+        return res.redirect('/comingsoon.html');
+    }
     res.sendFile(path.join(__dirname, 'html', 'form.html'));
 });
+
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
