@@ -146,9 +146,9 @@ nav a {
 }
 
 #calendar-title {
-    font-size: 32px;
+    font-size: 26px; 
     font-weight: bold;
-    text-align: center;
+    margin: 0 15px; 
 }
 
 #calendar-buttons {
