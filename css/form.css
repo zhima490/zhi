@@ -476,22 +476,14 @@ textarea {
     resize: vertical;
 }
 
-.form-row {
-    visibility: hidden;
-    position: absolute;
-    top: -9999px;  
-    left: -9999px;
-}
-
 .form-row.show {
-    visibility: visible; 
     position: relative;  
     top: 0;
     left: 0;
     display: flex;
     gap: 20px; 
     margin-bottom: 15px;
-    align-items: center; /
+    align-items: center;
 }
 
 .row, .form-group, .form-row label {    
