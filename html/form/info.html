@@ -11,6 +11,40 @@
 <body>
     <div class="container">
         <form id="reservationForm" action="/reservations" method="POST">
+            <div class="reservation-summary">
+            <h2>訂位資訊</h2>
+            <div class="summary-content">
+                <div class="summary-item">
+                    <label>日期</label>
+                    <span id="displayDate"></span>
+                </div>
+                <div class="summary-item">
+                    <label>時間</label>
+                    <span id="displayTime"></span>
+                </div>
+                <div class="summary-item">
+                    <label>人數</label>
+                    <div class="people-counter">
+                        <div class="counter-item">
+                            <label>大人</label>
+                            <div class="counter-controls">
+                                <button type="button" class="counter-btn minus" data-target="adults">-</button>
+                                <span id="adultsCount">1</span>
+                                <button type="button" class="counter-btn plus" data-target="adults">+</button>
+                            </div>
+                        </div>
+                        <div class="counter-item">
+                            <label>小孩</label>
+                            <div class="counter-controls">
+                                <button type="button" class="counter-btn minus" data-target="children">-</button>
+                                <span id="childrenCount">0</span>
+                                <button type="button" class="counter-btn plus" data-target="children">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             <input type="hidden" id="date" name="date">
             <input type="hidden" id="time" name="time">
             <input type="hidden" id="adults" name="adults" value="1">
