@@ -109,11 +109,10 @@ nav a {
 .container {
     display: flex;
     gap: 20px;
-    padding: 30px 40px;
+    padding: 20px 40px;
     justify-content: center;
     margin-top: 0;
     margin-left: 0; 
-    flex: 1;
 }
 
 #reservationForm {
@@ -152,12 +151,10 @@ nav a {
 }
 
 #calendar-buttons {
-    display: flex;
+    display: flex; 
     align-items: center;
-    justify-content: space-between; 
     width: auto; 
 }
-
 
 /* 左右箭頭按鈕 */
 #prevMonth,
