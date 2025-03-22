@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 顯示選擇的人數
     const peopleText = [];
-    if (selectedAdults && selectedAdults !== '0') {
+    if (selectedAdults) {
         peopleText.push(`${selectedAdults}位大人`);
     }
     if (selectedChildren && selectedChildren !== '0') {
