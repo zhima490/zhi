@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 從 sessionStorage 獲取選擇的日期和時間
     const selectedDate = sessionStorage.getItem('selectedDate');
     const selectedTime = sessionStorage.getItem('selectedTime');
+    const adults = sessionStorage.getItem('adults') || '1';
+    const children = sessionStorage.getItem('children') || '0';
     
     if (!selectedDate || !selectedTime) {
         window.location.href = '/uf'; // 如果沒有日期或時間就返回選擇頁面
@@ -11,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 設置隱藏的表單值
     document.getElementById('date').value = selectedDate;
     document.getElementById('time').value = selectedTime;
+    document.getElementById('adults').value = adults;
+    document.getElementById('children').value = children;
 
     // 顯示選擇的日期和時間
     const date = new Date(selectedDate);
@@ -19,6 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('displayDate').textContent = formattedDate;
     document.getElementById('displayTime').textContent = selectedTime;
+
+    // 顯示人數
+    const peopleText = [];
+    if (adults !== '0') {
+        peopleText.push(`${adults}位大人`);
+    }
+    if (children !== '0') {
+        peopleText.push(`${children}位小孩`);
+    }
+    document.getElementById('displayPeople').textContent = peopleText.join('、');
 
     // 表單提交處理
     const form = document.getElementById('reservationForm');
