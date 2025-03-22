@@ -11,69 +11,69 @@
 <body>
     <div class="container">
         <form id="reservationForm" action="/reservations" method="POST">
-            <div class="selected-date">
-                已選擇日期：<span id="displayDate"></span>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="name">姓名:</label>
-                    <input type="text" id="name" name="name" required placeholder="請輸入姓名">
-                </div>
+            <input type="hidden" id="date" name="date">
+            <input type="hidden" id="time" name="time">
+            <input type="hidden" id="adults" name="adults" value="1">
+            <input type="hidden" id="children" name="children" value="0">
             
-                <div class="form-group" id="gender-container">
-                    <div>
-                        <label><input type="radio" name="gender" value="先生" required> 先生</label>
-                        <label><input type="radio" name="gender" value="小姐"> 小姐</label>
-                        <label><input type="radio" name="gender" value="其他"> 其他</label>
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" name="name" required placeholder="請輸入姓名">
+                    </div>
+                    <div class="form-group" id="gender-container">
+                        <label>稱謂</label>
+                        <div class="gender-options">
+                            <label><input type="radio" name="gender" value="先生" required> 先生</label>
+                            <label><input type="radio" name="gender" value="小姐"> 小姐</label>
+                            <label><input type="radio" name="gender" value="其他"> 其他</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <span class="pe-note">※請留下正確的電話及電子郵件 確保可收到訂位資訊</span>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="phone">電話：</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="0912345678">
-                </div>
-            
-                <div class="form-group" id="email-container">
-                    <label for="email">電子郵件：</label>
-                    <input type="email" id="email" name="email" required placeholder="xxx@gmail.com">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="vegetarian">吃素：</label>
-                    <select id="vegetarian" name="vegetarian">
-                        <option value="否">否</option>
-                        <option value="是">是</option>
-                    </select>
-                </div>
-            
-                <div class="form-group">
-                    <label for="specialNeeds">特殊需求：</label>
-                    <select id="specialNeeds" name="specialNeeds">
-                        <option value="無">無</option>
-                        <option value="有行動不便者">有行動不便者</option>
-                        <option value="有嬰兒車">有嬰兒車</option>
-                        <option value="攜帶寵物">攜帶寵物</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="notes" >備註：</label>
-                    <textarea id="notes" name="notes" maxlength="30" placeholder="有任何需求都可在此提出，如兒童椅等等… (最多可輸入 30 字)"></textarea>
-                </div>
-            </div>
 
-            
-            <div class="button-group">
-                <button type="button" class="back-btn" onclick="history.back()">上一步</button>
-                <button type="submit" class="submit-btn">確認訂位</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">電話</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="0912345678">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">電子郵件</label>
+                        <input type="email" id="email" name="email" required placeholder="xxx@gmail.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="vegetarian">素食選項</label>
+                        <select id="vegetarian" name="vegetarian">
+                            <option value="否">否</option>
+                            <option value="是">是</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialNeeds">特殊需求</label>
+                        <select id="specialNeeds" name="specialNeeds">
+                            <option value="無">無</option>
+                            <option value="有行動不便者">有行動不便者</option>
+                            <option value="有嬰兒車">有嬰兒車</option>
+                            <option value="攜帶寵物">攜帶寵物</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="notes">備註</label>
+                        <textarea id="notes" name="notes" maxlength="30" 
+                                 placeholder="有任何需求都可在此提出，如兒童椅等等…（最多30字）"></textarea>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="back-btn" onclick="history.back()">上一步</button>
+                    <button type="submit" class="submit-btn">確認訂位</button>
+                </div>
             </div>
         </form>
     </div>
