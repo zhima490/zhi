@@ -398,7 +398,7 @@ app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 //app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form/info', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', '/uf/info.html'));
+    res.sendFile(path.join(__dirname, 'html', 'html/uf/info.html'));
 });
 
 app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
