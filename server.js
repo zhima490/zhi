@@ -398,14 +398,18 @@ app.use(express.static(__dirname));
 
 // 獲取請求者的 IP
 function getClientIP(req) {
-    const forwarded = req.headers['x-forwarded-for'];
+    const forwarded = req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For'];
+    console.log(`X-Forwarded-For: ${forwarded}`);
     if (forwarded) {
         const ips = forwarded.split(',');
-        const clientIP = ips[0].trim();
-        console.log(`提取的 IP: ${clientIP}`); // 檢查輸出
-        return clientIP;
+        console.log(`分割後的 IPs: ${JSON.stringify(ips)}`);
+        const firstIP = ips[0].trim();
+        console.log(`提取的第一個 IP: ${firstIP}`);
+        return firstIP;
     }
-    return req.connection.remoteAddress;
+    const remoteAddr = req.connection.remoteAddress;
+    console.log(`Remote Address: ${remoteAddr}`);
+    return remoteAddr;
 }
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
