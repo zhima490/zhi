@@ -400,7 +400,8 @@ app.use(express.static(__dirname));
 function getClientIP(req) {
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
-        return forwarded.split(',')[0].trim();
+        const ips = forwarded.split(',');
+        return ips[0].trim(); 
     }
     return req.connection.remoteAddress;
 }
