@@ -1,20 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 從 sessionStorage 獲取選擇的日期和時間
+    // 從 sessionStorage 獲取所有選擇的資訊
     const selectedDate = sessionStorage.getItem('selectedDate');
     const selectedTime = sessionStorage.getItem('selectedTime');
-    const adults = sessionStorage.getItem('adults') || '1';
-    const children = sessionStorage.getItem('children') || '0';
+    const selectedAdults = sessionStorage.getItem('selectedAdults');
+    const selectedChildren = sessionStorage.getItem('selectedChildren');
     
     if (!selectedDate || !selectedTime) {
-        window.location.href = '/uf'; // 如果沒有日期或時間就返回選擇頁面
+        window.location.href = '/uf';
         return;
     }
 
     // 設置隱藏的表單值
     document.getElementById('date').value = selectedDate;
     document.getElementById('time').value = selectedTime;
-    document.getElementById('adults').value = adults;
-    document.getElementById('children').value = children;
+    document.getElementById('adults').value = selectedAdults || '1';
+    document.getElementById('children').value = selectedChildren || '0';
 
     // 顯示選擇的日期和時間
     const date = new Date(selectedDate);
@@ -24,15 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('displayDate').textContent = formattedDate;
     document.getElementById('displayTime').textContent = selectedTime;
 
-    // 顯示人數
+    // 顯示選擇的人數
     const peopleText = [];
-    if (adults !== '0') {
-        peopleText.push(`${adults}位大人`);
+    if (selectedAdults && selectedAdults !== '0') {
+        peopleText.push(`${selectedAdults}位大人`);
     }
-    if (children !== '0') {
-        peopleText.push(`${children}位小孩`);
+    if (selectedChildren && selectedChildren !== '0') {
+        peopleText.push(`${selectedChildren}位小孩`);
     }
-    document.getElementById('displayPeople').textContent = peopleText.join('、');
+    document.getElementById('displayPeople').textContent = peopleText.join('、') || '1位大人';
 
     // 表單提交處理
     const form = document.getElementById('reservationForm');
