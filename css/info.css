@@ -174,9 +174,15 @@ textarea {
     resize: vertical;
 }
 
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
 
 .back-btn,
 .submit-btn {
+    display: flex;
     padding: 0.8rem 2rem;
     border-radius: 8px;
     font-size: 1rem;
@@ -236,6 +242,6 @@ footer {
     #reservationForm {
         width: 100%;
         margin-left: 0;
-        margin: 20px auto 40px;
+        margin-top: 20px;
     }
 } 
