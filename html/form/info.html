@@ -26,6 +26,7 @@
     </div>
 
     <div class="container">
+
         <form id="reservationForm" action="/reservations" method="POST">
             <input type="hidden" id="date" name="date">
             <input type="hidden" id="time" name="time">
@@ -35,11 +36,11 @@
             <div class="form-section">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="name">姓名</label>
+                        <label for="name">姓名<span class="ipt">*</span></label>
                         <input type="text" id="name" name="name" required placeholder="請輸入姓名">
                     </div>
                     <div class="form-group" id="gender-container">
-                        <label>稱謂</label>
+                        <label>&nbsp;</label>
                         <div class="gender-options">
                             <label><input type="radio" name="gender" value="先生" required> 先生</label>
                             <label><input type="radio" name="gender" value="小姐"> 小姐</label>
@@ -48,13 +49,16 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">電話</label>
+                <div class="form-row contact-row">
+                    <div class="form-group contact-field">
+                        <label for="phone">電話<span class="ipt">*</span></label>
                         <input type="tel" id="phone" name="phone" required placeholder="0912345678">
                     </div>
-                    <div class="form-group">
-                        <label for="email">電子郵件</label>
+                </div>
+                
+                <div class="form-row contact-row">
+                    <div class="form-group contact-field">
+                        <label for="email">電子郵件<span class="ipt">*</span></label>
                         <input type="email" id="email" name="email" required placeholder="xxx@gmail.com">
                     </div>
                 </div>
@@ -85,11 +89,28 @@
                                  placeholder="有任何需求都可在此提出，如兒童椅等等…（最多30字）"></textarea>
                     </div>
                 </div>
-
-                <div class="form-buttons">
-                    <button type="button" class="back-btn" onclick="history.back()">上一步</button>
-                    <button type="submit" class="submit-btn">確認訂位</button>
+            </div>
+            
+            <div class="dining-rules">
+                <h3>⭐用餐規則</h3>
+                <ol>
+                    <li>假日用餐時間為90分鐘（入座後開始計時）</li>
+                    <li>訂位保留10分鐘，10分鐘未到將自動取消。線上訂位超過3次以上（含）自動加入黑名單，如有特殊原因請致電 03 558 7360 或其它方式聯絡我們</li>
+                    <li>請填寫正確的電話號碼以方便聯絡，以及正確的電子郵件接受訂位資訊（含訂位代碼）</li>
+                    <li>若當日有重複的訂位，只會採用最新的一組訂位</li>
+                </ol>
+                
+                <div class="agreement-box">
+                    <label>
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                        我同意以上規則並已詳細閱讀
+                    </label>
                 </div>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="button" class="back-btn" onclick="history.back()">上一步</button>
+                <button type="submit" id="submitBtn" class="submit-btn" disabled>確認訂位</button>
             </div>
         </form>
     </div>
