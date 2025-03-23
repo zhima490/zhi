@@ -223,7 +223,7 @@ footer {
 
     .reservation-summary {
         left: 20px;
-        position: ralative; /* 重置固定定位 */
+        position: static; /* 重置固定定位 */
         width: 100%;
         margin-bottom: 5px;
     }
