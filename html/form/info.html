@@ -6,29 +6,26 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/info.css?v=1.0">
-
 </head>
 <body>
-    <div class="container">
-        <form id="reservationForm" action="/reservations" method="POST">
-            <div class="reservation-summary">
-            <div class="summary-content">
-                <div class="summary-item">
-                    <label>日期</label>
-                    <span id="displayDate"></span>
-                </div>
-                <div class="summary-item">
-                    <label>時間</label>
-                    <span id="displayTime"></span>
-                </div>
-                <div class="summary-item">
-                    <label>人數</label>
-                    <span id="displayPeople"></span>
-                </div>
+    <div class="reservation-summary">
+        <div class="summary-content">
+            <div class="summary-item">
+                <label>日期</label>
+                <span id="displayDate"></span>
+            </div>
+            <div class="summary-item">
+                <label>時間</label>
+                <span id="displayTime"></span>
+            </div>
+            <div class="summary-item">
+                <label>人數</label>
+                <span id="displayPeople"></span>
             </div>
         </div>
+    </div>
 
-        <!-- 右側表單 -->
+    <div class="container">
         <form id="reservationForm" action="/reservations" method="POST">
             <input type="hidden" id="date" name="date">
             <input type="hidden" id="time" name="time">
@@ -109,4 +106,4 @@
     </script>
     <script src="/js/info.js"></script>
 </body>
-</html> 
+</html>
