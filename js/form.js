@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.setItem('selectedTime', time);
             sessionStorage.setItem('selectedAdults', '1');
             sessionStorage.setItem('selectedChildren', '0');
-            window.location.href = '/uf/info';
+            window.location.href = '/form/info';
         }
     });
 });
