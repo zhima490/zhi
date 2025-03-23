@@ -1,8 +1,11 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     outline: none;
     border: none;
     text-decoration: none;
@@ -13,7 +16,6 @@ body {
     background: #fff;
     color: #333;
     line-height: 1.6;
-    
 }
 
 
