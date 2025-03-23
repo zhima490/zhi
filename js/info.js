@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 從 sessionStorage 獲取所有選擇的資訊
     const selectedDate = sessionStorage.getItem('selectedDate');
     const selectedTime = sessionStorage.getItem('selectedTime');
-    const selectedAdults = sessionStorage.getItem('selectedAdults') || '1';
+    const selectedAdults = sessionStorage.getItem('selectedAdults') || '2';
     const selectedChildren = sessionStorage.getItem('selectedChildren') || '0';
     
     if (!selectedDate || !selectedTime) {
