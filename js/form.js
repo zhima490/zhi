@@ -216,7 +216,7 @@ function selectDate(day, month, year) {
     });
 
     document.getElementById('time-picker-container').style.display = 'block';
-    document.getElementById('next-step-btn').disabled = false;
+    document.getElementById('next-step-btn').style.display = 'block';
     
     updateTimeButtons();
 }
