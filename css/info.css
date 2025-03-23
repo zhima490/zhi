@@ -176,10 +176,11 @@ textarea {
     resize: vertical;
 }
 
-.button-group {
+/* 按鈕容器 */
+.form-buttons {
     display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+    position: relative;
+    margin-top: 1.5rem;
 }
 
 .back-btn,
@@ -190,18 +191,21 @@ textarea {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s;
+    width: 160px; /* 固定寬度 */
+    justify-content: center; /* 文字置中 */
 }
 
 .back-btn {
     background: #f5f5f5;
     color: #666;
-    align-items: left;
+    position: absolute;
+    left: 0;
 }
 
 .submit-btn {
     background: #4CAF50;
     color: #fff;
-    align-items: center;
+    margin: 0 auto; /* 水平置中 */
 }
 
 .back-btn:hover {
