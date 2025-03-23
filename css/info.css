@@ -223,9 +223,9 @@ footer {
 
     .reservation-summary {
         left: 20px;
-        position: static; /* 重置固定定位 */
+        position: ralative; /* 重置固定定位 */
         width: 100%;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }
     
     #reservationForm {
