@@ -216,7 +216,6 @@ function selectDate(day, month, year) {
     });
 
     document.getElementById('time-picker-container').style.display = 'block';
-    document.getElementById('next-step-container').style.display = 'block';
     
     updateTimeButtons();
 }
@@ -517,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         row.classList.remove('show');
                     });
                     
-                    document.getElementById('adults').value = '1';
+                    document.getElementById('adults').value = '2';
                     document.getElementById('children').value = '0';
                     document.getElementById('vegetarian').value = '否';
                     document.getElementById('specialNeeds').value = '無';
