@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 設置隱藏的表單值
     document.getElementById('date').value = selectedDate;
     document.getElementById('time').value = selectedTime;
-    document.getElementById('adults').value = selectedAdults;
+    document.getElementById('adults').value = selectedAdults;   
     document.getElementById('children').value = selectedChildren;
 
     // 顯示選擇的日期和時間
@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     document.getElementById('displayPeople').textContent = peopleText.join('、');
 
+    // 同意條款與提交按鈕連動
+    const agreeCheckbox = document.getElementById('agreeTerms');
+    const submitButton = document.getElementById('submitBtn');
+    
+    agreeCheckbox.addEventListener('change', function() {
+        submitButton.disabled = !this.checked;
+    });
 
     // 表單提交處理
     const form = document.getElementById('reservationForm');
