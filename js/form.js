@@ -540,12 +540,14 @@ document.addEventListener('DOMContentLoaded', function() {
     nextStepBtn.addEventListener('click', function() {
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
+        const adults = document.getElementById('adults').value;  
+        const children = document.getElementById('children').value; 
         
         if (date && time) {
             sessionStorage.setItem('selectedDate', date);
             sessionStorage.setItem('selectedTime', time);
-            sessionStorage.setItem('selectedAdults', '1');
-            sessionStorage.setItem('selectedChildren', '0');
+            sessionStorage.setItem('selectedAdults', adults);    
+            sessionStorage.setItem('selectedChildren', children); 
             window.location.href = '/form/info';
         }
     });
