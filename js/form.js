@@ -133,9 +133,9 @@ document.addEventListener('DOMContentLoaded', function () {
         adultsSelect.appendChild(option);
     }
 
-    updateChildrenOptions();
     adultsSelect.value = 2;
-
+    updateChildrenOptions();
+    
     adultsSelect.addEventListener('change', () => {
         updateChildrenOptions();
     });
