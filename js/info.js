@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedChildren = sessionStorage.getItem('selectedChildren') || '0';
     
     if (!selectedDate || !selectedTime) {
-        window.location.href = '/uf';
+        window.location.href = '/form';
         return;
     }
 
