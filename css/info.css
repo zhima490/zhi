@@ -19,7 +19,7 @@ body {
 /* 主容器樣式 */
 .container {
     max-width: 1200px;
-    margin: 120px auto 40px;
+    margin: 20px auto 40px;
     padding: 0 20px;
     position: relative; /* 確保有一個相對定位的父元素 */
 }
