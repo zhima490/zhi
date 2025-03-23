@@ -20,7 +20,7 @@ body {
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 40px;
-    align-items: start;
+    position: relative;
 }
 
 /* 左側訂位摘要 */
@@ -29,11 +29,10 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    position: sticky;
+    position: fixed; 
     top: 100px;
-    align-self: start;
+    width: 300px; 
 }
-
 .summary-content {
     display: flex;
     flex-direction: column;
@@ -110,6 +109,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
     width: 100%;
+    margin-left: 340px; 
 }
 
 .form-section {
@@ -219,8 +219,13 @@ footer {
     }
 
     .reservation-summary {
-        position: static;
+        position: static; 
         margin-bottom: 20px;
+        width: 100%; 
+    }
+    
+    #reservationForm {
+        margin-left: 0;
     }
 }
 
