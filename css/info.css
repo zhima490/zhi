@@ -34,6 +34,7 @@ body {
     top: 100px;
     left: calc(50% - 600px + 20px); /* 根據container的寬度和padding計算 */
     width: 300px;
+    margin: 15px;
 }
 
 .summary-content {
