@@ -37,6 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('reservationForm');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        
+        // 獲取提交按鈕並修改文字和狀態
+        const submitButton = document.querySelector('.submit-btn');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = '正在提交訂位';
+        submitButton.disabled = true;
 
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
@@ -61,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Reservation error:', error);
             alert(error.message || '預訂失敗，請稍後再試');
+            
+            // 發生錯誤時恢復按鈕狀態
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
         }
     });
 }); 
