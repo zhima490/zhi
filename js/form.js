@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateChildrenOptions();
-    adultsSelect.value = 1;
+    adultsSelect.value = 2;
 
     adultsSelect.addEventListener('change', () => {
         updateChildrenOptions();
