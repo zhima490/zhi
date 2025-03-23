@@ -65,6 +65,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.redirected) {
                 window.location.href = response.url;
+
+                setTimeout(() => {
+                    form.reset();
+                    
+                    currentMonth = new Date().getMonth();
+                    currentYear = new Date().getFullYear();
+                    generateCalendar(currentMonth, currentYear);
+                    
+                    const days = document.querySelectorAll('#days-container .day');
+                    days.forEach(day => day.classList.remove('selected'));
+                    
+                    document.querySelectorAll('.time-button').forEach(btn => 
+                        btn.classList.remove('selected')
+                    );
+                    
+                    document.getElementById('time-picker-container').style.display = 'none';
+                    document.querySelectorAll('.form-row').forEach(row => {
+                        row.classList.remove('show');
+                    });
+                    
+                    document.getElementById('adults').value = '2';
+                    document.getElementById('children').value = '0';
+                    document.getElementById('vegetarian').value = '否';
+                    document.getElementById('specialNeeds').value = '無';
+                }, 100);
+                
             } else {
                 const result = await response.json();
                 if (!response.ok) {
