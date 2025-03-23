@@ -33,7 +33,7 @@ body {
     position: fixed; /* 固定位置 */
     top: 100px;
     left: calc(50% - 600px + 20px); /* 根據container的寬度和padding計算 */
-    width: 300px;
+    width: 280px;
     margin: 15px;
 }
 
