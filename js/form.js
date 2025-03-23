@@ -261,7 +261,7 @@ async function updateTimeButtons() {
     try {
         const weekdaySlots = {
             morning: [
-                { time: '11:00', id: 'wm1' },
+                { time: '11:10', id: 'wm1' },
                 { time: '11:30', id: 'wm1' },
                 { time: '12:00', id: 'wm2' },
                 { time: '12:30', id: 'wm2' },
@@ -281,7 +281,7 @@ async function updateTimeButtons() {
 
         const holidaySlots = {
             morning: [
-                { time: '11:00', id: 'hm1' },
+                { time: '11:10', id: 'hm1' },
                 { time: '11:30', id: 'hm1' },
                 { time: '12:00', id: 'hm2' },
                 { time: '12:30', id: 'hm2' },
