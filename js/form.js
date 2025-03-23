@@ -544,7 +544,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (date && time) {
             sessionStorage.setItem('selectedDate', date);
             sessionStorage.setItem('selectedTime', time);
-            window.location.href = '/form/info';
+            sessionStorage.setItem('selectedAdults', '1');
+            sessionStorage.setItem('selectedChildren', '0');
+            window.location.href = '/uf/info';
         }
     });
 });
