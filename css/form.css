@@ -405,6 +405,12 @@ button[type="submit"]:hover {
     cursor: default;
 }
 
+#next-step-container {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
 .next-btn {
     padding: 10px 20px;
     background-color: #4CAF50;
