@@ -1,7 +1,11 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
 }
 
 body {
@@ -9,6 +13,7 @@ body {
     background: #fff;
     color: #333;
     line-height: 1.6;
+    
 }
 
 
@@ -169,11 +174,6 @@ textarea {
     resize: vertical;
 }
 
-.button-group {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
 
 .back-btn,
 .submit-btn {
