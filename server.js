@@ -396,13 +396,14 @@ app.use(express.static(__dirname));
 // 路由處理
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
-//app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 app.get('/form/info', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'form', 'info.html'));
 });
 
-app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
-app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+// 更新用
+// app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+// app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
