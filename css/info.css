@@ -17,10 +17,7 @@ body {
     max-width: 1200px;
     margin: 120px auto 40px;
     padding: 0 20px;
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 40px;
-    position: relative;
+    position: relative; /* 確保有一個相對定位的父元素 */
 }
 
 /* 左側訂位摘要 */
@@ -29,10 +26,12 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    position: fixed; 
+    position: fixed; /* 固定位置 */
     top: 100px;
-    width: 300px; 
+    left: calc(50% - 600px + 20px); /* 根據container的寬度和padding計算 */
+    width: 300px;
 }
+
 .summary-content {
     display: flex;
     flex-direction: column;
@@ -108,8 +107,8 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    width: 100%;
-    margin-left: 340px; 
+    width: calc(100% - 380px); /* 減去左側的寬度和間距 */
+    margin-left: 340px; /* 左側留出寬度給摘要 */
 }
 
 .form-section {
@@ -214,17 +213,19 @@ footer {
 /* 響應式設計 */
 @media (max-width: 1024px) {
     .container {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        display: flex;
+        flex-direction: column;
     }
 
     .reservation-summary {
-        position: static; 
+        left: 20px;
+        position: static; /* 重置固定定位 */
+        width: 100%;
         margin-bottom: 20px;
-        width: 100%; 
     }
     
     #reservationForm {
+        width: 100%;
         margin-left: 0;
     }
 }
