@@ -414,7 +414,7 @@ app.post('/login', (req, res) => {
     if ((username === adminUsername && password === adminPassword) ||
         (username === developerUsername && password === developerPassword)) {
         req.session.user = { username };
-        return res.json({ success: true });
+        return res.sendStatus(200);
     }
     res.status(401).send('登入失敗');
 });
@@ -438,7 +438,7 @@ app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.h
 
 //新後台測試
 
-app.get(['/bs-t', '/backstage-test'], authenticateUser, (req, res) => {
+app.get(['/bs-t', '/backstage-test'], (req, res) => {
     const role = req.session.user.username === process.env.ADMIN_USERNAME ? '管理者' : 
                  req.session.user.username === process.env.DEVELOPER_USERNAME ? '開發者' : '普通用戶';
     res.render('backstage-test', { role });
