@@ -23,7 +23,7 @@ function checkLogin() {
         return;
     }
 
-    fetch('/login', {
+    fetch('/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -34,9 +34,10 @@ function checkLogin() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = 'backstage.html';
+            window.location.href = '/backstage-test'; // 修改重定向路徑
         } else {
             errorMessage.style.display = 'block';
+            errorMessage.textContent = '登入失敗，請檢查您的用戶名和密碼。'; // 更具體的錯誤信息
             document.getElementById('password').value = '';
         }
     })
@@ -67,4 +68,4 @@ function clearError() {
 
 // 當輸入框獲得焦點時清除錯誤訊息
 document.getElementById('username').addEventListener('focus', clearError);
-document.getElementById('password').addEventListener('focus', clearError);
+document.getElementById('password').addEventListener('focus', clearError); 
