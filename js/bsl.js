@@ -29,7 +29,7 @@ function checkLogin() {
     })
     .then(response => {
         if (response.ok) { 
-            window.location.href = '/bs'; 
+            window.location.href = '/bs-t'; 
         } else {
             alert('帳號或密碼錯誤'); 
         }
