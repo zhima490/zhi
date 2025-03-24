@@ -414,7 +414,7 @@ app.post('/login', (req, res) => {
     if ((username === adminUsername && password === adminPassword) ||
         (username === developerUsername && password === developerPassword)) {
         req.session.user = { username };
-        return res.redirect('/backstage-test');
+        return res.json({ success: true });
     }
     res.status(401).send('登入失敗');
 });
