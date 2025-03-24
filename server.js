@@ -407,7 +407,7 @@ app.post('/login', (req, res) => {
     if ((username === adminUsername && password === adminPassword) ||
         (username === developerUsername && password === developerPassword)) {
         req.session.user = { username };
-        return res.redirect('/backstage');
+        return res.redirect('/backstage-test');
     }
     res.status(401).send('登入失敗');
 });
@@ -427,11 +427,18 @@ app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'con
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
 // app.get('/comingsoon', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
-app.get(['/bs', '/backstage'], authenticateUser, (req, res) => {
+
+
+//新後台測試
+
+app.get(['/bs-t', '/backstage-test'], authenticateUser, (req, res) => {
     const role = req.session.user.username === '035587360' ? '管理者' : 
                  req.session.user.username === 'zzyw0097' ? '開發者' :
     res.render('backstage', { role });
 });
+
+// app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
+//      res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
 
 app.get(['/bsl', '/backstage-login'], (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
