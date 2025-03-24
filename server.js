@@ -439,8 +439,8 @@ app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.h
 //新後台測試
 
 app.get(['/bs-t', '/backstage-test'], authenticateUser, (req, res) => {
-    const role = req.session.user.username === '035587360' ? '管理者' : 
-                 req.session.user.username === 'zzyw0097' ? '開發者' :
+    const role = req.session.user.username === process.env.ADMIN_USERNAME ? '管理者' : 
+                 req.session.user.username === process.env.DEVELOPER_USERNAME ? '開發者' : '普通用戶';
     res.render('backstage', { role });
 });
 
