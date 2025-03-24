@@ -203,6 +203,13 @@ const AuthLog = mongoose.model('AuthLog', {
     timestamp: Date
 });
 
+function authenticateUser(req, res, next) {
+    if (req.session.user) {
+        return next();
+    }
+    res.redirect('/backstage-login');
+}
+
 function generateToken(length = 8) {
     return crypto.randomBytes(length).toString('hex').slice(0, length);
 }
