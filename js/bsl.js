@@ -23,7 +23,7 @@ function checkLogin() {
         return;
     }
 
-    fetch('/api/login', {
+    fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
