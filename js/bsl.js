@@ -14,7 +14,6 @@ function togglePassword() {
 function checkLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('rememberMe').checked;
     const errorMessage = document.getElementById('error-message');
 
     if (!username || !password) {
@@ -25,26 +24,19 @@ function checkLogin() {
 
     fetch('/login', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, rememberMe }),
-        credentials: 'same-origin'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = '/backstage-test'; // 修改重定向路徑
+    .then(response => {
+        if (response.ok) { 
+            window.location.href = '/bs'; 
         } else {
-            errorMessage.style.display = 'block';
-            errorMessage.textContent = '登入失敗，請檢查您的用戶名和密碼。'; // 更具體的錯誤信息
-            document.getElementById('password').value = '';
+            alert('帳號或密碼錯誤'); 
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        errorMessage.textContent = '系統錯誤，請稍後再試';
-        errorMessage.style.display = 'block';
+        alert('登入失敗，請稍後再試');
     });
 }
 
