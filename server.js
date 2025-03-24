@@ -386,6 +386,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); 
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -394,6 +396,21 @@ app.use(express.static(path.join(__dirname, 'html')));
 app.use(express.static(__dirname));
 
 // 路由處理
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const adminUsername = process.env.ADMIN_USERNAME;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const developerUsername = process.env.DEVELOPER_USERNAME;
+    const developerPassword = process.env.DEVELOPER_PASSWORD;
+
+    if ((username === adminUsername && password === adminPassword) ||
+        (username === developerUsername && password === developerPassword)) {
+        req.session.user = { username };
+        return res.redirect('/backstage');
+    }
+    res.status(401).send('登入失敗');
+});
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
 app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
@@ -410,21 +427,14 @@ app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'con
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
 app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
 // app.get('/comingsoon', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
-app.get(['/bsl', '/backstage-login'], (req, res) => {
-    const accessToken = req.cookies.accessToken;
-    if (accessToken) {
-        try {
-            jwt.verify(accessToken, process.env.JWT_SECRET);
-            return res.redirect('/bs');
-        } catch (err) {
-            // 處理錯誤
-        }
-    }
-    res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
+app.get(['/bs', '/backstage'], authenticateUser, (req, res) => {
+    const role = req.session.user.username === '035587360' ? '管理者' : 
+                 req.session.user.username === 'zzyw0097' ? '開發者' :
+    res.render('backstage', { role });
 });
 
-app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
+app.get(['/bsl', '/backstage-login'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
 });
 
 connectToDatabase();
