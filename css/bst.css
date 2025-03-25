@@ -22,6 +22,9 @@ body {
     color: white;
     height: 100vh;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .sidebar .user-info {
     margin-bottom: 30px;
@@ -36,6 +39,7 @@ body {
 .sidebar-menu {
     list-style-type: none;
     padding: 0;
+    flex-grow: 1;
 }
 .sidebar-menu li {
     margin-bottom: 10px;
