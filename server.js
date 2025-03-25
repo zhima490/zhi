@@ -30,6 +30,8 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
+dotenv.config();
+
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
 
@@ -127,6 +129,47 @@ app.use((req, res, next) => {
     }
     
     next();
+});
+
+//////////////
+
+const authenticate = (req, res, next) => {
+    if (!req.session.user) {
+        return res.redirect('/');
+    }
+    next();
+};
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // 帳號密碼驗證
+    if (
+        (username === process.env.ADMIN_ACCOUNT && password === process.env.ADMIN_PASSWORD) ||
+        (username === process.env.DEV_ACCOUNT && password === process.env.DEV_PASSWORD)
+    ) {
+        req.session.user = username;
+        req.session.userType = username === process.env.ADMIN_ACCOUNT ? '管理者' : '開發者';
+        
+        res.json({ 
+            success: true, 
+            userType: req.session.userType 
+        });
+    } else {
+        res.status(401).json({ 
+            success: false,
+            message: '無效的帳號或密碼' 
+        });
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('登出時發生錯誤:', err);
+        }
+        res.redirect('/');
+    });
 });
 
 // 認證中間件
@@ -385,7 +428,8 @@ app.use((req, res, next) => {
     res.setHeader('X-XSS-Protection', '0'); 
     next();
 });
-
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -404,6 +448,20 @@ app.get('/form/info', (req, res) => {
 // 更新用
 // app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
 // app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
+
+//新後台測試
+app.get('/bst', authenticate, (req, res) => {
+    res.render('bst', { 
+        userType: req.session.userType 
+    });
+});
+
+app.get('/bslt', (req, res) => {
+    if (req.session.user) {
+        return res.redirect('/bst');
+    }
+    res.sendFile(path.join(__dirname, 'bslt.html'));
+});
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
