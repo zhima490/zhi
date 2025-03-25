@@ -5,7 +5,7 @@ const authenticate = (req, res, next) => {
     if (!req.session.user) {
         return res.redirect('/bslt');
     }
-    req.session.userType = req.session.userType || 'manager';
+    req.session.userType = req.session.userType || '管理者';
     next();
 };
 
