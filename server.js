@@ -30,6 +30,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
+dotenv.config();
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
@@ -130,6 +131,140 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    name: 'sessionId',
+    cookie: { 
+        secure: false,
+        maxAge: 120000
+    }
+}));
+
+app.use(cookieParser(process.env.COOKIE_SECRET));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    if (req.path.includes('/api/') || req.path.includes('/form')) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|webp|svg)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } 
+    // else if (req.path.match(/\.(css|js)$/)) {
+    //     res.setHeader('Cache-Control', 'public, max-age=3600');
+    // } else if (req.path.match(/\.html$/)) {
+    //     res.setHeader('Cache-Control', 'public, max-age=300');
+    // } else {
+    //     res.setHeader('Cache-Control', 'public, max-age=3600');
+    // }
+    
+    if (req.path.endsWith('.css')) {
+        res.type('text/css');
+    } else if (req.path.endsWith('.js')) {
+        res.type('application/javascript');
+    } else if (req.path.endsWith('.ico')) {
+        res.type('image/x-icon');
+    } else if (req.path.endsWith('.svg')) {
+        res.type('image/svg+xml');
+    } else if (req.path.endsWith('.webp')) {
+        res.type('image/webp');
+    }
+    
+    next();
+});
+
+// 壓縮
+app.use(compression());
+
+// 安全性中間件
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                "'unsafe-eval'",
+                "https://maps.googleapis.com",
+                "https://www.googletagmanager.com",
+                "https://www.google-analytics.com",
+                "https://code.jquery.com",
+                "https://cdn.jsdelivr.net",
+                "https://cdnjs.cloudflare.com"  // 添加 cdnjs
+            ],
+            styleSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                "https://fonts.googleapis.com",
+                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
+                "https:"
+            ],
+            scriptSrcAttr: [
+                "'unsafe-inline'"  // 允許內聯事件處理器
+            ],
+            connectSrc: [
+                "'self'",
+                "https://zhimayouzi.onrender.com",
+                "https://zhimayouzi.com",
+                "https://www.zhimayouzi.com",
+                "http://zhimayouzi.com",
+                "http://www.zhimayouzi.com",
+                "wss://zhimayouzi.com",
+                "https://api.zhimayouzi.com"
+            ],
+            imgSrc: [
+                "'self'",
+                "data:",
+                "https:",
+                "https://*.line-apps.com",
+                "https://scdn.line-apps.com"
+            ],
+            fontSrc: [
+                "'self'",
+                "https:",
+                "data:",
+                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
+                "https://fonts.gstatic.com"
+            ],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+            frameSrc: [
+                "'self'",
+                "https://www.google.com"  // 允許 Google 網站被嵌入 iframe
+            ]
+        }
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+app.use((req, res, next) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('base64');
+    next();
+});
+
+app.use((req, res, next) => {
+    res.setHeader('Origin-Agent-Cluster', '?1');
+    res.setHeader('X-XSS-Protection', '0'); 
+    next();
+});
+
 //////////////
 
 const authenticate = (req, res, next) => {
@@ -140,13 +275,33 @@ const authenticate = (req, res, next) => {
 };
 
 app.post('/login', (req, res) => {
-    
+    // 新增日誌記錄，檢查接收到的請求
+    console.log('完整請求 headers:', req.headers);
+    console.log('完整請求 body:', req.body);
+
+    // 如果 body 為空，返回錯誤
+    if (!req.body) {
+        return res.status(400).json({
+            success: false,
+            message: '請求 body 為空'
+        });
+    }
+
     const { username, password } = req.body;
 
-    // 帳號密碼驗證
+    // 增加更多的錯誤檢查
+    if (!username || !password) {
+        return res.status(400).json({
+            success: false,
+            message: '帳號或密碼未提供'
+        });
+    }
+
+    console.log('嘗試登入:', username);
+
     if (
-        (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) ||
-        (username === process.env.DEV_USERNAME && password === process.env.DEV_PASSWORD)
+        (username === process.env.ADMIN_ACCOUNT && password === process.env.ADMIN_PASSWORD) ||
+        (username === process.env.DEV_ACCOUNT && password === process.env.DEV_PASSWORD)
     ) {
         req.session.user = username;
         req.session.userType = username === process.env.ADMIN_ACCOUNT ? '管理者' : '開發者';
@@ -295,139 +450,6 @@ function getTimeSlot(time, date) {
 
 require('dotenv').config();
 
-app.use(session({
-    store: new RedisStore({ client: redisClient }),
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    name: 'sessionId',
-    cookie: { 
-        ...cookieConfig,
-        maxAge: 120000
-    }
-}));
-
-app.use(cookieParser(process.env.COOKIE_SECRET));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); 
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    
-    if (req.path.includes('/api/') || req.path.includes('/form')) {
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-    } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|webp|svg)$/)) {
-        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    } 
-    // else if (req.path.match(/\.(css|js)$/)) {
-    //     res.setHeader('Cache-Control', 'public, max-age=3600');
-    // } else if (req.path.match(/\.html$/)) {
-    //     res.setHeader('Cache-Control', 'public, max-age=300');
-    // } else {
-    //     res.setHeader('Cache-Control', 'public, max-age=3600');
-    // }
-    
-    if (req.path.endsWith('.css')) {
-        res.type('text/css');
-    } else if (req.path.endsWith('.js')) {
-        res.type('application/javascript');
-    } else if (req.path.endsWith('.ico')) {
-        res.type('image/x-icon');
-    } else if (req.path.endsWith('.svg')) {
-        res.type('image/svg+xml');
-    } else if (req.path.endsWith('.webp')) {
-        res.type('image/webp');
-    }
-    
-    next();
-});
-
-// 壓縮
-app.use(compression());
-
-// 安全性中間件
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "'unsafe-eval'",
-                "https://maps.googleapis.com",
-                "https://www.googletagmanager.com",
-                "https://www.google-analytics.com",
-                "https://code.jquery.com",
-                "https://cdn.jsdelivr.net",
-                "https://cdnjs.cloudflare.com"  // 添加 cdnjs
-            ],
-            styleSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "https://fonts.googleapis.com",
-                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
-                "https:"
-            ],
-            scriptSrcAttr: [
-                "'unsafe-inline'"  // 允許內聯事件處理器
-            ],
-            connectSrc: [
-                "'self'",
-                "https://zhimayouzi.onrender.com",
-                "https://zhimayouzi.com",
-                "https://www.zhimayouzi.com",
-                "http://zhimayouzi.com",
-                "http://www.zhimayouzi.com",
-                "wss://zhimayouzi.com",
-                "https://api.zhimayouzi.com"
-            ],
-            imgSrc: [
-                "'self'",
-                "data:",
-                "https:",
-                "https://*.line-apps.com",
-                "https://scdn.line-apps.com"
-            ],
-            fontSrc: [
-                "'self'",
-                "https:",
-                "data:",
-                "https://cdnjs.cloudflare.com",  // 添加 cdnjs
-                "https://fonts.gstatic.com"
-            ],
-            formAction: ["'self'"],
-            frameAncestors: ["'self'"],
-            objectSrc: ["'none'"],
-            upgradeInsecureRequests: [],
-            frameSrc: [
-                "'self'",
-                "https://www.google.com"  // 允許 Google 網站被嵌入 iframe
-            ]
-        }
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
-
-app.use((req, res, next) => {
-    res.locals.nonce = crypto.randomBytes(16).toString('base64');
-    next();
-});
-
-app.use((req, res, next) => {
-    res.setHeader('Origin-Agent-Cluster', '?1');
-    res.setHeader('X-XSS-Protection', '0'); 
-    next();
-});
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use('/js', express.static(path.join(__dirname, 'js')));
@@ -460,7 +482,7 @@ app.get('/bslt', (req, res) => {
     if (req.session.user) {
         return res.redirect('/bst');
     }
-    res.sendFile(path.join(__dirname, 'html', 'bslt.html'));
+    res.sendFile(path.join(__dirname, 'bslt.html'));
 });
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
