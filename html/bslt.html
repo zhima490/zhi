@@ -1,0 +1,74 @@
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>後台登入</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>後台登入</h2>
+        <input type="text" id="username" placeholder="帳號">
+        <input type="password" id="password" placeholder="密碼">
+        <button onclick="login()">登入</button>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '/bst';
+                } else {
+                    alert('登入失敗，請檢查帳號密碼');
+                }
+            } catch (error) {
+                console.error('登入錯誤:', error);
+                alert('登入過程發生錯誤');
+            }
+        }
+    </script>
+</body>
+</html>
