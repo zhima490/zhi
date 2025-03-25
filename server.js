@@ -299,8 +299,8 @@ app.post('/login', (req, res) => {
     console.log('嘗試登入:', username);
 
     if (
-        (username === process.env.ADMIN_ACCOUNT && password === process.env.ADMIN_PASSWORD) ||
-        (username === process.env.DEV_ACCOUNT && password === process.env.DEV_PASSWORD)
+        (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) ||
+        (username === process.env.DEV_USERNAME && password === process.env.DEV_PASSWORD)
     ) {
         req.session.user = username;
         req.session.userType = username === process.env.ADMIN_ACCOUNT ? '管理者' : '開發者';
