@@ -268,7 +268,7 @@ app.use((req, res, next) => {
 
 const authenticate = (req, res, next) => {
     if (!req.session.user) {
-        return res.redirect('/');
+        return res.redirect('/bslt');
     }
     next();
 };
