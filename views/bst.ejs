@@ -1,63 +1,32 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>後台管理系統</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            color: white;
-            height: 100vh;
-            padding: 20px;
-        }
-        .sidebar .user-info {
-            margin-bottom: 30px;
-            border-bottom: 1px solid #34495e;
-            padding-bottom: 15px;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #f4f6f7;
-        }
-        .sidebar-menu {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar-menu li {
-            margin-bottom: 10px;
-        }
-        .sidebar-menu li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .sidebar-menu li a:hover {
-            background-color: #34495e;
-        }
-    </style>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bst.css">
+    <title>後台管理系統-測試</title>
 </head>
 <body>
     <div class="sidebar">
         <div class="user-info">
-            <h3>登入帳號：<%= userType %></h3>
+            <h3><%= userType %></h3>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#">控制台</a></li>
-            <li><a href="#">使用者管理</a></li>
-            <li><a href="#">系統設定</a></li>
+            <% if (userType === 'manager' || userType === 'developer') { %>
+                <li><a href="#" class="menu-item">查看訂位</a></li>
+                <li><a href="#" class="menu-item">取消訂位</a></li>
+                <li><a href="#" class="menu-item">訂位設定</a></li>
+                <li><a href="#" class="menu-item">黑名單</a></li>
+                <li><a href="#" class="menu-item">統計</a></li>
+            <% } %>
+            
+            <% if (userType === 'developer') { %>
+                <li class="developer-only"><a href="#" class="menu-item">一鍵訂位</a></li>
+            <% } %>
         </ul>
     </div>
     <div class="content">
         <h1>歡迎使用後台管理系統</h1>
-        <!-- 右側操作介面內容 -->
     </div>
 </body>
 </html>
