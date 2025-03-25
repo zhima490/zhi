@@ -58,3 +58,21 @@ body {
 .sidebar-menu li.developer-only a:hover {
     background-color: #9B59B6;
 }
+
+.logout-button {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 12px;
+    background-color: #F44336;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.logout-button:hover {
+    background-color: #D32F2F;
+    transform: translateY(-2px);
+}
