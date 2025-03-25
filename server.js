@@ -303,7 +303,7 @@ app.post('/login', (req, res) => {
         (username === process.env.DEV_USERNAME && password === process.env.DEV_PASSWORD)
     ) {
         req.session.user = username;
-        req.session.userType = username === process.env.ADMIN_ACCOUNT ? '管理者' : '開發者';
+        req.session.userType = username === process.env.ADMIN_USERNAME ? '管理者' : '開發者';
         
         res.json({ 
             success: true, 
