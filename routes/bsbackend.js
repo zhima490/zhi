@@ -21,4 +21,13 @@ router.get('/dashboard', authenticate, (req, res) => {
     });
 });
 
+router.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).send('登出失敗');
+      }
+      res.redirect('/bslt');
+    });
+  });
+
 module.exports = router;
