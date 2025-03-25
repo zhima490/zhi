@@ -318,14 +318,14 @@ app.post('/login', (req, res) => {
     }
 });
 
-app.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('登出時發生錯誤:', err);
-        }
-        res.redirect('/');
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).send('登出失敗');
+      }
+      res.redirect('/bslt'); 
     });
-});
+  });
 
 // 認證中間件
 const authenticateToken = async (req, res, next) => {
