@@ -30,7 +30,6 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 
-require('dotenv').config();
 
 // 在文件的頂部定義 userTimeouts
 const userTimeouts = {}; // 用於存儲每個用戶的計時器
@@ -460,7 +459,7 @@ app.get('/bslt', (req, res) => {
     if (req.session.user) {
         return res.redirect('/bst');
     }
-    res.sendFile(path.join(__dirname, 'bslt.html'));
+    res.sendFile(path.join(__dirname, 'html', 'bslt.html'));
 });
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
