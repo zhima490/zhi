@@ -55,8 +55,16 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ 
+                        username: username, 
+                        password: password 
+                    })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || '登入失敗');
+                }
 
                 const result = await response.json();
                 if (result.success) {
@@ -66,7 +74,7 @@
                 }
             } catch (error) {
                 console.error('登入錯誤:', error);
-                alert('登入過程發生錯誤');
+                alert(error.message || '登入過程發生錯誤');
             }
         }
     </script>
