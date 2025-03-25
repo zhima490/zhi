@@ -481,7 +481,7 @@ app.get('/bslt', (req, res) => {
     if (req.session.user) {
         return res.redirect('/bst');
     }
-    res.sendFile(path.join(__dirname, 'bslt.html'));
+    res.sendFile(path.join(__dirname, 'html','bslt.html'));
 });
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
