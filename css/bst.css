@@ -15,13 +15,6 @@ body {
     font-family: 'Microsoft JhengHei', sans-serif;
     display: flex;
 }
-
-.sidebar .user-info {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #34495e;
-    padding-bottom: 15px;
-}
-
 .sidebar {
     width: 250px;
     background: white;
@@ -30,16 +23,23 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
-
+.sidebar .user-info {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 15px;
+}
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f6f7;
+}
 .sidebar-menu {
     list-style-type: none;
     padding: 0;
 }
-
 .sidebar-menu li {
     margin-bottom: 10px;
 }
-
 .sidebar-menu li a {
     color: white;
     text-decoration: none;
@@ -48,16 +48,13 @@ body {
     border-radius: 4px;
     transition: all 0.3s ease;
 }
-
 .sidebar-menu li a:hover {
     background-color: #34495e;
 }
-
 .sidebar-menu li.developer-only a {
-    background-color: #dec487;
+    background-color: #8E44AD; /* 不同的底色，用於開發者專用 */
     color: white;
 }
-
 .sidebar-menu li.developer-only a:hover {
-    background-color: #e6d4a3;
+    background-color: #9B59B6;
 }
