@@ -12,7 +12,7 @@
             <h3><%= userType %></h3>
         </div>
         <ul class="sidebar-menu">
-            <% if (userType === 'manager' || userType === 'developer') { %>
+            <% if (userType === '管理者' || userType === '開發者') { %>
                 <li><a href="#" class="menu-item">查看訂位</a></li>
                 <li><a href="#" class="menu-item">取消訂位</a></li>
                 <li><a href="#" class="menu-item">訂位設定</a></li>
@@ -20,7 +20,7 @@
                 <li><a href="#" class="menu-item">統計</a></li>
             <% } %>
             
-            <% if (userType === 'developer') { %>
+            <% if (userType === '開發者') { %>
                 <li class="developer-only"><a href="#" class="menu-item">一鍵訂位</a></li>
             <% } %>
         </ul>
