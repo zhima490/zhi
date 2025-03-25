@@ -29,6 +29,7 @@ const customerNotificationTemplate = require('./line-templates/customer-notifica
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
+const bsbackendRoutes = require('./routes/bsbackend');
 
 
 // 在文件的頂部定義 userTimeouts
@@ -451,6 +452,7 @@ require('dotenv').config();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use('/bst', bsbackendRoutes);
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
