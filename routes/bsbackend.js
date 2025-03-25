@@ -21,13 +21,22 @@ router.get('/dashboard', authenticate, (req, res) => {
     });
 });
 
-router.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(500).send('登出失敗');
-      }
-      res.redirect('/bslt');
+document.querySelector('.logout-button').addEventListener('click', function() {
+    fetch('/logout', {
+        method: 'POST',
+        credentials: 'include'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/login';
+        } else {
+            alert('登出失敗');
+        }
+    })
+    .catch(error => {
+        console.error('登出錯誤:', error);
+        alert('登出時發生錯誤');
     });
-  });
+});
 
 module.exports = router;
