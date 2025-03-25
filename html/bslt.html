@@ -77,6 +77,12 @@
                 alert(error.message || '登入過程發生錯誤');
             }
         }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkLogin();
+            }
+        });
     </script>
 </body>
 </html>
