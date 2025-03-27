@@ -1,4 +1,3 @@
-<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -13,7 +12,7 @@
         </div>
         <ul class="sidebar-menu">
             <% if (userType === '管理者' || userType === '開發者') { %>
-                <li><a href="#" class="menu-item">查看訂位</a></li>
+                <li><a href="#" class="menu-item" id="view-reservations">查看訂位</a></li>
                 <li><a href="#" class="menu-item">取消訂位</a></li>
                 <li><a href="#" class="menu-item">訂位設定</a></li>
                 <li><a href="#" class="menu-item">黑名單</a></li>
@@ -27,7 +26,22 @@
         <button class="logout-button" onclick="logout()">登出</button>
     </div>
     <div class="content">
-        <h1>歡迎使用後台管理系統</h1>
+        <div id="reservations-view" style="display: none;">
+            <div class="date-selector">
+                <input type="date" id="reservation-date">
+            </div>
+            <div class="reservations-list"></div>
+        </div>
+        
+        <!-- Modal for full details -->
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>訂位詳細資訊</h2>
+                <div class="reservation-details"></div>
+            </div>
+        </div>
     </div>
+    <script src="/js/bst.js"></script>
 </body>
 </html>
