@@ -2567,6 +2567,34 @@ app.post('/send-email', (req, res) => {
     });
 });
 
+// new bs test
+
+app.get('/api/bookings', async (req, res) => {
+    try {
+        const date = req.query.date;
+        const bookings = await Reservation.find({ date })
+                                        .sort({ time: 1 });
+        res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: '載入訂位失敗' });
+    }
+});
+
+// 獲取單個訂位詳情
+app.get('/api/bookings/:id', async (req, res) => {
+    try {
+        const booking = await Reservation.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ error: '找不到訂位' });
+        }
+        res.json(booking);
+    } catch (error) {
+        res.status(500).json({ error: '載入訂位詳情失敗' });
+    }
+});
+
+//
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
     console.log(`Connected to database: ${mongoose.connection.name}`);
