@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
@@ -16,16 +16,16 @@ const userStates = {};
 const jwt = require('jsonwebtoken');
 const { CronJob } = require('cron');
 const moment = require('moment-timezone');
-const reservationSuccessTemplate = require('./line-templates/reservation-success.json');
-const reservationSuccessMangerTemplate = require('./line-templates/reservation-success-manger.json');
-const welcomeTemplate = require('./line-templates/welcome.json');
-const bindingSuccessTemplate = require('./line-templates/binding-success.json');
-const confirmReservationTemplate = require('./line-templates/confirm-reservation.json');
-const confirmBindingTemplate = require('./line-templates/confirm-binding.json');
-const reservationCancelTemplate = require('./line-templates/reservation-cancel.json');
-const seatedNotificationTemplate = require('./line-templates/seated-notification.json');
-const manualCancelNotificationTemplate = require('./line-templates/manual-cancel-notification.json');
-const customerNotificationTemplate = require('./line-templates/customer-notification.json');
+// const reservationSuccessTemplate = require('./line-templates/reservation-success.json');
+// const reservationSuccessMangerTemplate = require('./line-templates/reservation-success-manger.json');
+// const welcomeTemplate = require('./line-templates/welcome.json');
+// const bindingSuccessTemplate = require('./line-templates/binding-success.json');
+// const confirmReservationTemplate = require('./line-templates/confirm-reservation.json');
+// const confirmBindingTemplate = require('./line-templates/confirm-binding.json');
+// const reservationCancelTemplate = require('./line-templates/reservation-cancel.json');
+// const seatedNotificationTemplate = require('./line-templates/seated-notification.json');
+// const manualCancelNotificationTemplate = require('./line-templates/manual-cancel-notification.json');
+// const customerNotificationTemplate = require('./line-templates/customer-notification.json');
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -424,29 +424,29 @@ async function generateUniqueBookingCode() {
     return code;
 }
 
-function getTimeSlot(time, date) {
-    const hour = parseInt(time.split(':')[0]);
-    const reservationDate = moment.tz(date, 'Asia/Taipei');
-    const dayOfWeek = reservationDate.day();
-    const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+// function getTimeSlot(time, date) {
+//     const hour = parseInt(time.split(':')[0]);
+//     const reservationDate = moment.tz(date, 'Asia/Taipei');
+//     const dayOfWeek = reservationDate.day();
+//     const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
     
-    if (isWeekday) {
-        if (hour === 11) return 'wm1';
-        if (hour === 12) return 'wm2';
-        if (hour === 13) return 'wm3';
-        if (hour === 17) return 'wa1';
-        if (hour === 18) return 'wa2';
-        if (hour >= 19) return 'wa3';
-    } else {
-        if (hour === 11) return 'hm1';
-        if (hour === 12) return 'hm2';
-        if (hour === 13) return 'hm3';
-        if (hour === 14) return 'hm4';
-        if (hour === 17) return 'ha1';
-        if (hour === 18) return 'ha2';
-        if (hour >= 19) return 'ha3';
-    }
-}
+//     if (isWeekday) {
+//         if (hour === 11) return 'wm1';
+//         if (hour === 12) return 'wm2';
+//         if (hour === 13) return 'wm3';
+//         if (hour === 17) return 'wa1';
+//         if (hour === 18) return 'wa2';
+//         if (hour >= 19) return 'wa3';
+//     } else {
+//         if (hour === 11) return 'hm1';
+//         if (hour === 12) return 'hm2';
+//         if (hour === 13) return 'hm3';
+//         if (hour === 14) return 'hm4';
+//         if (hour === 17) return 'ha1';
+//         if (hour === 18) return 'ha2';
+//         if (hour >= 19) return 'ha3';
+//     }
+// }
 
 require('dotenv').config();
 
@@ -548,828 +548,828 @@ const cleanupSchedule = new CronJob(
 // 啟動排程
 cleanupSchedule.start();
 
-async function sendEmail(toEmail, reservationData) {
-    const {
-        name,
-        date,
-        time,
-        adults,
-        children,
-        vegetarian,
-        specialNeeds,
-        notes,
-        bookingCode
-    } = reservationData;
+// async function sendEmail(toEmail, reservationData) {
+//     const {
+//         name,
+//         date,
+//         time,
+//         adults,
+//         children,
+//         vegetarian,
+//         specialNeeds,
+//         notes,
+//         bookingCode
+//     } = reservationData;
 
-    const displayDate = date.replace(/-/g, '/');
-    const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][new Date(date).getDay()];
+//     const displayDate = date.replace(/-/g, '/');
+//     const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][new Date(date).getDay()];
 
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: toEmail,
-        subject: '芝麻柚子 とんかつ | 訂位確認通知',
-        html: `
-            <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h2 style="color: #333;">訂位確認通知</h2>
-                <p style="color: #666;">${name} 您好，</p>
-                <p style="color: #666;">感謝您在芝麻柚子 とんかつ 訂位，以下是您的訂位資訊：</p>
+//     const mailOptions = {
+//         from: process.env.EMAIL_USER,
+//         to: toEmail,
+//         subject: '芝麻柚子 とんかつ | 訂位確認通知',
+//         html: `
+//             <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//                 <h2 style="color: #333;">訂位確認通知</h2>
+//                 <p style="color: #666;">${name} 您好，</p>
+//                 <p style="color: #666;">感謝您在芝麻柚子 とんかつ 訂位，以下是您的訂位資訊：</p>
                 
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
-                    <p style="margin: 5px 0;">姓名：${name}</p>
-                    <p style="margin: 5px 0;">日期：${displayDate} (${dayOfWeek})</p>
-                    <p style="margin: 5px 0;">時間：${time}</p>
-                    <p style="margin: 5px 0;">人數：${adults}大${children}小</p>
-                    <p style="margin: 5px 0;">素食：${vegetarian}</p>
-                    <p style="margin: 5px 0;">特殊需求：${specialNeeds}</p>
-                    <p style="margin: 5px 0;">備註：${notes || '無'}</p>
-                    <p style="margin: 5px 0;">訂位代碼：${bookingCode}</p>
-                </div>
+//                 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+//                     <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
+//                     <p style="margin: 5px 0;">姓名：${name}</p>
+//                     <p style="margin: 5px 0;">日期：${displayDate} (${dayOfWeek})</p>
+//                     <p style="margin: 5px 0;">時間：${time}</p>
+//                     <p style="margin: 5px 0;">人數：${adults}大${children}小</p>
+//                     <p style="margin: 5px 0;">素食：${vegetarian}</p>
+//                     <p style="margin: 5px 0;">特殊需求：${specialNeeds}</p>
+//                     <p style="margin: 5px 0;">備註：${notes || '無'}</p>
+//                     <p style="margin: 5px 0;">訂位代碼：${bookingCode}</p>
+//                 </div>
 
-                <p style="color: #666;">如需修改訂位，請提前來電告知。</p>
-                <p style="color: #666;">期待您的光臨！</p>
+//                 <p style="color: #666;">如需修改訂位，請提前來電告知。</p>
+//                 <p style="color: #666;">期待您的光臨！</p>
                 
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                    <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
-                    <p style="color: #999; font-size: 14px;">電：03 558 7360</p>
-                    <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
-                </div>
-            </div>
-        `
-    };
+//                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+//                     <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
+//                     <p style="color: #999; font-size: 14px;">電：03 558 7360</p>
+//                     <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
+//                 </div>
+//             </div>
+//         `
+//     };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully to:', toEmail);
-    } catch (error) {
-        console.error('Email sending error:', error);
-        throw error;
-    }
-}
+//     try {
+//         await transporter.sendMail(mailOptions);
+//         console.log('Email sent successfully to:', toEmail);
+//     } catch (error) {
+//         console.error('Email sending error:', error);
+//         throw error;
+//     }
+// }
 
-app.get('/api/time-slots', async (req, res) => {
-    console.log('Received request for time slots:', req.query);  // 添加日誌
-    try {
-        const date = req.query.date;
-        const queryDate = moment.tz(date, 'Asia/Taipei');
-        console.log('Query date:', queryDate.format());   // 添加日誌
+// app.get('/api/time-slots', async (req, res) => {
+//     console.log('Received request for time slots:', req.query);  // 添加日誌
+//     try {
+//         const date = req.query.date;
+//         const queryDate = moment.tz(date, 'Asia/Taipei');
+//         console.log('Query date:', queryDate.format());   // 添加日誌
         
-        const dayOfWeek = queryDate.day();
-        console.log('Day of week:', dayOfWeek);          // 添加日誌
+//         const dayOfWeek = queryDate.day();
+//         console.log('Day of week:', dayOfWeek);          // 添加日誌
         
-        const settings = await Settings.findOne() || {
-            wm: 2, wa: 2, hm: 3, ha: 3
-        };
-        console.log('Settings:', settings);              // 添加日誌
+//         const settings = await Settings.findOne() || {
+//             wm: 2, wa: 2, hm: 3, ha: 3
+//         };
+//         console.log('Settings:', settings);              // 添加日誌
 
-        const today = moment.tz('Asia/Taipei').startOf('day');
-        if (queryDate.isBefore(today)) {
-            return res.status(400).json({ error: '不能選擇過去的日期' });
-        }
+//         const today = moment.tz('Asia/Taipei').startOf('day');
+//         if (queryDate.isBefore(today)) {
+//             return res.status(400).json({ error: '不能選擇過去的日期' });
+//         }
 
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-            let glwData = await GLW.findOne({ date });
-            if (!glwData) {
-                glwData = new GLW({
-                    date,
-                    wm1: 0, wm2: 0, wm3: 0,
-                    wa1: 0, wa2: 0, wa3: 0
-                });
-                await glwData.save();
-            }
-            return res.json({
-                ...glwData.toObject(),
-                settings: {
-                    wm: settings.wm,
-                    wa: settings.wa
-                }
-            });
-        } else {
-            let glhData = await GLH.findOne({ date });
-            if (!glhData) {
-                glhData = new GLH({
-                    date,
-                    hm1: 0, hm2: 0, hm3: 0, hm4: 0,
-                    ha1: 0, ha2: 0, ha3: 0
-                });
-                await glhData.save();
-            }
-            return res.json({
-                ...glhData.toObject(),
-                settings: {
-                    hm: settings.hm,
-                    ha: settings.ha
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Error in time-slots route:', error);  // 添加錯誤日誌
-        res.status(500).json({ error: '獲取時段資訊失敗' });
-    }
-});
+//         if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+//             let glwData = await GLW.findOne({ date });
+//             if (!glwData) {
+//                 glwData = new GLW({
+//                     date,
+//                     wm1: 0, wm2: 0, wm3: 0,
+//                     wa1: 0, wa2: 0, wa3: 0
+//                 });
+//                 await glwData.save();
+//             }
+//             return res.json({
+//                 ...glwData.toObject(),
+//                 settings: {
+//                     wm: settings.wm,
+//                     wa: settings.wa
+//                 }
+//             });
+//         } else {
+//             let glhData = await GLH.findOne({ date });
+//             if (!glhData) {
+//                 glhData = new GLH({
+//                     date,
+//                     hm1: 0, hm2: 0, hm3: 0, hm4: 0,
+//                     ha1: 0, ha2: 0, ha3: 0
+//                 });
+//                 await glhData.save();
+//             }
+//             return res.json({
+//                 ...glhData.toObject(),
+//                 settings: {
+//                     hm: settings.hm,
+//                     ha: settings.ha
+//                 }
+//             });
+//         }
+//     } catch (error) {
+//         console.error('Error in time-slots route:', error);  // 添加錯誤日誌
+//         res.status(500).json({ error: '獲取時段資訊失敗' });
+//     }
+// });
 
-app.get('/api/settings', async (req, res) => {
-    try {
-        const settings = await Settings.findOne({});
-        if (!settings) {
-            // 如果沒有設置，返回默認值
-            return res.json({
-                wm: 2,
-                wa: 2,
-                hm: 3,
-                ha: 3,
-                upt: '-'
-            });
-        }
-        res.json(settings);
-    } catch (error) {
-        console.error('Error fetching settings:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
+// app.get('/api/settings', async (req, res) => {
+//     try {
+//         const settings = await Settings.findOne({});
+//         if (!settings) {
+//             // 如果沒有設置，返回默認值
+//             return res.json({
+//                 wm: 2,
+//                 wa: 2,
+//                 hm: 3,
+//                 ha: 3,
+//                 upt: '-'
+//             });
+//         }
+//         res.json(settings);
+//     } catch (error) {
+//         console.error('Error fetching settings:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
 
-app.post('/api/settings', async (req, res) => {
-    try {
-        const { wm, wa, hm, ha, upt } = req.body;
+// app.post('/api/settings', async (req, res) => {
+//     try {
+//         const { wm, wa, hm, ha, upt } = req.body;
         
-        // 更新或創建設置
-        const settings = await Settings.findOneAndUpdate(
-            {}, // 空條件表示更新第一個文檔
-            { wm, wa, hm, ha, upt },
-            { upsert: true, new: true } // 如果不存在則創建，返回更新後的文檔
-        );
+//         // 更新或創建設置
+//         const settings = await Settings.findOneAndUpdate(
+//             {}, // 空條件表示更新第一個文檔
+//             { wm, wa, hm, ha, upt },
+//             { upsert: true, new: true } // 如果不存在則創建，返回更新後的文檔
+//         );
         
-        res.json(settings);
-    } catch (error) {
-        console.error('Error updating settings:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
+//         res.json(settings);
+//     } catch (error) {
+//         console.error('Error updating settings:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
 
-app.get('/api/bookings', async (req, res) => {
-    try {
-        const date = req.query.date;
-        const bookings = await Reservation.find({ date: date })
-                                        .sort({ time: 1 }); 
-        res.json(bookings);
-    } catch (error) {
-        res.status(500).json({ error: '載入訂位失敗' });
-    }
-});
+// app.get('/api/bookings', async (req, res) => {
+//     try {
+//         const date = req.query.date;
+//         const bookings = await Reservation.find({ date: date })
+//                                         .sort({ time: 1 }); 
+//         res.json(bookings);
+//     } catch (error) {
+//         res.status(500).json({ error: '載入訂位失敗' });
+//     }
+// });
 
-app.post('/reservations', async (req, res) => {
-    try {
-        console.log('Received reservation request:', req.body);
+// app.post('/reservations', async (req, res) => {
+//     try {
+//         console.log('Received reservation request:', req.body);
         
-        const { 
-            name, phone, email, gender, date, time, 
-            adults, children, vegetarian, specialNeeds, notes 
-        } = req.body;
+//         const { 
+//             name, phone, email, gender, date, time, 
+//             adults, children, vegetarian, specialNeeds, notes 
+//         } = req.body;
 
-        if (!time || time.trim() === '') {
-            return res.status(400).json({ error: '請選擇用餐時間' });
-        }
+//         if (!time || time.trim() === '') {
+//             return res.status(400).json({ error: '請選擇用餐時間' });
+//         }
         
-        const token = generateToken();
-        const bookingCode = await generateUniqueBookingCode();
+//         const token = generateToken();
+//         const bookingCode = await generateUniqueBookingCode();
         
-        // 轉換為台灣時間
-        const reservationDate = moment.tz(date, 'Asia/Taipei');
-        const dayOfWeek = reservationDate.day();
-        const timeSlot = getTimeSlot(time, date);
-        const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+//         // 轉換為台灣時間
+//         const reservationDate = moment.tz(date, 'Asia/Taipei');
+//         const dayOfWeek = reservationDate.day();
+//         const timeSlot = getTimeSlot(time, date);
+//         const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
 
-        // 獲取設置
-        const settings = await Settings.findOne() || {
-            wm: 2, wa: 2, hm: 3, ha: 3
-        };
+//         // 獲取設置
+//         const settings = await Settings.findOne() || {
+//             wm: 2, wa: 2, hm: 3, ha: 3
+//         };
 
-        // 檢查日期是否存在於資料庫
-        if (isWeekday) {
-            const glwData = await GLW.findOne({ date });
+//         // 檢查日期是否存在於資料庫
+//         if (isWeekday) {
+//             const glwData = await GLW.findOne({ date });
             
-            if (!glwData) {
-                // 如果不在資料庫中 - 創建新記錄
-                const newGLW = new GLW({
-                    date,
-                    wm1: 0, wm2: 0, wm3: 0,
-                    wa1: 0, wa2: 0, wa3: 0
-                });
-                // 更新選擇的時段
-                newGLW[timeSlot] = 1;
-                await newGLW.save();
+//             if (!glwData) {
+//                 // 如果不在資料庫中 - 創建新記錄
+//                 const newGLW = new GLW({
+//                     date,
+//                     wm1: 0, wm2: 0, wm3: 0,
+//                     wa1: 0, wa2: 0, wa3: 0
+//                 });
+//                 // 更新選擇的時段
+//                 newGLW[timeSlot] = 1;
+//                 await newGLW.save();
 
-                // 創建預約
-                const reservation = new Reservation({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
-                await reservation.save();
+//                 // 創建預約
+//                 const reservation = new Reservation({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
+//                 await reservation.save();
 
-                // 存入 Redis
-                await redisClient.set(token, JSON.stringify({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode,
-                    createdAt: new Date().toISOString()
-                }), 'EX', 120);
+//                 // 存入 Redis
+//                 await redisClient.set(token, JSON.stringify({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode,
+//                     createdAt: new Date().toISOString()
+//                 }), 'EX', 120);
 
-                // 發送確認郵件
-                await sendEmail(email, {
-                    name,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
+//                 // 發送確認郵件
+//                 await sendEmail(email, {
+//                     name,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
 
-                // LINE 通知
-                const existingLineUser = await UserID.findOne({ phone });
-                if (existingLineUser) {
-                    const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                    messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
-                    const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 // LINE 通知
+//                 const existingLineUser = await UserID.findOne({ phone });
+//                 if (existingLineUser) {
+//                     const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+//                     messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
+//                     const reservationInfo = messageTemplate.body.contents[1].contents;
                     
-                    reservationInfo.forEach(box => {
-                        const label = box.contents[0].text;
-                        switch(label) {
-                            case "姓名":
-                                box.contents[1].text = name;
-                                break;
-                            case "日期":
-                                box.contents[1].text = date;
-                                break;
-                            case "時間":
-                                box.contents[1].text = time;
-                                break;
-                            case "人數":
-                                box.contents[1].text = `${adults}大${children}小`;
-                                break;
-                            case "素食":
-                                box.contents[1].text = vegetarian;
-                                break;
-                            case "特殊需求":
-                                box.contents[1].text = specialNeeds;
-                                break;
-                            case "備註":
-                                box.contents[1].text = notes || '無';
-                                break;
-                            case "訂位代碼":
-                                box.contents[1].text = bookingCode;
-                                break; 
-                        }
-                    });
+//                     reservationInfo.forEach(box => {
+//                         const label = box.contents[0].text;
+//                         switch(label) {
+//                             case "姓名":
+//                                 box.contents[1].text = name;
+//                                 break;
+//                             case "日期":
+//                                 box.contents[1].text = date;
+//                                 break;
+//                             case "時間":
+//                                 box.contents[1].text = time;
+//                                 break;
+//                             case "人數":
+//                                 box.contents[1].text = `${adults}大${children}小`;
+//                                 break;
+//                             case "素食":
+//                                 box.contents[1].text = vegetarian;
+//                                 break;
+//                             case "特殊需求":
+//                                 box.contents[1].text = specialNeeds;
+//                                 break;
+//                             case "備註":
+//                                 box.contents[1].text = notes || '無';
+//                                 break;
+//                             case "訂位代碼":
+//                                 box.contents[1].text = bookingCode;
+//                                 break; 
+//                         }
+//                     });
 
-                    await sendLineMessage(existingLineUser.lineUserId, {
-                        type: 'flex',
-                        altText: '訂位成功通知',
-                        contents: messageTemplate
-                    });
-                }
+//                     await sendLineMessage(existingLineUser.lineUserId, {
+//                         type: 'flex',
+//                         altText: '訂位成功通知',
+//                         contents: messageTemplate
+//                     });
+//                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
-                messageTemplate.body.contents[0].text = `管理者，您好！`;
-                const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+//                 messageTemplate.body.contents[0].text = `管理者，您好！`;
+//                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
-                reservationInfo.forEach(box => {
-                    const label = box.contents[0].text;
-                    switch(label) {
-                        case "姓名":
-                            box.contents[1].text = `${name} ${gender}`;
-                            break;
-                        case "電話":
-                            box.contents[1].text = phone;
-                            break;
-                        case "電子郵件":
-                            box.contents[1].text = email;
-                            break;
-                        case "日期":
-                            box.contents[1].text = date;
-                            break;
-                        case "時間":
-                            box.contents[1].text = time;
-                            break;
-                        case "人數":
-                            box.contents[1].text = `${adults}大${children}小`;
-                            break;
-                        case "素食":
-                            box.contents[1].text = vegetarian;
-                            break;
-                        case "特殊需求":
-                            box.contents[1].text = specialNeeds;
-                            break;
-                        case "備註":
-                            box.contents[1].text = notes || '無';
-                            break;
-                        case "訂位代碼":
-                            box.contents[1].text = bookingCode;
-                            break;
-                    }
-                });
+//                 reservationInfo.forEach(box => {
+//                     const label = box.contents[0].text;
+//                     switch(label) {
+//                         case "姓名":
+//                             box.contents[1].text = `${name} ${gender}`;
+//                             break;
+//                         case "電話":
+//                             box.contents[1].text = phone;
+//                             break;
+//                         case "電子郵件":
+//                             box.contents[1].text = email;
+//                             break;
+//                         case "日期":
+//                             box.contents[1].text = date;
+//                             break;
+//                         case "時間":
+//                             box.contents[1].text = time;
+//                             break;
+//                         case "人數":
+//                             box.contents[1].text = `${adults}大${children}小`;
+//                             break;
+//                         case "素食":
+//                             box.contents[1].text = vegetarian;
+//                             break;
+//                         case "特殊需求":
+//                             box.contents[1].text = specialNeeds;
+//                             break;
+//                         case "備註":
+//                             box.contents[1].text = notes || '無';
+//                             break;
+//                         case "訂位代碼":
+//                             box.contents[1].text = bookingCode;
+//                             break;
+//                     }
+//                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
-                    type: 'flex',
-                    altText: '新訂位通知',
-                    contents: messageTemplate
-                });
+//                 await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+//                     type: 'flex',
+//                     altText: '新訂位通知',
+//                     contents: messageTemplate
+//                 });
 
-                return res.redirect(`/${token}/success`);
+//                 return res.redirect(`/${token}/success`);
 
-            } else {
-                // 如果在資料庫中 - 檢查限制
-                const limit = timeSlot.startsWith('wm') ? settings.wm : settings.wa;
+//             } else {
+//                 // 如果在資料庫中 - 檢查限制
+//                 const limit = timeSlot.startsWith('wm') ? settings.wm : settings.wa;
                 
-                // 檢查是否達到限制
-                if (glwData[timeSlot] >= limit) {
-                    return res.status(400).json({ 
-                        error: '該時段已滿，請重新選擇時段'
-                    });
-                }
+//                 // 檢查是否達到限制
+//                 if (glwData[timeSlot] >= limit) {
+//                     return res.status(400).json({ 
+//                         error: '該時段已滿，請重新選擇時段'
+//                     });
+//                 }
                 
-                // 未達到限制 - 更新時段計數
-                await GLW.updateOne(
-                    { date },
-                    { $inc: { [timeSlot]: 1 } }
-                );
+//                 // 未達到限制 - 更新時段計數
+//                 await GLW.updateOne(
+//                     { date },
+//                     { $inc: { [timeSlot]: 1 } }
+//                 );
 
-                // 創建預約
-                const reservation = new Reservation({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
-                await reservation.save();
+//                 // 創建預約
+//                 const reservation = new Reservation({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
+//                 await reservation.save();
 
-                // 存入 Redis
-                await redisClient.set(token, JSON.stringify({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode,
-                    createdAt: new Date().toISOString()
-                }), 'EX', 120);
+//                 // 存入 Redis
+//                 await redisClient.set(token, JSON.stringify({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode,
+//                     createdAt: new Date().toISOString()
+//                 }), 'EX', 120);
 
-                // 發送確認郵件
-                await sendEmail(email, {
-                    name,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
+//                 // 發送確認郵件
+//                 await sendEmail(email, {
+//                     name,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
 
-                // LINE 通知
-                const existingLineUser = await UserID.findOne({ phone });
-                if (existingLineUser) {
-                    const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                    messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
-                    const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 // LINE 通知
+//                 const existingLineUser = await UserID.findOne({ phone });
+//                 if (existingLineUser) {
+//                     const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+//                     messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
+//                     const reservationInfo = messageTemplate.body.contents[1].contents;
                     
-                    reservationInfo.forEach(box => {
-                        const label = box.contents[0].text;
-                        switch(label) {
-                            case "姓名":
-                                box.contents[1].text = name;
-                                break;
-                            case "日期":
-                                box.contents[1].text = date;
-                                break;
-                            case "時間":
-                                box.contents[1].text = time;
-                                break;
-                            case "人數":
-                                box.contents[1].text = `${adults}大${children}小`;
-                                break;
-                            case "素食":
-                                box.contents[1].text = vegetarian;
-                                break;
-                            case "特殊需求":
-                                box.contents[1].text = specialNeeds;
-                                break;
-                            case "備註":
-                                box.contents[1].text = notes || '無';
-                                break;
-                            case "訂位代碼":
-                                box.contents[1].text = bookingCode;
-                                break;
-                        }
-                    });
+//                     reservationInfo.forEach(box => {
+//                         const label = box.contents[0].text;
+//                         switch(label) {
+//                             case "姓名":
+//                                 box.contents[1].text = name;
+//                                 break;
+//                             case "日期":
+//                                 box.contents[1].text = date;
+//                                 break;
+//                             case "時間":
+//                                 box.contents[1].text = time;
+//                                 break;
+//                             case "人數":
+//                                 box.contents[1].text = `${adults}大${children}小`;
+//                                 break;
+//                             case "素食":
+//                                 box.contents[1].text = vegetarian;
+//                                 break;
+//                             case "特殊需求":
+//                                 box.contents[1].text = specialNeeds;
+//                                 break;
+//                             case "備註":
+//                                 box.contents[1].text = notes || '無';
+//                                 break;
+//                             case "訂位代碼":
+//                                 box.contents[1].text = bookingCode;
+//                                 break;
+//                         }
+//                     });
 
-                    await sendLineMessage(existingLineUser.lineUserId, {
-                        type: 'flex',
-                        altText: '訂位成功通知',
-                        contents: messageTemplate
-                    });
-                }
+//                     await sendLineMessage(existingLineUser.lineUserId, {
+//                         type: 'flex',
+//                         altText: '訂位成功通知',
+//                         contents: messageTemplate
+//                     });
+//                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
-                messageTemplate.body.contents[0].text = `管理者，您好！`;
-                const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+//                 messageTemplate.body.contents[0].text = `管理者，您好！`;
+//                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
-                reservationInfo.forEach(box => {
-                    const label = box.contents[0].text;
-                    switch(label) {
-                        case "姓名":
-                            box.contents[1].text = `${name} ${gender}`;
-                            break;
-                        case "電話":
-                            box.contents[1].text = phone;
-                            break;
-                        case "電子郵件":
-                            box.contents[1].text = email;
-                            break;
-                        case "日期":
-                            box.contents[1].text = date;
-                            break;
-                        case "時間":
-                            box.contents[1].text = time;
-                            break;
-                        case "人數":
-                            box.contents[1].text = `${adults}大${children}小`;
-                            break;
-                        case "素食":
-                            box.contents[1].text = vegetarian;
-                            break;
-                        case "特殊需求":
-                            box.contents[1].text = specialNeeds;
-                            break;
-                        case "備註":
-                            box.contents[1].text = notes || '無';
-                            break;
-                        case "訂位代碼":
-                            box.contents[1].text = bookingCode;
-                            break;
-                    }
-                });
+//                 reservationInfo.forEach(box => {
+//                     const label = box.contents[0].text;
+//                     switch(label) {
+//                         case "姓名":
+//                             box.contents[1].text = `${name} ${gender}`;
+//                             break;
+//                         case "電話":
+//                             box.contents[1].text = phone;
+//                             break;
+//                         case "電子郵件":
+//                             box.contents[1].text = email;
+//                             break;
+//                         case "日期":
+//                             box.contents[1].text = date;
+//                             break;
+//                         case "時間":
+//                             box.contents[1].text = time;
+//                             break;
+//                         case "人數":
+//                             box.contents[1].text = `${adults}大${children}小`;
+//                             break;
+//                         case "素食":
+//                             box.contents[1].text = vegetarian;
+//                             break;
+//                         case "特殊需求":
+//                             box.contents[1].text = specialNeeds;
+//                             break;
+//                         case "備註":
+//                             box.contents[1].text = notes || '無';
+//                             break;
+//                         case "訂位代碼":
+//                             box.contents[1].text = bookingCode;
+//                             break;
+//                     }
+//                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
-                    type: 'flex',
-                    altText: '新訂位通知',
-                    contents: messageTemplate
-                });
+//                 await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+//                     type: 'flex',
+//                     altText: '新訂位通知',
+//                     contents: messageTemplate
+//                 });
 
-                return res.redirect(`/${token}/success`);
-            }
-        } else {
-            const glhData = await GLH.findOne({ date });
+//                 return res.redirect(`/${token}/success`);
+//             }
+//         } else {
+//             const glhData = await GLH.findOne({ date });
             
-            if (!glhData) {
-                // 如果不在資料庫中 - 創建新記錄
-                const newGLH = new GLH({
-                    date,
-                    hm1: 0, hm2: 0, hm3: 0, hm4: 0,
-                    ha1: 0, ha2: 0, ha3: 0
-                });
-                // 更新選擇的時段
-                newGLH[timeSlot] = 1;
-                await newGLH.save();
+//             if (!glhData) {
+//                 // 如果不在資料庫中 - 創建新記錄
+//                 const newGLH = new GLH({
+//                     date,
+//                     hm1: 0, hm2: 0, hm3: 0, hm4: 0,
+//                     ha1: 0, ha2: 0, ha3: 0
+//                 });
+//                 // 更新選擇的時段
+//                 newGLH[timeSlot] = 1;
+//                 await newGLH.save();
 
-                // 創建預約
-                const reservation = new Reservation({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
-                await reservation.save();
+//                 // 創建預約
+//                 const reservation = new Reservation({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
+//                 await reservation.save();
 
-                // 存入 Redis
-                await redisClient.set(token, JSON.stringify({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode,
-                    createdAt: new Date().toISOString()
-                }), 'EX', 120);
+//                 // 存入 Redis
+//                 await redisClient.set(token, JSON.stringify({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode,
+//                     createdAt: new Date().toISOString()
+//                 }), 'EX', 120);
 
-                // 發送確認郵件
-                await sendEmail(email, {
-                    name,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                }); 
+//                 // 發送確認郵件
+//                 await sendEmail(email, {
+//                     name,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 }); 
 
-                // LINE 通知
-                const existingLineUser = await UserID.findOne({ phone });
-                if (existingLineUser) {
-                    const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                    messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
-                    const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 // LINE 通知
+//                 const existingLineUser = await UserID.findOne({ phone });
+//                 if (existingLineUser) {
+//                     const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+//                     messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
+//                     const reservationInfo = messageTemplate.body.contents[1].contents;
                     
-                    reservationInfo.forEach(box => {
-                        const label = box.contents[0].text;
-                        switch(label) {
-                            case "姓名":
-                                box.contents[1].text = name;
-                                break;
-                            case "日期":
-                                box.contents[1].text = date;
-                                break;
-                            case "時間":
-                                box.contents[1].text = time;
-                                break;
-                            case "人數":
-                                box.contents[1].text = `${adults}大${children}小`;
-                                break;
-                            case "素食":
-                                box.contents[1].text = vegetarian;
-                                break;
-                            case "特殊需求":
-                                box.contents[1].text = specialNeeds;
-                                break;
-                            case "備註":
-                                box.contents[1].text = notes || '無';
-                                break;
-                            case "訂位代碼":
-                                box.contents[1].text = bookingCode;
-                                break;
-                        }
-                    });
+//                     reservationInfo.forEach(box => {
+//                         const label = box.contents[0].text;
+//                         switch(label) {
+//                             case "姓名":
+//                                 box.contents[1].text = name;
+//                                 break;
+//                             case "日期":
+//                                 box.contents[1].text = date;
+//                                 break;
+//                             case "時間":
+//                                 box.contents[1].text = time;
+//                                 break;
+//                             case "人數":
+//                                 box.contents[1].text = `${adults}大${children}小`;
+//                                 break;
+//                             case "素食":
+//                                 box.contents[1].text = vegetarian;
+//                                 break;
+//                             case "特殊需求":
+//                                 box.contents[1].text = specialNeeds;
+//                                 break;
+//                             case "備註":
+//                                 box.contents[1].text = notes || '無';
+//                                 break;
+//                             case "訂位代碼":
+//                                 box.contents[1].text = bookingCode;
+//                                 break;
+//                         }
+//                     });
 
-                    await sendLineMessage(existingLineUser.lineUserId, {
-                        type: 'flex',
-                        altText: '訂位成功通知',
-                        contents: messageTemplate
-                    });
-                }
+//                     await sendLineMessage(existingLineUser.lineUserId, {
+//                         type: 'flex',
+//                         altText: '訂位成功通知',
+//                         contents: messageTemplate
+//                     });
+//                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
-                messageTemplate.body.contents[0].text = `管理者，您好！`;
-                const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+//                 messageTemplate.body.contents[0].text = `管理者，您好！`;
+//                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
-                reservationInfo.forEach(box => {
-                    const label = box.contents[0].text;
-                    switch(label) {
-                        case "姓名":
-                            box.contents[1].text = `${name} ${gender}`;
-                            break;
-                        case "電話":
-                            box.contents[1].text = phone;
-                            break;
-                        case "電子郵件":
-                            box.contents[1].text = email;
-                            break;
-                        case "日期":
-                            box.contents[1].text = date;
-                            break;
-                        case "時間":
-                            box.contents[1].text = time;
-                            break;
-                        case "人數":
-                            box.contents[1].text = `${adults}大${children}小`;
-                            break;
-                        case "素食":
-                            box.contents[1].text = vegetarian;
-                            break;
-                        case "特殊需求":
-                            box.contents[1].text = specialNeeds;
-                            break;
-                        case "備註":
-                            box.contents[1].text = notes || '無';
-                            break;
-                        case "訂位代碼":
-                            box.contents[1].text = bookingCode;
-                            break;
-                    }
-                });
+//                 reservationInfo.forEach(box => {
+//                     const label = box.contents[0].text;
+//                     switch(label) {
+//                         case "姓名":
+//                             box.contents[1].text = `${name} ${gender}`;
+//                             break;
+//                         case "電話":
+//                             box.contents[1].text = phone;
+//                             break;
+//                         case "電子郵件":
+//                             box.contents[1].text = email;
+//                             break;
+//                         case "日期":
+//                             box.contents[1].text = date;
+//                             break;
+//                         case "時間":
+//                             box.contents[1].text = time;
+//                             break;
+//                         case "人數":
+//                             box.contents[1].text = `${adults}大${children}小`;
+//                             break;
+//                         case "素食":
+//                             box.contents[1].text = vegetarian;
+//                             break;
+//                         case "特殊需求":
+//                             box.contents[1].text = specialNeeds;
+//                             break;
+//                         case "備註":
+//                             box.contents[1].text = notes || '無';
+//                             break;
+//                         case "訂位代碼":
+//                             box.contents[1].text = bookingCode;
+//                             break;
+//                     }
+//                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
-                    type: 'flex',
-                    altText: '新訂位通知',
-                    contents: messageTemplate
-                });
+//                 await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+//                     type: 'flex',
+//                     altText: '新訂位通知',
+//                     contents: messageTemplate
+//                 });
 
-                return res.redirect(`/${token}/success`);
+//                 return res.redirect(`/${token}/success`);
 
-            } else {
-                // 如果在資料庫中 - 檢查限制
-                const limit = timeSlot.startsWith('hm') ? settings.hm : settings.ha;
+//             } else {
+//                 // 如果在資料庫中 - 檢查限制
+//                 const limit = timeSlot.startsWith('hm') ? settings.hm : settings.ha;
                 
-                // 檢查是否達到限制
-                if (glhData[timeSlot] >= limit) {
-                    return res.status(400).json({ 
-                        error: '該時段已滿，請重新選擇時段'
-                    });
-                }
+//                 // 檢查是否達到限制
+//                 if (glhData[timeSlot] >= limit) {
+//                     return res.status(400).json({ 
+//                         error: '該時段已滿，請重新選擇時段'
+//                     });
+//                 }
                 
-                // 未達到限制 - 更新時段計數
-                await GLH.updateOne(
-                    { date },
-                    { $inc: { [timeSlot]: 1 } }
-                );
+//                 // 未達到限制 - 更新時段計數
+//                 await GLH.updateOne(
+//                     { date },
+//                     { $inc: { [timeSlot]: 1 } }
+//                 );
 
-                // 創建預約
-                const reservation = new Reservation({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
-                await reservation.save();
+//                 // 創建預約
+//                 const reservation = new Reservation({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
+//                 await reservation.save();
 
-                // 存入 Redis
-                await redisClient.set(token, JSON.stringify({
-                    name,
-                    phone,
-                    email,
-                    gender,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode,    
-                    createdAt: new Date().toISOString()
-                }), 'EX', 120);
+//                 // 存入 Redis
+//                 await redisClient.set(token, JSON.stringify({
+//                     name,
+//                     phone,
+//                     email,
+//                     gender,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode,    
+//                     createdAt: new Date().toISOString()
+//                 }), 'EX', 120);
 
-                // 發送確認郵件
-                await sendEmail(email, {
-                    name,
-                    date,
-                    time,
-                    adults,
-                    children,
-                    vegetarian,
-                    specialNeeds,
-                    notes,
-                    bookingCode
-                });
+//                 // 發送確認郵件
+//                 await sendEmail(email, {
+//                     name,
+//                     date,
+//                     time,
+//                     adults,
+//                     children,
+//                     vegetarian,
+//                     specialNeeds,
+//                     notes,
+//                     bookingCode
+//                 });
 
-                // LINE 通知
-                const existingLineUser = await UserID.findOne({ phone });
-                if (existingLineUser) {
-                    const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
-                    messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
-                    const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 // LINE 通知
+//                 const existingLineUser = await UserID.findOne({ phone });
+//                 if (existingLineUser) {
+//                     const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessTemplate));
+//                     messageTemplate.body.contents[0].text = `${existingLineUser.lineName}，您好！`;
+//                     const reservationInfo = messageTemplate.body.contents[1].contents;
                     
-                    reservationInfo.forEach(box => {
-                        const label = box.contents[0].text;
-                        switch(label) {
-                            case "姓名":
-                                box.contents[1].text = name;
-                                break;
-                            case "日期":
-                                box.contents[1].text = date;
-                                break;
-                            case "時間":
-                                box.contents[1].text = time;
-                                break;
-                            case "人數":
-                                box.contents[1].text = `${adults}大${children}小`;
-                                break;
-                            case "素食":
-                                box.contents[1].text = vegetarian;
-                                break;
-                            case "特殊需求":
-                                box.contents[1].text = specialNeeds;
-                                break;
-                            case "備註":
-                                box.contents[1].text = notes || '無';
-                                break;
-                            case "訂位代碼":
-                                box.contents[1].text = bookingCode;
-                                break;
-                        }
-                    });
+//                     reservationInfo.forEach(box => {
+//                         const label = box.contents[0].text;
+//                         switch(label) {
+//                             case "姓名":
+//                                 box.contents[1].text = name;
+//                                 break;
+//                             case "日期":
+//                                 box.contents[1].text = date;
+//                                 break;
+//                             case "時間":
+//                                 box.contents[1].text = time;
+//                                 break;
+//                             case "人數":
+//                                 box.contents[1].text = `${adults}大${children}小`;
+//                                 break;
+//                             case "素食":
+//                                 box.contents[1].text = vegetarian;
+//                                 break;
+//                             case "特殊需求":
+//                                 box.contents[1].text = specialNeeds;
+//                                 break;
+//                             case "備註":
+//                                 box.contents[1].text = notes || '無';
+//                                 break;
+//                             case "訂位代碼":
+//                                 box.contents[1].text = bookingCode;
+//                                 break;
+//                         }
+//                     });
 
-                    await sendLineMessage(existingLineUser.lineUserId, {
-                        type: 'flex',
-                        altText: '訂位成功通知',
-                        contents: messageTemplate
-                    });
-                }
+//                     await sendLineMessage(existingLineUser.lineUserId, {
+//                         type: 'flex',
+//                         altText: '訂位成功通知',
+//                         contents: messageTemplate
+//                     });
+//                 }
 
-                const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
-                messageTemplate.body.contents[0].text = `管理者，您好！`;
-                const reservationInfo = messageTemplate.body.contents[1].contents;
+//                 const messageTemplate = JSON.parse(JSON.stringify(reservationSuccessMangerTemplate));
+//                 messageTemplate.body.contents[0].text = `管理者，您好！`;
+//                 const reservationInfo = messageTemplate.body.contents[1].contents;
 
-                reservationInfo.forEach(box => {
-                    const label = box.contents[0].text;
-                    switch(label) {
-                        case "姓名":
-                            box.contents[1].text = `${name} ${gender}`;
-                            break;
-                        case "電話":
-                            box.contents[1].text = phone;
-                            break;
-                        case "電子郵件":
-                            box.contents[1].text = email;
-                            break;
-                        case "日期":
-                            box.contents[1].text = date;
-                            break;
-                        case "時間":
-                            box.contents[1].text = time;
-                            break;
-                        case "人數":
-                            box.contents[1].text = `${adults}大${children}小`;
-                            break;
-                        case "素食":
-                            box.contents[1].text = vegetarian;
-                            break;
-                        case "特殊需求":
-                            box.contents[1].text = specialNeeds;
-                            break;
-                        case "備註":
-                            box.contents[1].text = notes || '無';
-                            break;
-                        case "訂位代碼":
-                            box.contents[1].text = bookingCode;
-                            break;
-                    }
-                });
+//                 reservationInfo.forEach(box => {
+//                     const label = box.contents[0].text;
+//                     switch(label) {
+//                         case "姓名":
+//                             box.contents[1].text = `${name} ${gender}`;
+//                             break;
+//                         case "電話":
+//                             box.contents[1].text = phone;
+//                             break;
+//                         case "電子郵件":
+//                             box.contents[1].text = email;
+//                             break;
+//                         case "日期":
+//                             box.contents[1].text = date;
+//                             break;
+//                         case "時間":
+//                             box.contents[1].text = time;
+//                             break;
+//                         case "人數":
+//                             box.contents[1].text = `${adults}大${children}小`;
+//                             break;
+//                         case "素食":
+//                             box.contents[1].text = vegetarian;
+//                             break;
+//                         case "特殊需求":
+//                             box.contents[1].text = specialNeeds;
+//                             break;
+//                         case "備註":
+//                             box.contents[1].text = notes || '無';
+//                             break;
+//                         case "訂位代碼":
+//                             box.contents[1].text = bookingCode;
+//                             break;
+//                     }
+//                 });
 
-                await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
-                    type: 'flex',
-                    altText: '新訂位通知',
-                    contents: messageTemplate
-                });
+//                 await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+//                     type: 'flex',
+//                     altText: '新訂位通知',
+//                     contents: messageTemplate
+//                 });
 
-                return res.redirect(`/${token}/success`);
-            }
-        }
+//                 return res.redirect(`/${token}/success`);
+//             }
+//         }
 
-    } catch (error) {
-        console.error('Reservation error:', error);
-        res.status(500).json({ error: '預約失敗' });
-    }
-});
+//     } catch (error) {
+//         console.error('Reservation error:', error);
+//         res.status(500).json({ error: '預約失敗' });
+//     }
+// });
 
 // app.post('/line/webhook', async (req, res) => {
 //     console.log('Received webhook:', JSON.stringify(req.body, null, 2));
@@ -1771,833 +1771,832 @@ app.post('/reservations', async (req, res) => {
 //     }
 // });
 
-app.get('/:token/success', async (req, res) => {
-    const token = req.params.token;
-    try {
-        let reservationData = await redisClient.get(token);
+// app.get('/:token/success', async (req, res) => {
+//     const token = req.params.token;
+//     try {
+//         let reservationData = await redisClient.get(token);
         
-        if (!reservationData) {
-            const reservation = await Reservation.findOne({ reservationToken: token });
-            if (!reservation) {
-                console.error('No reservation found for token:', token);
-                return res.redirect('/form');
-            }
-            reservationData = JSON.stringify(reservation);
-        }
+//         if (!reservationData) {
+//             const reservation = await Reservation.findOne({ reservationToken: token });
+//             if (!reservation) {
+//                 console.error('No reservation found for token:', token);
+//                 return res.redirect('/form');
+//             }
+//             reservationData = JSON.stringify(reservation);
+//         }
 
-        const parsedData = JSON.parse(reservationData);
+//         const parsedData = JSON.parse(reservationData);
         
-        const existingLineUser = await UserID.findOne({ phone: parsedData.phone });
+//         const existingLineUser = await UserID.findOne({ phone: parsedData.phone });
         
-        res.cookie('reservationToken', token, { 
-            maxAge: 120000,
-            httpOnly: true 
-        });
+//         res.cookie('reservationToken', token, { 
+//             maxAge: 120000,
+//             httpOnly: true 
+//         });
 
-        const successPath = path.join(__dirname, 'html', 'success.html');
-        console.log('Success page path:', successPath);
+//         const successPath = path.join(__dirname, 'html', 'success.html');
+//         console.log('Success page path:', successPath);
 
-        if (fs.existsSync(successPath)) {
-            res.sendFile(successPath);
-        } else {
-            console.error('Success page not found at:', successPath);
-            res.status(404).send('Success page not found');
-        }
+//         if (fs.existsSync(successPath)) {
+//             res.sendFile(successPath);
+//         } else {
+//             console.error('Success page not found at:', successPath);
+//             res.status(404).send('Success page not found');
+//         }
 
-        setTimeout(async () => {
-            await redisClient.del(token);
-            console.log(`Token Deleted: ${token}, Time: ${new Date().toISOString()}`);
-        }, 120000);
+//         setTimeout(async () => {
+//             await redisClient.del(token);
+//             console.log(`Token Deleted: ${token}, Time: ${new Date().toISOString()}`);
+//         }, 120000);
 
-    } catch (error) {
-        console.error('Error in success page:', error);
-        res.redirect('/form?error=server_error');
-    }
-});
+//     } catch (error) {
+//         console.error('Error in success page:', error);
+//         res.redirect('/form?error=server_error');
+//     }
+// });
 
-app.get('/api/reservation/:token', async (req, res) => {
-    const token = req.params.token;
-    try {
-        let reservationData = await redisClient.get(token);
+// app.get('/api/reservation/:token', async (req, res) => {
+//     const token = req.params.token;
+//     try {
+//         let reservationData = await redisClient.get(token);
         
-        if (!reservationData) {
-            const reservation = await Reservation.findOne({ reservationToken: token });
-            if (!reservation) {
-                return res.status(404).json({ error: 'Reservation not found' });
-            }
-            reservationData = JSON.stringify(reservation);
-        }
+//         if (!reservationData) {
+//             const reservation = await Reservation.findOne({ reservationToken: token });
+//             if (!reservation) {
+//                 return res.status(404).json({ error: 'Reservation not found' });
+//             }
+//             reservationData = JSON.stringify(reservation);
+//         }
 
-        res.json(JSON.parse(reservationData));
-    } catch (error) {
-        console.error('Error fetching reservation:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
+//         res.json(JSON.parse(reservationData));
+//     } catch (error) {
+//         console.error('Error fetching reservation:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
 
-// IP 地址處理函數
-function getClientIP(req) {
-    // 獲取真實 IP 地址（如果有代理的話）
-    const realIP = req.headers['x-real-ip'] || 
-                  req.headers['x-forwarded-for'] || 
-                  req.ip || 
-                  req.connection.remoteAddress;
+// // IP 地址處理函數
+// function getClientIP(req) {
+//     // 獲取真實 IP 地址（如果有代理的話）
+//     const realIP = req.headers['x-real-ip'] || 
+//                   req.headers['x-forwarded-for'] || 
+//                   req.ip || 
+//                   req.connection.remoteAddress;
     
-    // 處理 IPv6 格式
-    if (realIP === '::1') {
-        return 'localhost';
-    }
+//     // 處理 IPv6 格式
+//     if (realIP === '::1') {
+//         return 'localhost';
+//     }
     
-    // 如果是 IPv6 格式但包含 IPv4
-    if (realIP.includes('::ffff:')) {
-        return realIP.replace('::ffff:', '');
-    }
+//     // 如果是 IPv6 格式但包含 IPv4
+//     if (realIP.includes('::ffff:')) {
+//         return realIP.replace('::ffff:', '');
+//     }
     
-    return realIP;
-}
+//     return realIP;
+// }
 
-// 修改入 API
-app.post('/api/login', async (req, res) => {
-    const { username, password, rememberMe } = req.body;
-    const ip = getClientIP(req);
+// // 修改入 API
+// app.post('/api/login', async (req, res) => {
+//     const { username, password, rememberMe } = req.body;
+//     const ip = getClientIP(req);
     
-    const success = username === process.env.ADMIN_USERNAME && 
-                   password === process.env.ADMIN_PASSWORD;
+//     const success = username === process.env.ADMIN_USERNAME && 
+//                    password === process.env.ADMIN_PASSWORD;
     
-    logAuth('LOGIN', username, success, ip);
+//     logAuth('LOGIN', username, success, ip);
     
-    if (success) {
-        // 生成 access token
-        const accessToken = jwt.sign(
-            { username }, 
-            process.env.JWT_SECRET, 
-            { expiresIn: '15m' }
-        );
+//     if (success) {
+//         // 生成 access token
+//         const accessToken = jwt.sign(
+//             { username }, 
+//             process.env.JWT_SECRET, 
+//             { expiresIn: '15m' }
+//         );
         
-        // 設置 access token cookie
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000  // 24小時
-        });
+//         // 設置 access token cookie
+//         res.cookie('accessToken', accessToken, {
+//             httpOnly: true,
+//             secure: process.env.NODE_ENV === 'production',
+//             sameSite: 'lax',
+//             maxAge: 24 * 60 * 60 * 1000  // 24小時
+//         });
         
-        if (rememberMe) {
-            // 生成 refresh token
-            const refreshToken = crypto.randomBytes(64).toString('hex');
+//         if (rememberMe) {
+//             // 生成 refresh token
+//             const refreshToken = crypto.randomBytes(64).toString('hex');
             
-            // 存儲 refresh token 到 Redis
-            await redisClient.set(
-                `auth_refresh_${refreshToken}`,
-                username,
-                'EX',
-                30 * 24 * 60 * 60  // 30天
-            );
+//             // 存儲 refresh token 到 Redis
+//             await redisClient.set(
+//                 `auth_refresh_${refreshToken}`,
+//                 username,
+//                 'EX',
+//                 30 * 24 * 60 * 60  // 30天
+//             );
             
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 30 * 24 * 60 * 60 * 1000  // 30天
-            });
-        }
+//             res.cookie('refreshToken', refreshToken, {
+//                 httpOnly: true,
+//                 secure: process.env.NODE_ENV === 'production',
+//                 sameSite: 'lax',
+//                 maxAge: 30 * 24 * 60 * 60 * 1000  // 30天
+//             });
+//         }
 
-        res.json({ success: true });
-    } else {
-        res.json({ success: false });
-    }
-});
+//         res.json({ success: true });
+//     } else {
+//         res.json({ success: false });
+//     }
+// });
 
-// 修改登出 API
-app.post('/api/logout', async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    const accessToken = req.cookies.accessToken;
-    const ip = getClientIP(req);
+// // 修改登出 API
+// app.post('/api/logout', async (req, res) => {
+//     const refreshToken = req.cookies.refreshToken;
+//     const accessToken = req.cookies.accessToken;
+//     const ip = getClientIP(req);
     
-    let username = 'unknown';
+//     let username = 'unknown';
     
-    if (accessToken) {
-        try {
-            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-            username = decoded.username;
-        } catch (err) {
-            console.error('Error decoding token during logout:', err);
-        }
-    }
+//     if (accessToken) {
+//         try {
+//             const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+//             username = decoded.username;
+//         } catch (err) {
+//             console.error('Error decoding token during logout:', err);
+//         }
+//     }
     
-    logAuth('LOGOUT', username, true, ip);
+//     logAuth('LOGOUT', username, true, ip);
     
-    if (refreshToken) {
-        try {
-            await redisClient.del(`auth_refresh_${refreshToken}`);
-        } catch (err) {
-            console.error('Error deleting refresh token:', err);
-        }
-    }
+//     if (refreshToken) {
+//         try {
+//             await redisClient.del(`auth_refresh_${refreshToken}`);
+//         } catch (err) {
+//             console.error('Error deleting refresh token:', err);
+//         }
+//     }
     
-    // 確保完全清除 cookie
-    res.clearCookie('accessToken', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-    });
-    res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-    });
+//     // 確保完全清除 cookie
+//     res.clearCookie('accessToken', {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === 'production',
+//         sameSite: 'lax'
+//     });
+//     res.clearCookie('refreshToken', {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === 'production',
+//         sameSite: 'lax'
+//     });
     
-    res.json({ success: true });
-});
+//     res.json({ success: true });
+// });
 
-// 添加 check-auth 路由
-app.get('/api/check-auth', authenticateToken, (req, res) => {
-    res.json({ success: true });
-});
+// // 添加 check-auth 路由
+// app.get('/api/check-auth', authenticateToken, (req, res) => {
+//     res.json({ success: true });
+// });
 
-app.get('/api/vip/phones', async (req, res) => {
-    try {
-        const vips = await VIP.find({}, 'phone');
-        const phones = vips.map(vip => vip.phone);
-        res.json(phones);
-    } catch (error) {
-        console.error('Error fetching VIP phones:', error);
-        res.status(500).json({ message: '獲取常客列表失敗' });
-    }
-});
+// app.get('/api/vip/phones', async (req, res) => {
+//     try {
+//         const vips = await VIP.find({}, 'phone');
+//         const phones = vips.map(vip => vip.phone);
+//         res.json(phones);
+//     } catch (error) {
+//         console.error('Error fetching VIP phones:', error);
+//         res.status(500).json({ message: '獲取常客列表失敗' });
+//     }
+// });
 
-// 獲取分頁常客列表
-app.get('/api/vip/list', async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
+// // 獲取分頁常客列表
+// app.get('/api/vip/list', async (req, res) => {
+//     try {
+//         const page = parseInt(req.query.page) || 1;
+//         const limit = parseInt(req.query.limit) || 10;
+//         const skip = (page - 1) * limit;
 
-        const vips = await VIP.find()
-            .sort({ createdAt: -1 })  // 按加入時間降序排序
-            .skip(skip)
-            .limit(limit);
+//         const vips = await VIP.find()
+//             .sort({ createdAt: -1 })  // 按加入時間降序排序
+//             .skip(skip)
+//             .limit(limit);
 
-        const total = await VIP.countDocuments();
-        const hasNextPage = skip + vips.length < total;
+//         const total = await VIP.countDocuments();
+//         const hasNextPage = skip + vips.length < total;
 
-        res.json({
-            vips,
-            hasNextPage,
-            currentPage: page,
-            totalPages: Math.ceil(total / limit)
-        });
-    } catch (error) {
-        console.error('Error fetching VIP list:', error);
-        res.status(500).json({ message: '獲取常客列表失敗' });
-    }
-});
+//         res.json({
+//             vips,
+//             hasNextPage,
+//             currentPage: page,
+//             totalPages: Math.ceil(total / limit)
+//         });
+//     } catch (error) {
+//         console.error('Error fetching VIP list:', error);
+//         res.status(500).json({ message: '獲取常客列表失敗' });
+//     }
+// });
 
-app.post('/api/vip/add', async (req, res) => {
-    try {
-        const { name, phone } = req.body;
+// app.post('/api/vip/add', async (req, res) => {
+//     try {
+//         const { name, phone } = req.body;
         
-        // 檢查是否已經是常客
-        const existingVIP = await VIP.findOne({ phone });
-        if (existingVIP) {
-            // 檢查新名字是否與現有名字不同
-            if (!existingVIP.name.includes(name)) {
-                // 更新名字，將新名字加入到現有名字後面
-                const updatedName = `${existingVIP.name},${name}`;
-                await VIP.findByIdAndUpdate(existingVIP._id, { name: updatedName });
-                return res.json({ message: '已更新常客名稱' });
-            }
-            return res.status(400).json({ message: '該客人已經在常客名單中' });
-        }
+//         // 檢查是否已經是常客
+//         const existingVIP = await VIP.findOne({ phone });
+//         if (existingVIP) {
+//             // 檢查新名字是否與現有名字不同
+//             if (!existingVIP.name.includes(name)) {
+//                 // 更新名字，將新名字加入到現有名字後面
+//                 const updatedName = `${existingVIP.name},${name}`;
+//                 await VIP.findByIdAndUpdate(existingVIP._id, { name: updatedName });
+//                 return res.json({ message: '已更新常客名稱' });
+//             }
+//             return res.status(400).json({ message: '該客人已經在常客名單中' });
+//         }
 
-        // 檢查是否有訂位紀錄
-        const hasBooking = await Reservation.findOne({ phone });
-        if (!hasBooking) {
-            return res.status(400).json({ message: '查無此客人的訂位紀錄' });
-        }
+//         // 檢查是否有訂位紀錄
+//         const hasBooking = await Reservation.findOne({ phone });
+//         if (!hasBooking) {
+//             return res.status(400).json({ message: '查無此客人的訂位紀錄' });
+//         }
 
-        // 新增常客
-        const vip = new VIP({ name, phone });
-        await vip.save();
-        res.json({ message: '成功加入常客名單' });
-    } catch (error) {
-        console.error('Error adding/updating VIP:', error);
-        res.status(500).json({ message: '新增/更新常客失敗' });
-    }
-});
+//         // 新增常客
+//         const vip = new VIP({ name, phone });
+//         await vip.save();
+//         res.json({ message: '成功加入常客名單' });
+//     } catch (error) {
+//         console.error('Error adding/updating VIP:', error);
+//         res.status(500).json({ message: '新增/更新常客失敗' });
+//     }
+// });
 
-app.post('/api/reservations/search-by-code', async (req, res) => {
-    try {
-        const { bookingCode } = req.body;
-        const today = moment.tz('Asia/Taipei').startOf('day').format('YYYY-MM-DD');
-        const reservation = await Reservation.findOne({ 
-            bookingCode,
-            date: { $gte: today },
-            canceled: { $ne: true }
-        });
+// app.post('/api/reservations/search-by-code', async (req, res) => {
+//     try {
+//         const { bookingCode } = req.body;
+//         const today = moment.tz('Asia/Taipei').startOf('day').format('YYYY-MM-DD');
+//         const reservation = await Reservation.findOne({ 
+//             bookingCode,
+//             date: { $gte: today },
+//             canceled: { $ne: true }
+//         });
         
-        if (!reservation) {
-            return res.status(404).json({ error: '找不到訂位資料' });
-        }
+//         if (!reservation) {
+//             return res.status(404).json({ error: '找不到訂位資料' });
+//         }
         
-        res.json({
-            name: reservation.name,
-            phone: reservation.phone,
-            email: reservation.email,
-            date: reservation.date,
-            time: reservation.time,
-            adults: reservation.adults,
-            children: reservation.children,
-            bookingCode: reservation.bookingCode
-        });
-    } catch (error) {
-        res.status(500).json({ error: '查詢失敗' });
-    }
-});
+//         res.json({
+//             name: reservation.name,
+//             phone: reservation.phone,
+//             email: reservation.email,
+//             date: reservation.date,
+//             time: reservation.time,
+//             adults: reservation.adults,
+//             children: reservation.children,
+//             bookingCode: reservation.bookingCode
+//         });
+//     } catch (error) {
+//         res.status(500).json({ error: '查詢失敗' });
+//     }
+// });
 
-// 使用姓名和電話查詢
-app.post('/api/reservations/search-by-info', async (req, res) => {
-    try {
-        const { name, phone } = req.body;
-        const today = moment.tz('Asia/Taipei').startOf('day').format('YYYY-MM-DD');
-        const reservations = await Reservation.find({ 
-            name,
-            phone,
-            date: { $gte: today },
-            canceled: { $ne: true }
-        });
+// // 使用姓名和電話查詢
+// app.post('/api/reservations/search-by-info', async (req, res) => {
+//     try {
+//         const { name, phone } = req.body;
+//         const today = moment.tz('Asia/Taipei').startOf('day').format('YYYY-MM-DD');
+//         const reservations = await Reservation.find({ 
+//             name,
+//             phone,
+//             date: { $gte: today },
+//             canceled: { $ne: true }
+//         });
         
-        if (!reservations.length) {
-            return res.status(404).json({ error: '找不到訂位資料' });
-        }
+//         if (!reservations.length) {
+//             return res.status(404).json({ error: '找不到訂位資料' });
+//         }
         
-        res.json(reservations.map(r => ({
-            id: r._id,
-            name: r.name,
-            phone: r.phone,
-            email: r.email,
-            date: r.date,
-            time: r.time,
-            adults: r.adults,
-            children: r.children,
-            bookingCode: r.bookingCode
-        })));
-    } catch (error) {
-        res.status(500).json({ error: '查詢失敗' });
-    }
-});
+//         res.json(reservations.map(r => ({
+//             id: r._id,
+//             name: r.name,
+//             phone: r.phone,
+//             email: r.email,
+//             date: r.date,
+//             time: r.time,
+//             adults: r.adults,
+//             children: r.children,
+//             bookingCode: r.bookingCode
+//         })));
+//     } catch (error) {
+//         res.status(500).json({ error: '查詢失敗' });
+//     }
+// });
 
-// 取消訂位
-app.post('/api/reservations/cancel', async (req, res) => {
-    try {
-        const { bookingCode } = req.body;
-        console.log('Received cancel request for booking:', bookingCode); // 添加日誌
+// // 取消訂位
+// app.post('/api/reservations/cancel', async (req, res) => {
+//     try {
+//         const { bookingCode } = req.body;
+//         console.log('Received cancel request for booking:', bookingCode); // 添加日誌
 
-        if (!bookingCode) {
-            return res.status(400).json({ error: '訂位代碼不能為空' });
-        }
+//         if (!bookingCode) {
+//             return res.status(400).json({ error: '訂位代碼不能為空' });
+//         }
 
-        // 先查找訂位
-        const reservation = await Reservation.findOne({ 
-            bookingCode,
-            canceled: { $ne: true }
-        });
+//         // 先查找訂位
+//         const reservation = await Reservation.findOne({ 
+//             bookingCode,
+//             canceled: { $ne: true }
+//         });
 
-        if (!reservation) {
-            return res.status(404).json({ error: '找不到訂位資料或訂位已被取消' });
-        }
+//         if (!reservation) {
+//             return res.status(404).json({ error: '找不到訂位資料或訂位已被取消' });
+//         }
 
-        console.log('Found reservation:', reservation); // 添加日誌
+//         console.log('Found reservation:', reservation); // 添加日誌
 
-        // 更新訂位狀態
-        reservation.canceled = true;
-        reservation.canceledAt = new Date();
-        await reservation.save();
+//         // 更新訂位狀態
+//         reservation.canceled = true;
+//         reservation.canceledAt = new Date();
+//         await reservation.save();
 
-        // 更新時段計數
-        const date = reservation.date;
-        const time = reservation.time;
-        const hour = parseInt(time.split(':')[0]);
-        const dayOfWeek = new Date(date).getDay();
+//         // 更新時段計數
+//         const date = reservation.date;
+//         const time = reservation.time;
+//         const hour = parseInt(time.split(':')[0]);
+//         const dayOfWeek = new Date(date).getDay();
         
-        // 確定是平日還是假日
-        const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-        const Model = isWeekday ? GLW : GLH;
+//         // 確定是平日還是假日
+//         const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+//         const Model = isWeekday ? GLW : GLH;
         
-        // 確定時段代碼
-        let timeSlot;
-        if (isWeekday) {
-            if (hour === 11) timeSlot = 'wm1';
-            else if (hour === 12) timeSlot = 'wm2';
-            else if (hour === 13) timeSlot = 'wm3';
-            else if (hour === 17) timeSlot = 'wa1';
-            else if (hour === 18) timeSlot = 'wa2';
-            else if (hour >= 19) timeSlot = 'wa3';
-        } else {
-            if (hour === 11) timeSlot = 'hm1';
-            else if (hour === 12) timeSlot = 'hm2';
-            else if (hour === 13) timeSlot = 'hm3';
-            else if (hour === 14) timeSlot = 'hm4';
-            else if (hour === 17) timeSlot = 'ha1';
-            else if (hour === 18) timeSlot = 'ha2';
-            else if (hour >= 19) timeSlot = 'ha3';
-        }
+//         // 確定時段代碼
+//         let timeSlot;
+//         if (isWeekday) {
+//             if (hour === 11) timeSlot = 'wm1';
+//             else if (hour === 12) timeSlot = 'wm2';
+//             else if (hour === 13) timeSlot = 'wm3';
+//             else if (hour === 17) timeSlot = 'wa1';
+//             else if (hour === 18) timeSlot = 'wa2';
+//             else if (hour >= 19) timeSlot = 'wa3';
+//         } else {
+//             if (hour === 11) timeSlot = 'hm1';
+//             else if (hour === 12) timeSlot = 'hm2';
+//             else if (hour === 13) timeSlot = 'hm3';
+//             else if (hour === 14) timeSlot = 'hm4';
+//             else if (hour === 17) timeSlot = 'ha1';
+//             else if (hour === 18) timeSlot = 'ha2';
+//             else if (hour >= 19) timeSlot = 'ha3';
+//         }
 
-        console.log('Updating time slot:', { date, timeSlot, isWeekday }); // 添加日誌
+//         console.log('Updating time slot:', { date, timeSlot, isWeekday }); // 添加日誌
 
-        // 更新時段資料
-        const updateResult = await Model.updateOne(
-            { date },
-            { $inc: { [timeSlot]: -1 } }
-        );
-        console.log('Time slot update result:', updateResult); // 添加日誌
+//         // 更新時段資料
+//         const updateResult = await Model.updateOne(
+//             { date },
+//             { $inc: { [timeSlot]: -1 } }
+//         );
+//         console.log('Time slot update result:', updateResult); // 添加日誌
 
-        // 取得星期幾的字串
-        const displayDate = reservation.date;
+//         // 取得星期幾的字串
+//         const displayDate = reservation.date;
 
-        const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-        const weekDay = dayMapping[dayOfWeek];
+//         const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
+//         const weekDay = dayMapping[dayOfWeek];
 
-        // 發送取消確認郵件給客人
-        await sendCancelEmail(reservation.email, {
-            name: reservation.name,
-            date: displayDate,
-            dayOfWeek: weekDay, 
-            time: reservation.time,
-            adults: reservation.adults,
-            children: reservation.children,
-            bookingCode: reservation.bookingCode
-        });
+//         // 發送取消確認郵件給客人
+//         await sendCancelEmail(reservation.email, {
+//             name: reservation.name,
+//             date: displayDate,
+//             dayOfWeek: weekDay, 
+//             time: reservation.time,
+//             adults: reservation.adults,
+//             children: reservation.children,
+//             bookingCode: reservation.bookingCode
+//         });
 
-        // 發送通知給餐廳
-        await sendCancelNotificationEmail(process.env.EMAIL_USER, {
-            name: reservation.name,
-            date: displayDate,
-            dayOfWeek: weekDay,         
-            time: reservation.time,
-            adults: reservation.adults,
-            children: reservation.children,
-            bookingCode: reservation.bookingCode
-        });
+//         // 發送通知給餐廳
+//         await sendCancelNotificationEmail(process.env.EMAIL_USER, {
+//             name: reservation.name,
+//             date: displayDate,
+//             dayOfWeek: weekDay,         
+//             time: reservation.time,
+//             adults: reservation.adults,
+//             children: reservation.children,
+//             bookingCode: reservation.bookingCode
+//         });
 
-        // 如果有 LINE 帳號綁定，發送 LINE 通知
-        const lineUser = await UserID.findOne({ phone: reservation.phone });
-        if (lineUser) {
-            const messageTemplate = JSON.parse(JSON.stringify(reservationCancelTemplate));
-            messageTemplate.body.contents[0].text = `${reservation.name}，您好！`;
-            const reservationInfo = messageTemplate.body.contents[1].contents;
+//         // 如果有 LINE 帳號綁定，發送 LINE 通知
+//         const lineUser = await UserID.findOne({ phone: reservation.phone });
+//         if (lineUser) {
+//             const messageTemplate = JSON.parse(JSON.stringify(reservationCancelTemplate));
+//             messageTemplate.body.contents[0].text = `${reservation.name}，您好！`;
+//             const reservationInfo = messageTemplate.body.contents[1].contents;
             
-            reservationInfo.forEach(box => {
-                const label = box.contents[0].text;
-                switch(label) {
-                    case "日期":
-                        box.contents[1].text = `${reservation.date} (${weekDay})`;
-                        break;
-                    case "時間":
-                        box.contents[1].text = reservation.time;
-                        break;
-                }
-            });
+//             reservationInfo.forEach(box => {
+//                 const label = box.contents[0].text;
+//                 switch(label) {
+//                     case "日期":
+//                         box.contents[1].text = `${reservation.date} (${weekDay})`;
+//                         break;
+//                     case "時間":
+//                         box.contents[1].text = reservation.time;
+//                         break;
+//                 }
+//             });
 
-            await sendLineMessage(lineUser.lineUserId, {
-                type: 'flex',
-                altText: '訂位取消通知',
-                contents: messageTemplate
-            });
-        }
+//             await sendLineMessage(lineUser.lineUserId, {
+//                 type: 'flex',
+//                 altText: '訂位取消通知',
+//                 contents: messageTemplate
+//             });
+//         }
 
-        res.json({ message: '訂位已成功取消' });
-    } catch (error) {
-        console.error('Cancel reservation error:', error);
-        res.status(500).json({ error: '取消失敗' });
-    }
-});
+//         res.json({ message: '訂位已成功取消' });
+//     } catch (error) {
+//         console.error('Cancel reservation error:', error);
+//         res.status(500).json({ error: '取消失敗' });
+//     }
+// });
 
-// 新增取消訂位郵件函數
-async function sendCancelEmail(email, data) {
-    const emailData = {
-        to: email,
-        subject: '芝麻柚子 とんかつ | 訂位取消確認',
-        html: `
-            <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h2 style="color: #333;">訂位取消確認</h2>
-                <p style="color: #666;">${data.name} 您好，</p>
-                <p style="color: #666;">您已成功取消以下訂位：</p>
+// // 新增取消訂位郵件函數
+// async function sendCancelEmail(email, data) {
+//     const emailData = {
+//         to: email,
+//         subject: '芝麻柚子 とんかつ | 訂位取消確認',
+//         html: `
+//             <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//                 <h2 style="color: #333;">訂位取消確認</h2>
+//                 <p style="color: #666;">${data.name} 您好，</p>
+//                 <p style="color: #666;">您已成功取消以下訂位：</p>
                 
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
-                    <p style="margin: 5px 0;">姓名：${data.name}</p>
-                    <p style="margin: 5px 0;">日期：${data.date} (${data.dayOfWeek})</p>
-                    <p style="margin: 5px 0;">時間：${data.time}</p>
-                    <p style="margin: 5px 0;">人數：${data.adults}大${data.children}小</p>
-                    <p style="margin: 5px 0;">訂位代碼：${data.bookingCode}</p>
-                </div>
+//                 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+//                     <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
+//                     <p style="margin: 5px 0;">姓名：${data.name}</p>
+//                     <p style="margin: 5px 0;">日期：${data.date} (${data.dayOfWeek})</p>
+//                     <p style="margin: 5px 0;">時間：${data.time}</p>
+//                     <p style="margin: 5px 0;">人數：${data.adults}大${data.children}小</p>
+//                     <p style="margin: 5px 0;">訂位代碼：${data.bookingCode}</p>
+//                 </div>
 
-                <p style="color: #666;">如有任何問題，請隨時與我們聯繫。</p>
+//                 <p style="color: #666;">如有任何問題，請隨時與我們聯繫。</p>
                 
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                    <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
-                    <p style="color: #999; font-size: 14px;">電：03 558 7360</p>
-                    <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
-                </div>
-            </div>
-        `
-    };
+//                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+//                     <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
+//                     <p style="color: #999; font-size: 14px;">電：03 558 7360</p>
+//                     <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
+//                 </div>
+//             </div>
+//         `
+//     };
 
-    return await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: emailData.to,
-        subject: emailData.subject,
-        html: emailData.html
-    });
-}
+//     return await transporter.sendMail({
+//         from: process.env.EMAIL_USER,
+//         to: emailData.to,
+//         subject: emailData.subject,
+//         html: emailData.html
+//     });
+// }
 
-// 新增餐廳通知郵件函數
-async function sendCancelNotificationEmail(email, data) {
-    const emailData = {
-        to: email,
-        subject: '訂位取消通知',
-        html: `
-            <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h2 style="color: #333;">訂位取消通知</h2>
-                <p style="color: #666;">有客人取消了訂位：</p>
+// // 新增餐廳通知郵件函數
+// async function sendCancelNotificationEmail(email, data) {
+//     const emailData = {
+//         to: email,
+//         subject: '訂位取消通知',
+//         html: `
+//             <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//                 <h2 style="color: #333;">訂位取消通知</h2>
+//                 <p style="color: #666;">有客人取消了訂位：</p>
                 
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
-                    <p style="margin: 5px 0;">姓名：${data.name}</p>
-                    <p style="margin: 5px 0;">日期：${data.date} (${data.dayOfWeek})</p>
-                    <p style="margin: 5px 0;">時間：${data.time}</p>
-                    <p style="margin: 5px 0;">人數：${data.adults}大${data.children}小</p>
-                    <p style="margin: 5px 0;">訂位代碼：${data.bookingCode}</p>
-                </div>
-            </div>
-        `
-    };
+//                 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+//                     <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
+//                     <p style="margin: 5px 0;">姓名：${data.name}</p>
+//                     <p style="margin: 5px 0;">日期：${data.date} (${data.dayOfWeek})</p>
+//                     <p style="margin: 5px 0;">時間：${data.time}</p>
+//                     <p style="margin: 5px 0;">人數：${data.adults}大${data.children}小</p>
+//                     <p style="margin: 5px 0;">訂位代碼：${data.bookingCode}</p>
+//                 </div>
+//             </div>
+//         `
+//     };
 
-    return await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: emailData.to,
-        subject: emailData.subject,
-        html: emailData.html
-    });
-}
+//     return await transporter.sendMail({
+//         from: process.env.EMAIL_USER,
+//         to: emailData.to,
+//         subject: emailData.subject,
+//         html: emailData.html
+//     });
+// }
 
-// 處理入座狀態更新
-app.post('/api/bookings/:id/seat', async (req, res) => {
-    try {
-        const bookingId = req.params.id;
+// // 處理入座狀態更新
+// app.post('/api/bookings/:id/seat', async (req, res) => {
+//     try {
+//         const bookingId = req.params.id;
         
-        // 更新訂位狀態為已入座
-        const updatedBooking = await Reservation.findByIdAndUpdate(
-            bookingId,
-            { seated: true },
-            { new: true }
-        );
+//         // 更新訂位狀態為已入座
+//         const updatedBooking = await Reservation.findByIdAndUpdate(
+//             bookingId,
+//             { seated: true },
+//             { new: true }
+//         );
 
-        if (!updatedBooking) {
-            return res.status(404).json({ message: '找不到訂位記錄' });
-        }
+//         if (!updatedBooking) {
+//             return res.status(404).json({ message: '找不到訂位記錄' });
+//         }
 
-        // 發送入座通知 email
-        if (updatedBooking.email) {
-            const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-            const weekDay = dayMapping[new Date(updatedBooking.date).getDay()];
+//         // 發送入座通知 email
+//         if (updatedBooking.email) {
+//             const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
+//             const weekDay = dayMapping[new Date(updatedBooking.date).getDay()];
             
-            await transporter.sendMail({
-                from: process.env.EMAIL_USER,
-                to: updatedBooking.email,
-                subject: '芝麻柚子 とんかつ | 入座通知',
-                html: `
-                    <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <h2 style="color: #333;">入座通知</h2>
-                        <p style="color: #666;">${updatedBooking.name} 您好，</p>
+//             await transporter.sendMail({
+//                 from: process.env.EMAIL_USER,
+//                 to: updatedBooking.email,
+//                 subject: '芝麻柚子 とんかつ | 入座通知',
+//                 html: `
+//                     <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//                         <h2 style="color: #333;">入座通知</h2>
+//                         <p style="color: #666;">${updatedBooking.name} 您好，</p>
                         
-                        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                            <p style="margin: 5px 0;">入座時間：${new Intl.DateTimeFormat('zh-TW', {
-                                timeZone: 'Asia/Taipei', // 指定時區
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            }).format(new Date())
-                        }</p>
-                        </div>
+//                         <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+//                             <p style="margin: 5px 0;">入座時間：${new Intl.DateTimeFormat('zh-TW', {
+//                                 timeZone: 'Asia/Taipei', // 指定時區
+//                                 hour: '2-digit',
+//                                 minute: '2-digit'
+//                             }).format(new Date())
+//                         }</p>
+//                         </div>
 
-                        <p style="color: #666;">祝您用餐愉快！</p>
+//                         <p style="color: #666;">祝您用餐愉快！</p>
                         
-                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                            <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
-                            <p style="color: #999; font-size: 14px;">電話：03 558 7360</p>
-                            <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
-                        </div>
-                    </div>
-                `
-            });
-        }
+//                         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+//                             <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
+//                             <p style="color: #999; font-size: 14px;">電話：03 558 7360</p>
+//                             <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
+//                         </div>
+//                     </div>
+//                 `
+//             });
+//         }
 
-        // 檢查是否有綁定 LINE 帳號並發送通知
-        const lineUser = await UserID.findOne({ phone: updatedBooking.phone });
-        if (lineUser) {
-            const seatedTime = new Intl.DateTimeFormat('zh-TW', {
-                timeZone: 'Asia/Taipei', 
-                hour: '2-digit',
-                minute: '2-digit'
-            }).format(new Date())
+//         // 檢查是否有綁定 LINE 帳號並發送通知
+//         const lineUser = await UserID.findOne({ phone: updatedBooking.phone });
+//         if (lineUser) {
+//             const seatedTime = new Intl.DateTimeFormat('zh-TW', {
+//                 timeZone: 'Asia/Taipei', 
+//                 hour: '2-digit',
+//                 minute: '2-digit'
+//             }).format(new Date())
             
-            const messageTemplate = JSON.parse(JSON.stringify(seatedNotificationTemplate));
-            messageTemplate.body.contents[0].text = `${updatedBooking.name}，您好！`;
-            const reservationInfo = messageTemplate.body.contents[1].contents;
+//             const messageTemplate = JSON.parse(JSON.stringify(seatedNotificationTemplate));
+//             messageTemplate.body.contents[0].text = `${updatedBooking.name}，您好！`;
+//             const reservationInfo = messageTemplate.body.contents[1].contents;
             
-            reservationInfo.forEach(box => {
-                const label = box.contents[0].text;
-                switch(label) {
-                    case "入座時間":
-                        box.contents[1].text = seatedTime;
-                        break;
-                }
-            });
+//             reservationInfo.forEach(box => {
+//                 const label = box.contents[0].text;
+//                 switch(label) {
+//                     case "入座時間":
+//                         box.contents[1].text = seatedTime;
+//                         break;
+//                 }
+//             });
 
-            await sendLineMessage(lineUser.lineUserId, {
-                type: 'flex',
-                altText: '入座通知',
-                contents: messageTemplate
-            });
-        }
+//             await sendLineMessage(lineUser.lineUserId, {
+//                 type: 'flex',
+//                 altText: '入座通知',
+//                 contents: messageTemplate
+//             });
+//         }
 
-        res.json({ message: '已更新入座狀態', booking: updatedBooking });
-    } catch (error) {
-        console.error('更新入座狀態失敗:', error);
-        res.status(500).json({ message: '更新入座狀態時發生錯誤' });
-    }
-});
+//         res.json({ message: '已更新入座狀態', booking: updatedBooking });
+//     } catch (error) {
+//         console.error('更新入座狀態失敗:', error);
+//         res.status(500).json({ message: '更新入座狀態時發生錯誤' });
+//     }
+// });
 
-app.post('/api/reservations/manual-cancel', async (req, res) => {
-    try {
-        const { bookingCode, reason, staffName } = req.body;
+// app.post('/api/reservations/manual-cancel', async (req, res) => {
+//     try {
+//         const { bookingCode, reason, staffName } = req.body;
 
-        const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
+//         const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
         
-        // 驗證輸入
-        if (!bookingCode || !reason || !staffName) {
-            return res.status(400).json({ error: '缺少必要資訊' });
-        }
+//         // 驗證輸入
+//         if (!bookingCode || !reason || !staffName) {
+//             return res.status(400).json({ error: '缺少必要資訊' });
+//         }
 
-        // 查找並更新訂位
-        const reservation = await Reservation.findOneAndUpdate(
-            { 
-                bookingCode,
-                canceled: { $ne: true }
-            },
-            { 
-                canceled: true,
-                cancelReason: reason,
-                canceledBy: staffName,
-                canceledAt: new Date(),
-                cancelType: 'manual'
-            },
-            { new: true }
-        );
+//         // 查找並更新訂位
+//         const reservation = await Reservation.findOneAndUpdate(
+//             { 
+//                 bookingCode,
+//                 canceled: { $ne: true }
+//             },
+//             { 
+//                 canceled: true,
+//                 cancelReason: reason,
+//                 canceledBy: staffName,
+//                 canceledAt: new Date(),
+//                 cancelType: 'manual'
+//             },
+//             { new: true }
+//         );
 
-        if (!reservation) {
-            return res.status(404).json({ error: '找不到有效的訂位' });
-        }
+//         if (!reservation) {
+//             return res.status(404).json({ error: '找不到有效的訂位' });
+//         }
 
-        // 更新時段計數
-        const date = reservation.date;
-        const time = reservation.time;
-        const hour = parseInt(time.split(':')[0]);
-        const dayOfWeek = new Date(date).getDay();
+//         // 更新時段計數
+//         const date = reservation.date;
+//         const time = reservation.time;
+//         const hour = parseInt(time.split(':')[0]);
+//         const dayOfWeek = new Date(date).getDay();
         
-        // 確定是平日還是假日
-        const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-        const Model = isWeekday ? GLW : GLH;
+//         // 確定是平日還是假日
+//         const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+//         const Model = isWeekday ? GLW : GLH;
         
-        // 確定時段代碼
-        let timeSlot;
-        if (isWeekday) {
-            if (hour === 11) timeSlot = 'wm1';
-            else if (hour === 12) timeSlot = 'wm2';
-            else if (hour === 13) timeSlot = 'wm3';
-            else if (hour === 17) timeSlot = 'wa1';
-            else if (hour === 18) timeSlot = 'wa2';
-            else if (hour >= 19) timeSlot = 'wa3';
-        } else {
-            if (hour === 11) timeSlot = 'hm1';
-            else if (hour === 12) timeSlot = 'hm2';
-            else if (hour === 13) timeSlot = 'hm3';
-            else if (hour === 14) timeSlot = 'hm4';
-            else if (hour === 17) timeSlot = 'ha1';
-            else if (hour === 18) timeSlot = 'ha2';
-            else if (hour >= 19) timeSlot = 'ha3';
-        }
+//         // 確定時段代碼
+//         let timeSlot;
+//         if (isWeekday) {
+//             if (hour === 11) timeSlot = 'wm1';
+//             else if (hour === 12) timeSlot = 'wm2';
+//             else if (hour === 13) timeSlot = 'wm3';
+//             else if (hour === 17) timeSlot = 'wa1';
+//             else if (hour === 18) timeSlot = 'wa2';
+//             else if (hour >= 19) timeSlot = 'wa3';
+//         } else {
+//             if (hour === 11) timeSlot = 'hm1';
+//             else if (hour === 12) timeSlot = 'hm2';
+//             else if (hour === 13) timeSlot = 'hm3';
+//             else if (hour === 14) timeSlot = 'hm4';
+//             else if (hour === 17) timeSlot = 'ha1';
+//             else if (hour === 18) timeSlot = 'ha2';
+//             else if (hour >= 19) timeSlot = 'ha3';
+//         }
 
-        console.log('Updating time slot:', { date, timeSlot, isWeekday }); // 添加日誌
+//         console.log('Updating time slot:', { date, timeSlot, isWeekday }); // 添加日誌
 
-        // 更新時段資料
-        const updateResult = await Model.updateOne(
-            { date },
-            { $inc: { [timeSlot]: -1 } }
-        );
-        console.log('Time slot update result:', updateResult); // 添加日誌
+//         // 更新時段資料
+//         const updateResult = await Model.updateOne(
+//             { date },
+//             { $inc: { [timeSlot]: -1 } }
+//         );
+//         console.log('Time slot update result:', updateResult); // 添加日誌
 
-        // 取得星期幾的字串
-        const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-        const weekDay = dayMapping[dayOfWeek];
+//         // 取得星期幾的字串
+//         const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
+//         const weekDay = dayMapping[dayOfWeek];
 
-        // 準備通知內容
-        const messageTemplate = JSON.parse(JSON.stringify(manualCancelNotificationTemplate));
+//         // 準備通知內容
+//         const messageTemplate = JSON.parse(JSON.stringify(manualCancelNotificationTemplate));
         
-        // 更新模板內容
-        messageTemplate.body.contents.forEach(content => {
-            if (content.type === 'text') {
-                const text = content.text;
-                if (text.includes('姓名：')) {
-                    content.text = `姓名：${reservation.name}`;
-                } else if (text.includes('電話：')) {
-                    content.text = `電話：${reservation.phone}`;
-                } else if (text.includes('電子郵件：')) {
-                    content.text = `電子郵件：${reservation.email}`;
-                } else if (text.includes('日期：')) {
-                    content.text = `日期：${reservation.date} (${weekDay})`;
-                } else if (text.includes('取消時間：')) {
-                    content.text = `取消時間：${today}`;
-                } else if (text.includes('取消原因：')) {
-                    content.text = `取消原因：${reason}`;
-                } else if (text.includes('取消者：')) {
-                    content.text = `取消者：${staffName}`;
-                }
-            }
-        });
+//         // 更新模板內容
+//         messageTemplate.body.contents.forEach(content => {
+//             if (content.type === 'text') {
+//                 const text = content.text;
+//                 if (text.includes('姓名：')) {
+//                     content.text = `姓名：${reservation.name}`;
+//                 } else if (text.includes('電話：')) {
+//                     content.text = `電話：${reservation.phone}`;
+//                 } else if (text.includes('電子郵件：')) {
+//                     content.text = `電子郵件：${reservation.email}`;
+//                 } else if (text.includes('日期：')) {
+//                     content.text = `日期：${reservation.date} (${weekDay})`;
+//                 } else if (text.includes('取消時間：')) {
+//                     content.text = `取消時間：${today}`;
+//                 } else if (text.includes('取消原因：')) {
+//                     content.text = `取消原因：${reason}`;
+//                 } else if (text.includes('取消者：')) {
+//                     content.text = `取消者：${staffName}`;
+//                 }
+//             }
+//         });
         
 
-        // 使用正確格式發送LINE通知
-        await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
-            type: 'flex',
-            altText: '手動訂位取消通知',
-            contents: messageTemplate
-        });
+//         // 使用正確格式發送LINE通知
+//         await sendLineMessage('Uc4e93b0ce290ca939299619e6bd603f0', {
+//             type: 'flex',
+//             altText: '手動訂位取消通知',
+//             contents: messageTemplate
+//         });
 
 
-        // 發送通知給客人
-        if (reservation.email) {
-            await transporter.sendMail({
-                from: process.env.EMAIL_USER,
-                to: reservation.email,
-                subject: '芝麻柚子 とんかつ | 訂位取消通知',
-                html: `
-                    <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <h2 style="color: #333;">訂位取消通知</h2>
-                        <p style="color: #666;">${reservation.name} 您好，</p>
-                        <p style="color: #666;">很抱歉通知您，您的訂位已被取消：</p>
+//         // 發送通知給客人
+//         if (reservation.email) {
+//             await transporter.sendMail({
+//                 from: process.env.EMAIL_USER,
+//                 to: reservation.email,
+//                 subject: '芝麻柚子 とんかつ | 訂位取消通知',
+//                 html: `
+//                     <div style="font-family: 'Microsoft JhengHei', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+//                         <h2 style="color: #333;">訂位取消通知</h2>
+//                         <p style="color: #666;">${reservation.name} 您好，</p>
+//                         <p style="color: #666;">很抱歉通知您，您的訂位已被取消：</p>
                         
-                        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                            <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
-                            <p style="margin: 5px 0;">姓名：${reservation.name}</p>
-                            <p style="margin: 5px 0;">日期：${reservation.date} (${weekDay})</p>
-                            <p style="margin: 5px 0;">時間：${reservation.time}</p>
-                            <p style="margin: 5px 0;">取消原因：${reason}</p>
-                        </div>
+//                         <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+//                             <p style="margin: 5px 0;"><strong>訂位資訊：</strong></p>
+//                             <p style="margin: 5px 0;">姓名：${reservation.name}</p>
+//                             <p style="margin: 5px 0;">日期：${reservation.date} (${weekDay})</p>
+//                             <p style="margin: 5px 0;">時間：${reservation.time}</p>
+//                             <p style="margin: 5px 0;">取消原因：${reason}</p>
+//                         </div>
 
-                        <p style="color: #666;">如有任何疑問，請與我們聯繫。</p>
+//                         <p style="color: #666;">如有任何疑問，請與我們聯繫。</p>
                         
-                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                            <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
-                            <p style="color: #999; font-size: 14px;">電話：03 558 7360</p>
-                            <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
-                        </div>
-                    </div>
-                `
-            });
-        }
+//                         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+//                             <p style="color: #999; font-size: 14px;">芝麻柚子 とんかつ</p>
+//                             <p style="color: #999; font-size: 14px;">電話：03 558 7360</p>
+//                             <p style="color: #999; font-size: 14px;">地址：新竹縣竹北市光明一路490號</p>
+//                         </div>
+//                     </div>
+//                 `
+//             });
+//         }
         
-        // 如果客人有 Line 帳號，發送 Line 通知
-        const lineUser = await UserID.findOne({ phone: reservation.phone });
-        if (lineUser) {
-            const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
-            const messageTemplate = JSON.parse(JSON.stringify(customerNotificationTemplate));
+//         // 如果客人有 Line 帳號，發送 Line 通知
+//         const lineUser = await UserID.findOne({ phone: reservation.phone });
+//         if (lineUser) {
+//             const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
+//             const messageTemplate = JSON.parse(JSON.stringify(customerNotificationTemplate));
             
-            // 更新問候語
-            if (messageTemplate.body?.contents?.[0]) {
-                messageTemplate.body.contents[0].text = `${lineUser.lineName}，您好！`;
-            }
+//             // 更新問候語
+//             if (messageTemplate.body?.contents?.[0]) {
+//                 messageTemplate.body.contents[0].text = `${lineUser.lineName}，您好！`;
+//             }
         
-            // 確保 reservationInfo 是一個陣列
-            const reservationInfo = messageTemplate.body.contents[1]?.contents;
-            if (Array.isArray(reservationInfo)) {
-                reservationInfo.forEach(content => {
-                    if (content.type === 'text') {
-                        if (content.text.includes('日期：')) {
-                            content.text = `日期：${reservation.date} (${weekDay})`;
-                        } else if (content.text.includes('取消時間：')) {
-                            content.text = `取消時間：${today}`;
-                        } else if (content.text.includes('取消原因：')) {
-                            content.text = `取消原因：${reason}`;
-                        }
-                    }
-                });
-            } else {
-                console.error('Invalid reservationInfo structure:', reservationInfo);
-            }
+//             // 確保 reservationInfo 是一個陣列
+//             const reservationInfo = messageTemplate.body.contents[1]?.contents;
+//             if (Array.isArray(reservationInfo)) {
+//                 reservationInfo.forEach(content => {
+//                     if (content.type === 'text') {
+//                         if (content.text.includes('日期：')) {
+//                             content.text = `日期：${reservation.date} (${weekDay})`;
+//                         } else if (content.text.includes('取消時間：')) {
+//                             content.text = `取消時間：${today}`;
+//                         } else if (content.text.includes('取消原因：')) {
+//                             content.text = `取消原因：${reason}`;
+//                         }
+//                     }
+//                 });
+//             } else {
+//                 console.error('Invalid reservationInfo structure:', reservationInfo);
+//             }
         
-            // 發送 LINE 訊息
-            await sendLineMessage(lineUser.lineUserId, {
-                type: 'flex',
-                altText: '訂位取消通知',
-                contents: messageTemplate
-            });
-        }
-        res.json({ message: '訂位已成功取消' });
-    } catch (error) {
-        console.error('取消訂位失敗:', error);
-        res.status(500).json({ error: '取消訂位時發生錯誤' });
-    }
-});
+//             // 發送 LINE 訊息
+//             await sendLineMessage(lineUser.lineUserId, {
+//                 type: 'flex',
+//                 altText: '訂位取消通知',
+//                 contents: messageTemplate
+//             });
+//         }
+//         res.json({ message: '訂位已成功取消' });
+//     } catch (error) {
+//         console.error('取消訂位失敗:', error);
+//         res.status(500).json({ error: '取消訂位時發生錯誤' });
+//     }
+// });
 
-app.post('/send-email', (req, res) => {
-    const { name, phone, email, message } = req.body;
+// app.post('/send-email', (req, res) => {
+//     const { name, phone, email, message } = req.body;
 
-    const mailOptions = {
-        from: email, 
-        to: 'zhima.youzi@gmail.com', 
-        subject: '聯絡我們表單提交',
-        text: `姓名: ${name}\n電話: ${phone}\n電子郵件: ${email}\n問題: ${message}`
-    };
+//     const mailOptions = {
+//         from: email, 
+//         to: 'zhima.youzi@gmail.com', 
+//         subject: '聯絡我們表單提交',
+//         text: `姓名: ${name}\n電話: ${phone}\n電子郵件: ${email}\n問題: ${message}`
+//     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return res.status(500).send('郵件發送失敗！');
-        }
-        res.status(200).send('郵件發送成功！');
-    });
-});
+//     transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//             return res.status(500).send('郵件發送失敗！');
+//         }
+//         res.status(200).send('郵件發送成功！');
+//     });
+// });
 
-// new bs test
+// // new bs test
 
-app.get('/api/bookings', async (req, res) => {
-    try {
-        const date = req.query.date;
-        const bookings = await Reservation.find({ date })
-                                        .sort({ time: 1 });
-        res.json(bookings);
-    } catch (error) {
-        res.status(500).json({ error: '載入訂位失敗' });
-    }
-});
+// app.get('/api/bookings', async (req, res) => {
+//     try {
+//         const date = req.query.date;
+//         const bookings = await Reservation.find({ date })
+//                                         .sort({ time: 1 });
+//         res.json(bookings);
+//     } catch (error) {
+//         res.status(500).json({ error: '載入訂位失敗' });
+//     }
+// });
 
-// 獲取單個訂位詳情
-app.get('/api/bookings/:id', async (req, res) => {
-    try {
-        const booking = await Reservation.findById(req.params.id);
-        if (!booking) {
-            return res.status(404).json({ error: '找不到訂位' });
-        }
-        res.json(booking);
-    } catch (error) {
-        res.status(500).json({ error: '載入訂位詳情失敗' });
-    }
-});
+// // 獲取單個訂位詳情
+// app.get('/api/bookings/:id', async (req, res) => {
+//     try {
+//         const booking = await Reservation.findById(req.params.id);
+//         if (!booking) {
+//             return res.status(404).json({ error: '找不到訂位' });
+//         }
+//         res.json(booking);
+//     } catch (error) {
+//         res.status(500).json({ error: '載入訂位詳情失敗' });
+//     }
+// });
 
 //
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log(`Connected to database: ${mongoose.connection.name}`);
 });
