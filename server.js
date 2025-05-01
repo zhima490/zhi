@@ -475,40 +475,40 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html
 // app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
 
 //新後台測試
-app.get('/bst', authenticate, (req, res) => {
-    res.render('bst', { 
-        userType: req.session.userType 
-    });
-});
+// app.get('/bst', authenticate, (req, res) => {
+//     res.render('bst', { 
+//         userType: req.session.userType 
+//     });
+// });
 
-app.get('/bslt', (req, res) => {
-    if (req.session.user) {
-        return res.redirect('/bst');
-    }
-    res.sendFile(path.join(__dirname, 'html','bslt.html'));
-});
+// app.get('/bslt', (req, res) => {
+//     if (req.session.user) {
+//         return res.redirect('/bst');
+//     }
+//     res.sendFile(path.join(__dirname, 'html','bslt.html'));
+// });
 
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'html', 'menu.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'html', 'contact.html')));  // 添加 contact 路由
 app.get('/questions', (req, res) => res.sendFile(path.join(__dirname, 'html', 'questions.html')));  // 添加 questions 路由
-app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
+// app.get('/line', (req, res) => res.sendFile(path.join(__dirname, 'html', 'line.html')));
 // app.get('/comingsoon', (req, res) => res.sendFile(path.join(__dirname, 'html', 'comingsoon.html')));
-app.get(['/bsl', '/backstage-login'], (req, res) => {
-    const accessToken = req.cookies.accessToken;
-    if (accessToken) {
-        try {
-            jwt.verify(accessToken, process.env.JWT_SECRET);
-            return res.redirect('/bs');
-        } catch (err) {
-            // 處理錯誤
-        }
-    }
-    res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
-});
+// app.get(['/bsl', '/backstage-login'], (req, res) => {
+//     const accessToken = req.cookies.accessToken;
+//     if (accessToken) {
+//         try {
+//             jwt.verify(accessToken, process.env.JWT_SECRET);
+//             return res.redirect('/bs');
+//         } catch (err) {
+//             // 處理錯誤
+//         }
+//     }
+//     res.sendFile(path.join(__dirname, 'html', 'backstage-login.html'));
+// });
 
-app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
-});
+// app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
+//     res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
+// });
 
 // connectToDatabase();
 redisClient.connect().catch(console.error);
