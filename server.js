@@ -267,162 +267,162 @@ app.use((req, res, next) => {
 
 //////////////
 
-const authenticate = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/bslt');
-    }
-    next();
-};
+// const authenticate = (req, res, next) => {
+//     if (!req.session.user) {
+//         return res.redirect('/bslt');
+//     }
+//     next();
+// };
 
-app.post('/login', (req, res) => {
-    // 新增日誌記錄，檢查接收到的請求
-    console.log('完整請求 headers:', req.headers);
-    console.log('完整請求 body:', req.body);
+// app.post('/login', (req, res) => {
+//     // 新增日誌記錄，檢查接收到的請求
+//     console.log('完整請求 headers:', req.headers);
+//     console.log('完整請求 body:', req.body);
 
-    // 如果 body 為空，返回錯誤
-    if (!req.body) {
-        return res.status(400).json({
-            success: false,
-            message: '請求 body 為空'
-        });
-    }
+//     // 如果 body 為空，返回錯誤
+//     if (!req.body) {
+//         return res.status(400).json({
+//             success: false,
+//             message: '請求 body 為空'
+//         });
+//     }
 
-    const { username, password } = req.body;
+//     const { username, password } = req.body;
 
-    // 增加更多的錯誤檢查
-    if (!username || !password) {
-        return res.status(400).json({
-            success: false,
-            message: '帳號或密碼未提供'
-        });
-    }
+//     // 增加更多的錯誤檢查
+//     if (!username || !password) {
+//         return res.status(400).json({
+//             success: false,
+//             message: '帳號或密碼未提供'
+//         });
+//     }
 
-    console.log('嘗試登入:', username);
+//     console.log('嘗試登入:', username);
 
-    if (
-        (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) ||
-        (username === process.env.DEV_USERNAME && password === process.env.DEV_PASSWORD)
-    ) {
-        req.session.user = username;
-        req.session.userType = username === process.env.ADMIN_USERNAME ? '管理者' : '開發者';
+//     if (
+//         (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) ||
+//         (username === process.env.DEV_USERNAME && password === process.env.DEV_PASSWORD)
+//     ) {
+//         req.session.user = username;
+//         req.session.userType = username === process.env.ADMIN_USERNAME ? '管理者' : '開發者';
         
-        res.json({ 
-            success: true, 
-            userType: req.session.userType 
-        });
-    } else {
-        res.status(401).json({ 
-            success: false,
-            message: '無效的帳號或密碼' 
-        });
-    }
-});
+//         res.json({ 
+//             success: true, 
+//             userType: req.session.userType 
+//         });
+//     } else {
+//         res.status(401).json({ 
+//             success: false,
+//             message: '無效的帳號或密碼' 
+//         });
+//     }
+// });
 
-app.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(500).send('登出失敗');
-      }
-      res.redirect('/bslt'); 
-    });
-  });
+// app.post('/logout', (req, res) => {
+//     req.session.destroy(err => {
+//       if (err) {
+//         return res.status(500).send('登出失敗');
+//       }
+//       res.redirect('/bslt'); 
+//     });
+//   });
 
-// 認證中間件
-const authenticateToken = async (req, res, next) => {
-    // 獲取客戶端 IP
-    const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || 
-               req.socket.remoteAddress || 
-               req.ip || 
-               'unknown';
+// // 認證中間件
+// const authenticateToken = async (req, res, next) => {
+//     // 獲取客戶端 IP
+//     const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || 
+//                req.socket.remoteAddress || 
+//                req.ip || 
+//                'unknown';
 
-    const accessToken = req.cookies.accessToken;
+//     const accessToken = req.cookies.accessToken;
     
-    if (!accessToken) {
-        res.clearCookie('accessToken', cookieConfig);
-        await logAuth('SESSION_ERROR', 'unknown', false, ip);
-        return res.status(401).json({ message: '未授權的訪問' });
-    }
+//     if (!accessToken) {
+//         res.clearCookie('accessToken', cookieConfig);
+//         await logAuth('SESSION_ERROR', 'unknown', false, ip);
+//         return res.status(401).json({ message: '未授權的訪問' });
+//     }
 
-    try {
-        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-        req.user = decoded;
-        await logAuth('TOKEN_VALID', decoded.username, true, ip);
-        next();
-    } catch (error) {
-        await logAuth('TOKEN_ERROR', 'unknown', false, ip);
-        res.clearCookie('accessToken', cookieConfig);
+//     try {
+//         const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+//         req.user = decoded;
+//         await logAuth('TOKEN_VALID', decoded.username, true, ip);
+//         next();
+//     } catch (error) {
+//         await logAuth('TOKEN_ERROR', 'unknown', false, ip);
+//         res.clearCookie('accessToken', cookieConfig);
         
-        const refreshToken = req.cookies.refreshToken;
-        if (refreshToken) {
-            try {
-                const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-                const newAccessToken = generateAccessToken({ username: decoded.username });
+//         const refreshToken = req.cookies.refreshToken;
+//         if (refreshToken) {
+//             try {
+//                 const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+//                 const newAccessToken = generateAccessToken({ username: decoded.username });
                 
-                res.cookie('accessToken', newAccessToken, {
-                    ...cookieConfig,
-                    maxAge: 15 * 60 * 1000
-                });
+//                 res.cookie('accessToken', newAccessToken, {
+//                     ...cookieConfig,
+//                     maxAge: 15 * 60 * 1000
+//                 });
                 
-                req.user = decoded;
-                await logAuth('TOKEN_REFRESH', decoded.username, true, ip);
-                next();
-            } catch (error) {
-                await logAuth('REFRESH_ERROR', 'unknown', false, ip);
-                res.clearCookie('refreshToken', cookieConfig);
-                return res.status(401).json({ message: '請重新登入' });
-            }
-        } else {
-            return res.status(401).json({ message: '請重新登入' });
-        }
-    }
-};
+//                 req.user = decoded;
+//                 await logAuth('TOKEN_REFRESH', decoded.username, true, ip);
+//                 next();
+//             } catch (error) {
+//                 await logAuth('REFRESH_ERROR', 'unknown', false, ip);
+//                 res.clearCookie('refreshToken', cookieConfig);
+//                 return res.status(401).json({ message: '請重新登入' });
+//             }
+//         } else {
+//             return res.status(401).json({ message: '請重新登入' });
+//         }
+//     }
+// };
 
-const logAuth = async (type, username, success, ip) => {
-    try {
-        const log = new AuthLog({
-            type,
-            username,
-            success,
-            ip,
-            timestamp: new Date()
-        });
-        await log.save();
-        console.log(`Auth log saved: ${type} - ${username} - ${success} - ${ip}`);
-    } catch (error) {
-        console.error('Error logging auth event:', error);
-    }
-};
+// const logAuth = async (type, username, success, ip) => {
+//     try {
+//         const log = new AuthLog({
+//             type,
+//             username,
+//             success,
+//             ip,
+//             timestamp: new Date()
+//         });
+//         await log.save();
+//         console.log(`Auth log saved: ${type} - ${username} - ${success} - ${ip}`);
+//     } catch (error) {
+//         console.error('Error logging auth event:', error);
+//     }
+// };
 
-const AuthLog = mongoose.model('AuthLog', {
-    type: String,
-    username: String,
-    success: Boolean,
-    ip: String,
-    timestamp: Date
-});
+// const AuthLog = mongoose.model('AuthLog', {
+//     type: String,
+//     username: String,
+//     success: Boolean,
+//     ip: String,
+//     timestamp: Date
+// });
 
-function generateToken(length = 8) {
-    return crypto.randomBytes(length).toString('hex').slice(0, length);
-}
+// function generateToken(length = 8) {
+//     return crypto.randomBytes(length).toString('hex').slice(0, length);
+// }
 
-async function generateUniqueBookingCode() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code;
-    let isUnique = false;
+// async function generateUniqueBookingCode() {
+//     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+//     let code;
+//     let isUnique = false;
     
-    while (!isUnique) {
-        code = '';
-        for (let i = 0; i < 6; i++) {
-            code += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
+//     while (!isUnique) {
+//         code = '';
+//         for (let i = 0; i < 6; i++) {
+//             code += characters.charAt(Math.floor(Math.random() * characters.length));
+//         }
         
-        const existingReservation = await Reservation.findOne({ bookingCode: code });
-        if (!existingReservation) {
-            isUnique = true;
-        }
-    }
-    return code;
-}
+//         const existingReservation = await Reservation.findOne({ bookingCode: code });
+//         if (!existingReservation) {
+//             isUnique = true;
+//         }
+//     }
+//     return code;
+// }
 
 // function getTimeSlot(time, date) {
 //     const hour = parseInt(time.split(':')[0]);
