@@ -463,10 +463,12 @@ app.use(express.static(__dirname));
 // 路由處理
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html', 'index.html')));
-app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
-app.get('/form/info', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'form', 'info.html'));
-});
+
+// 暫停
+// app.get('/form', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
+// app.get('/form/info', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'html', 'form', 'info.html'));
+// });
 
 // 更新用
 // app.get('/uf', (req, res) => res.sendFile(path.join(__dirname, 'html', 'form.html')));
@@ -1369,387 +1371,387 @@ app.post('/reservations', async (req, res) => {
     }
 });
 
-app.post('/line/webhook', async (req, res) => {
-    console.log('Received webhook:', JSON.stringify(req.body, null, 2));
-    try {
-        const events = req.body.events;
-        for (const event of events) {
+// app.post('/line/webhook', async (req, res) => {
+//     console.log('Received webhook:', JSON.stringify(req.body, null, 2));
+//     try {
+//         const events = req.body.events;
+//         for (const event of events) {
             
-            const lineUserId = event.source.userId;
+//             const lineUserId = event.source.userId;
             
-            // 檢查用戶是否已綁定 (移到最外層)
-            const existingUser = await UserID.findOne({ lineUserId });
+//             // 檢查用戶是否已綁定 (移到最外層)
+//             const existingUser = await UserID.findOne({ lineUserId });
 
-            if (event.type === 'unfollow') {
-                // 從 userids 集合中刪除用戶
-                await UserID.deleteOne({ lineUserId });
-                console.log(`User ${lineUserId} has unfollowed and has been removed from the database.`);
-                return; // 退出循環，因為不需要處理其他事件
-            }
+//             if (event.type === 'unfollow') {
+//                 // 從 userids 集合中刪除用戶
+//                 await UserID.deleteOne({ lineUserId });
+//                 console.log(`User ${lineUserId} has unfollowed and has been removed from the database.`);
+//                 return; // 退出循環，因為不需要處理其他事件
+//             }
 
-            // 1. 處理加入好友事件
-            if (event.type === 'follow') {
-                const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
-                    }
-                });
-                const lineName = userProfile.data.displayName;
+//             // 1. 處理加入好友事件
+//             if (event.type === 'follow') {
+//                 const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
+//                     headers: {
+//                         'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+//                     }
+//                 });
+//                 const lineName = userProfile.data.displayName;
                 
-                if (!existingUser) {
-                    await sendLineMessage(lineUserId, {
-                        type: 'flex',
-                        altText: '歡迎加入芝麻柚子 とんかつ官方帳號',
-                        contents: welcomeTemplate
-                    });
-                }
-            }
+//                 if (!existingUser) {
+//                     await sendLineMessage(lineUserId, {
+//                         type: 'flex',
+//                         altText: '歡迎加入芝麻柚子 とんかつ官方帳號',
+//                         contents: welcomeTemplate
+//                     });
+//                 }
+//             }
 
-            // 只處理未綁定用戶的消息
-            if (!existingUser) {
-                // 2. 處理按鈕回應
-                if (event.type === 'postback') {
-                    const data = new URLSearchParams(event.postback.data);
-                    const action = data.get('action');
-                    const phone = data.get('phone');
+//             // 只處理未綁定用戶的消息
+//             if (!existingUser) {
+//                 // 2. 處理按鈕回應
+//                 if (event.type === 'postback') {
+//                     const data = new URLSearchParams(event.postback.data);
+//                     const action = data.get('action');
+//                     const phone = data.get('phone');
 
-                    switch (action) {
-                        case 'bind_phone':
-                            userStates[lineUserId] = 'WAITING_FOR_PHONE';
-                            await sendLineMessage(lineUserId, {
-                                type: 'text',
-                                text: '請輸入您的手機號碼（例：0912345678）'
-                            });
+//                     switch (action) {
+//                         case 'bind_phone':
+//                             userStates[lineUserId] = 'WAITING_FOR_PHONE';
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'text',
+//                                 text: '請輸入您的手機號碼（例：0912345678）'
+//                             });
 
-                            // 檢查用戶是否已經綁定
-                            if (userStates[lineUserId] !== 'BINDING_COMPLETE') {
-                                // 設置計時器，限制用戶操作時間為1分鐘
-                                if (userTimeouts[lineUserId]) {
-                                    clearTimeout(userTimeouts[lineUserId]); // 清除之前的計時器
-                                }
-                                userTimeouts[lineUserId] = setTimeout(async () => {
-                                    // 超過1分鐘後的操作
-                                    userStates[lineUserId] = 'DEFAULT_STATE'; // 重置用戶狀態
-                                    await sendLineMessage(lineUserId, {
-                                        type: 'text',
-                                        text: '您已超過操作時間，請至最上方綁定訊息重新開始。'
-                                    });
-                                    delete userTimeouts[lineUserId]; // 清除計時器
-                                }, 60000); // 60000毫秒 = 1分鐘
-                            }
-                            break;
+//                             // 檢查用戶是否已經綁定
+//                             if (userStates[lineUserId] !== 'BINDING_COMPLETE') {
+//                                 // 設置計時器，限制用戶操作時間為1分鐘
+//                                 if (userTimeouts[lineUserId]) {
+//                                     clearTimeout(userTimeouts[lineUserId]); // 清除之前的計時器
+//                                 }
+//                                 userTimeouts[lineUserId] = setTimeout(async () => {
+//                                     // 超過1分鐘後的操作
+//                                     userStates[lineUserId] = 'DEFAULT_STATE'; // 重置用戶狀態
+//                                     await sendLineMessage(lineUserId, {
+//                                         type: 'text',
+//                                         text: '您已超過操作時間，請至最上方綁定訊息重新開始。'
+//                                     });
+//                                     delete userTimeouts[lineUserId]; // 清除計時器
+//                                 }, 60000); // 60000毫秒 = 1分鐘
+//                             }
+//                             break;
 
-                        case 'confirm_recent_reservation':
-                            try {
-                                // 獲取用戶資料
-                                const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
-                                    headers: {
-                                        'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
-                                    }
-                                });
+//                         case 'confirm_recent_reservation':
+//                             try {
+//                                 // 獲取用戶資料
+//                                 const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
+//                                     headers: {
+//                                         'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+//                                     }
+//                                 });
 
-                                // 建立新的綁定
-                                const newUserID = new UserID({
-                                    lineUserId,
-                                    lineName: userProfile.data.displayName,
-                                    phone
-                                });
-                                await newUserID.save();
+//                                 // 建立新的綁定
+//                                 const newUserID = new UserID({
+//                                     lineUserId,
+//                                     lineName: userProfile.data.displayName,
+//                                     phone
+//                                 });
+//                                 await newUserID.save();
 
-                                userStates[lineUserId] = 'BINDING_COMPLETE';
+//                                 userStates[lineUserId] = 'BINDING_COMPLETE';
 
-                                if (userTimeouts[lineUserId]) {
-                                    clearTimeout(userTimeouts[lineUserId]);
-                                    delete userTimeouts[lineUserId]; // 清除計時器
-                                }
+//                                 if (userTimeouts[lineUserId]) {
+//                                     clearTimeout(userTimeouts[lineUserId]);
+//                                     delete userTimeouts[lineUserId]; // 清除計時器
+//                                 }
 
-                                // 獲取完整訂位資訊
-                                const reservation = await Reservation.findOne({
-                                    phone,
-                                    createdAt: { 
-                                        $gte: new Date(Date.now() - 120000)
-                                    }
-                                });
+//                                 // 獲取完整訂位資訊
+//                                 const reservation = await Reservation.findOne({
+//                                     phone,
+//                                     createdAt: { 
+//                                         $gte: new Date(Date.now() - 120000)
+//                                     }
+//                                 });
 
-                                if (reservation) {
-                                    const messageTemplate = JSON.parse(JSON.stringify(bindingSuccessTemplate));
-                                    const reservationInfo = messageTemplate.body.contents[1].contents;
+//                                 if (reservation) {
+//                                     const messageTemplate = JSON.parse(JSON.stringify(bindingSuccessTemplate));
+//                                     const reservationInfo = messageTemplate.body.contents[1].contents;
                                     
-                                    // 更新所有預訂資訊
-                                    reservationInfo.forEach(box => {
-                                        const label = box.contents[0].text;
-                                        switch(label) {
-                                            case "姓名":
-                                                box.contents[1].text = reservation.name;
-                                                break;
-                                            case "電話":
-                                                box.contents[1].text = reservation.phone;
-                                                break;
-                                            case "日期":
-                                                box.contents[1].text = reservation.date;
-                                                break;
-                                            case "時間":
-                                                box.contents[1].text = reservation.time;
-                                                break;
-                                            case "人數":
-                                                box.contents[1].text = `${reservation.adults}大${reservation.children}小`;
-                                                break;
-                                            case "素食":
-                                                box.contents[1].text = reservation.vegetarian;
-                                                break;
-                                            case "特殊需求":
-                                                box.contents[1].text = reservation.specialNeeds;
-                                                break;
-                                            case "備註":
-                                                box.contents[1].text = reservation.notes || '無';
-                                                break;
-                                            case "訂位代碼":
-                                                box.contents[1].text = reservation.bookingCode;
-                                                break;  
-                                        }
-                                    });
+//                                     // 更新所有預訂資訊
+//                                     reservationInfo.forEach(box => {
+//                                         const label = box.contents[0].text;
+//                                         switch(label) {
+//                                             case "姓名":
+//                                                 box.contents[1].text = reservation.name;
+//                                                 break;
+//                                             case "電話":
+//                                                 box.contents[1].text = reservation.phone;
+//                                                 break;
+//                                             case "日期":
+//                                                 box.contents[1].text = reservation.date;
+//                                                 break;
+//                                             case "時間":
+//                                                 box.contents[1].text = reservation.time;
+//                                                 break;
+//                                             case "人數":
+//                                                 box.contents[1].text = `${reservation.adults}大${reservation.children}小`;
+//                                                 break;
+//                                             case "素食":
+//                                                 box.contents[1].text = reservation.vegetarian;
+//                                                 break;
+//                                             case "特殊需求":
+//                                                 box.contents[1].text = reservation.specialNeeds;
+//                                                 break;
+//                                             case "備註":
+//                                                 box.contents[1].text = reservation.notes || '無';
+//                                                 break;
+//                                             case "訂位代碼":
+//                                                 box.contents[1].text = reservation.bookingCode;
+//                                                 break;  
+//                                         }
+//                                     });
 
-                                    await sendLineMessage(lineUserId, {
-                                        type: 'flex',
-                                        altText: '電話號碼綁定成功',
-                                        contents: messageTemplate
-                                    });
+//                                     await sendLineMessage(lineUserId, {
+//                                         type: 'flex',
+//                                         altText: '電話號碼綁定成功',
+//                                         contents: messageTemplate
+//                                     });
                                     
-                                }
-                            } catch (error) {
-                                console.error('Error in confirm_recent_reservation:', error);
-                                await sendLineMessage(lineUserId, {
-                                    type: 'text',
-                                    text: '綁定過程發生錯誤，請稍後再試。'
-                                });
-                            }
-                            break;
+//                                 }
+//                             } catch (error) {
+//                                 console.error('Error in confirm_recent_reservation:', error);
+//                                 await sendLineMessage(lineUserId, {
+//                                     type: 'text',
+//                                     text: '綁定過程發生錯誤，請稍後再試。'
+//                                 });
+//                             }
+//                             break;
 
-                        case 'confirm_general_binding':
-                            try {
-                                const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
-                                    headers: {
-                                        'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
-                                    }
-                                });
+//                         case 'confirm_general_binding':
+//                             try {
+//                                 const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
+//                                     headers: {
+//                                         'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+//                                     }
+//                                 });
 
-                                const newUserID = new UserID({
-                                    lineUserId,
-                                    lineName: userProfile.data.displayName,
-                                    phone
-                                });
-                                await newUserID.save();
+//                                 const newUserID = new UserID({
+//                                     lineUserId,
+//                                     lineName: userProfile.data.displayName,
+//                                     phone
+//                                 });
+//                                 await newUserID.save();
 
-                                userStates[lineUserId] = 'BINDING_COMPLETE';
+//                                 userStates[lineUserId] = 'BINDING_COMPLETE';
 
-                                if (userTimeouts[lineUserId]) {
-                                    clearTimeout(userTimeouts[lineUserId]);
-                                    delete userTimeouts[lineUserId]; // 清除計時器
-                                }
+//                                 if (userTimeouts[lineUserId]) {
+//                                     clearTimeout(userTimeouts[lineUserId]);
+//                                     delete userTimeouts[lineUserId]; // 清除計時器
+//                                 }
 
-                                await sendLineMessage(lineUserId, {
-                                    type: 'text',
-                                    text: '電話號碼綁定成功！未來訂位時輸入此電話號碼將會收到通知。'
-                                });
-                            } catch (error) {
-                                console.error('Error in confirm_general_binding:', error);
-                                await sendLineMessage(lineUserId, {
-                                    type: 'text',
-                                    text: '綁定過程發生錯誤，請稍後再試。'
-                                });
-                            }
-                            break;
+//                                 await sendLineMessage(lineUserId, {
+//                                     type: 'text',
+//                                     text: '電話號碼綁定成功！未來訂位時輸入此電話號碼將會收到通知。'
+//                                 });
+//                             } catch (error) {
+//                                 console.error('Error in confirm_general_binding:', error);
+//                                 await sendLineMessage(lineUserId, {
+//                                     type: 'text',
+//                                     text: '綁定過程發生錯誤，請稍後再試。'
+//                                 });
+//                             }
+//                             break;
 
-                        case 'cancel_binding':
-                            delete userStates[lineUserId];
-                            await sendLineMessage(lineUserId, {
-                                type: 'text',
-                                text: '已取消綁定。'
-                            });
-                            break;
-                    }
-                }
+//                         case 'cancel_binding':
+//                             delete userStates[lineUserId];
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'text',
+//                                 text: '已取消綁定。'
+//                             });
+//                             break;
+//                     }
+//                 }
 
-                // 3. 處理電話號碼輸入
-                if (event.type === 'message' && event.message.type === 'text') {
-                    const userMessage = event.message.text;
+//                 // 3. 處理電話號碼輸入
+//                 if (event.type === 'message' && event.message.type === 'text') {
+//                     const userMessage = event.message.text;
                     
-                    // 驗證電話號碼格式
-                    if (userStates[lineUserId] === 'WAITING_FOR_PHONE') { 
-                        const phoneRegex = /^09\d{8}$/;
-                        if (!phoneRegex.test(userMessage)) {
-                            await sendLineMessage(lineUserId, {
-                                type: 'text',
-                                text: '請輸入有效的手機號碼（例：0912345678）'
-                            });
-                            return;
-                        }
+//                     // 驗證電話號碼格式
+//                     if (userStates[lineUserId] === 'WAITING_FOR_PHONE') { 
+//                         const phoneRegex = /^09\d{8}$/;
+//                         if (!phoneRegex.test(userMessage)) {
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'text',
+//                                 text: '請輸入有效的手機號碼（例：0912345678）'
+//                             });
+//                             return;
+//                         }
 
-                        // 檢查是否已經綁定
-                        const existingBinding = await UserID.findOne({ phone: userMessage });
-                        if (existingBinding) {
-                            await sendLineMessage(lineUserId, {
-                                type: 'text',
-                                text: '此電話號碼已經被綁定。'
-                            });
-                            return;
-                        }
+//                         // 檢查是否已經綁定
+//                         const existingBinding = await UserID.findOne({ phone: userMessage });
+//                         if (existingBinding) {
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'text',
+//                                 text: '此電話號碼已經被綁定。'
+//                             });
+//                             return;
+//                         }
 
-                        // 查詢2分鐘內的新訂位
-                        const recentReservation = await Reservation.findOne({
-                            phone: userMessage,
-                            createdAt: { 
-                                $gte: new Date(Date.now() - 120000)
-                            }
-                        }).sort({ createdAt: -1 });
+//                         // 查詢2分鐘內的新訂位
+//                         const recentReservation = await Reservation.findOne({
+//                             phone: userMessage,
+//                             createdAt: { 
+//                                 $gte: new Date(Date.now() - 120000)
+//                             }
+//                         }).sort({ createdAt: -1 });
 
-                        if (recentReservation) {
-                            // 發送遮罩後的訂位資訊確認
-                            const messageTemplate = JSON.parse(JSON.stringify(confirmReservationTemplate));
+//                         if (recentReservation) {
+//                             // 發送遮罩後的訂位資訊確認
+//                             const messageTemplate = JSON.parse(JSON.stringify(confirmReservationTemplate));
 
-                            const maskedName = recentReservation.name.charAt(0) + '*'.repeat(recentReservation.name.length - 1);
-                            const maskedPhone = `${userMessage.slice(0, 4)}**${userMessage.slice(-2)}`;
+//                             const maskedName = recentReservation.name.charAt(0) + '*'.repeat(recentReservation.name.length - 1);
+//                             const maskedPhone = `${userMessage.slice(0, 4)}**${userMessage.slice(-2)}`;
                             
-                            // 遞迴函數來處理巢狀結構
-                            const updateTemplateValues = (contents) => {
-                                if (Array.isArray(contents)) {
-                                    contents.forEach(content => updateTemplateValues(content));
-                                } else if (contents && typeof contents === 'object') {
-                                    // 處理當前物件的 text 屬性
-                                    if (contents.text) {
-                                        switch (contents.text) {
-                                            case '${maskedName}':
-                                                contents.text = maskedName;
-                                                break;
-                                            case '${maskedPhone}':
-                                                contents.text = maskedPhone;
-                                                break;
-                                            case '${date}':
-                                                const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
-                                                const weekDay = dayMapping[new Date(recentReservation.date).getDay()];
-                                                contents.text = `${moment(recentReservation.date).format('YYYY/MM/DD')} (${weekDay})`;
-                                                break;
-                                            case '${time}':
-                                                contents.text = recentReservation.time;
-                                                break;
-                                        }
-                                    }
-                                    // 遞迴處理所有子屬性
-                                    Object.values(contents).forEach(value => {
-                                        if (typeof value === 'object') {
-                                            updateTemplateValues(value);
-                                        }
-                                    });
-                                }
-                            };
+//                             // 遞迴函數來處理巢狀結構
+//                             const updateTemplateValues = (contents) => {
+//                                 if (Array.isArray(contents)) {
+//                                     contents.forEach(content => updateTemplateValues(content));
+//                                 } else if (contents && typeof contents === 'object') {
+//                                     // 處理當前物件的 text 屬性
+//                                     if (contents.text) {
+//                                         switch (contents.text) {
+//                                             case '${maskedName}':
+//                                                 contents.text = maskedName;
+//                                                 break;
+//                                             case '${maskedPhone}':
+//                                                 contents.text = maskedPhone;
+//                                                 break;
+//                                             case '${date}':
+//                                                 const dayMapping = ['日', '一', '二', '三', '四', '五', '六'];
+//                                                 const weekDay = dayMapping[new Date(recentReservation.date).getDay()];
+//                                                 contents.text = `${moment(recentReservation.date).format('YYYY/MM/DD')} (${weekDay})`;
+//                                                 break;
+//                                             case '${time}':
+//                                                 contents.text = recentReservation.time;
+//                                                 break;
+//                                         }
+//                                     }
+//                                     // 遞迴處理所有子屬性
+//                                     Object.values(contents).forEach(value => {
+//                                         if (typeof value === 'object') {
+//                                             updateTemplateValues(value);
+//                                         }
+//                                     });
+//                                 }
+//                             };
 
-                            // 更新整個模板
-                            updateTemplateValues(messageTemplate);
+//                             // 更新整個模板
+//                             updateTemplateValues(messageTemplate);
 
-                            // 更新確認按鈕的 data
-                            messageTemplate.footer.contents[1].action.data = 
-                                `action=confirm_recent_reservation&phone=${userMessage}`;
+//                             // 更新確認按鈕的 data
+//                             messageTemplate.footer.contents[1].action.data = 
+//                                 `action=confirm_recent_reservation&phone=${userMessage}`;
 
-                            await sendLineMessage(lineUserId, {
-                                type: 'flex',
-                                altText: '確認訂位資訊',
-                                contents: messageTemplate
-                            });
-                        } else {
-                            // 發送一般綁定確認
-                            const messageTemplate = JSON.parse(JSON.stringify(confirmBindingTemplate));
-                            // 更新電話號碼
-                            messageTemplate.body.contents[1].text = userMessage;
-                            // 更新確認按鈕的 data
-                            messageTemplate.footer.contents[1].action.data = `action=confirm_general_binding&phone=${userMessage}`;
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'flex',
+//                                 altText: '確認訂位資訊',
+//                                 contents: messageTemplate
+//                             });
+//                         } else {
+//                             // 發送一般綁定確認
+//                             const messageTemplate = JSON.parse(JSON.stringify(confirmBindingTemplate));
+//                             // 更新電話號碼
+//                             messageTemplate.body.contents[1].text = userMessage;
+//                             // 更新確認按鈕的 data
+//                             messageTemplate.footer.contents[1].action.data = `action=confirm_general_binding&phone=${userMessage}`;
 
-                            await sendLineMessage(lineUserId, {
-                                type: 'flex',
-                                altText: '確認綁定電話',
-                                contents: messageTemplate
-                            });
+//                             await sendLineMessage(lineUserId, {
+//                                 type: 'flex',
+//                                 altText: '確認綁定電話',
+//                                 contents: messageTemplate
+//                             });
 
-                            userStates[lineUserId] = 'BINDING_COMPLETE';
+//                             userStates[lineUserId] = 'BINDING_COMPLETE';
 
-                            if (userTimeouts[lineUserId]) {
-                                clearTimeout(userTimeouts[lineUserId]);
-                                delete userTimeouts[lineUserId]; // 清除計時器
-                            }
-                        }
+//                             if (userTimeouts[lineUserId]) {
+//                                 clearTimeout(userTimeouts[lineUserId]);
+//                                 delete userTimeouts[lineUserId]; // 清除計時器
+//                             }
+//                         }
                         
-                        // 清除用戶狀態
-                        // delete userStates[lineUserId];
-                    }
-                }
-            }
-        }
-        res.status(200).end();
-    } catch (error) {
-        console.error('Webhook error:', error);
-        res.status(500).end();
-    }
-});
+//                         // 清除用戶狀態
+//                         // delete userStates[lineUserId];
+//                     }
+//                 }
+//             }
+//         }
+//         res.status(200).end();
+//     } catch (error) {
+//         console.error('Webhook error:', error);
+//         res.status(500).end();
+//     }
+// });
 
 // 在發送 LINE 訊息前檢查並更新用戶資料
-async function sendLineMessage(userId, message) {
-    try {
-        // 先獲取用戶的 LINE 個人資料
-        const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
-            }
-        });
+// async function sendLineMessage(userId, message) {
+//     try {
+//         // 先獲取用戶的 LINE 個人資料
+//         const userProfile = await axios.get(`https://api.line.me/v2/bot/profile/${userId}`, {
+//             headers: {
+//                 'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+//             }
+//         });
         
-        // 查找現有用戶資料
-        const existingUser = await UserID.findOne({ lineUserId: userId });
+//         // 查找現有用戶資料
+//         const existingUser = await UserID.findOne({ lineUserId: userId });
         
-        // 如果名稱有變更才更新
-        if (existingUser && existingUser.lineName !== userProfile.data.displayName) {
-            console.log(`Updating LINE name for user ${userId} from "${existingUser.lineName}" to "${userProfile.data.displayName}"`);
+//         // 如果名稱有變更才更新
+//         if (existingUser && existingUser.lineName !== userProfile.data.displayName) {
+//             console.log(`Updating LINE name for user ${userId} from "${existingUser.lineName}" to "${userProfile.data.displayName}"`);
             
-            await UserID.findOneAndUpdate(
-                { lineUserId: userId },
-                { lineName: userProfile.data.displayName },
-                { new: true }
-            );
-        }
+//             await UserID.findOneAndUpdate(
+//                 { lineUserId: userId },
+//                 { lineName: userProfile.data.displayName },
+//                 { new: true }
+//             );
+//         }
 
-        // 處理 Flex Message
-        let messages;
-        if (typeof message === 'string') {
-            messages = [{ type: 'text', text: message }];
-        } else if (Array.isArray(message)) {
-            messages = message;
-        } else if (message.type === 'flex') {
-            // 移除 color 屬性
-            if (message.contents?.footer?.contents) {
-                message.contents.footer.contents.forEach(content => {
-                    if (content.action?.color) {
-                        delete content.action.color;
-                    }
-                });
-            }
-            messages = [message];
-        } else {
-            messages = [message];
-        }
+//         // 處理 Flex Message
+//         let messages;
+//         if (typeof message === 'string') {
+//             messages = [{ type: 'text', text: message }];
+//         } else if (Array.isArray(message)) {
+//             messages = message;
+//         } else if (message.type === 'flex') {
+//             // 移除 color 屬性
+//             if (message.contents?.footer?.contents) {
+//                 message.contents.footer.contents.forEach(content => {
+//                     if (content.action?.color) {
+//                         delete content.action.color;
+//                     }
+//                 });
+//             }
+//             messages = [message];
+//         } else {
+//             messages = [message];
+//         }
 
-        // 發送訊息
-        const response = await axios.post('https://api.line.me/v2/bot/message/push', {
-            to: userId,
-            messages: messages
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('LINE API Error:', error.response?.data || error);
-        throw error;
-    }
-}
+//         // 發送訊息
+//         const response = await axios.post('https://api.line.me/v2/bot/message/push', {
+//             to: userId,
+//             messages: messages
+//         }, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${CHANNEL_ACCESS_TOKEN}`
+//             }
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('LINE API Error:', error.response?.data || error);
+//         throw error;
+//     }
+// }
 
 
 
