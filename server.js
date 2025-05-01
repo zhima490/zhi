@@ -510,7 +510,7 @@ app.get(['/bs', '/backstage'], authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'backstage.html'));
 });
 
-connectToDatabase();
+// connectToDatabase();
 redisClient.connect().catch(console.error);
 
 const { invalidPhoneNumbers } = JSON.parse(fs.readFileSync('pnb.json', 'utf-8'));
@@ -524,29 +524,29 @@ const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
 // const Reservation = mongoose.model('Reservation', reservationSchema, 'bookings');
 
-async function cleanExpiredData() {
-    const today = moment.tz('Asia/Taipei').startOf('day');
+// async function cleanExpiredData() {
+//     const today = moment.tz('Asia/Taipei').startOf('day');
     
-    try {
-        await GLW.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
-        await GLH.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
-        console.log('Cleaned expired data at:', new Date().toISOString());
-    } catch (error) {
-        console.error('Error cleaning expired data:', error);
-    }
-}
+//     try {
+//         await GLW.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
+//         await GLH.deleteMany({ date: { $lt: today.format('YYYY-MM-DD') } });
+//         console.log('Cleaned expired data at:', new Date().toISOString());
+//     } catch (error) {
+//         console.error('Error cleaning expired data:', error);
+//     }
+// }
 
-// 創建 CronJob
-const cleanupSchedule = new CronJob(
-    '0 0 * * *',         // 每天午夜執行
-    cleanExpiredData,    // 要執行的函數
-    null,               // onComplete
-    true,              // start
-    'Asia/Taipei'      // 時區
-);
+// // 創建 CronJob
+// const cleanupSchedule = new CronJob(
+//     '0 0 * * *',         // 每天午夜執行
+//     cleanExpiredData,    // 要執行的函數
+//     null,               // onComplete
+//     true,              // start
+//     'Asia/Taipei'      // 時區
+// );
 
-// 啟動排程
-cleanupSchedule.start();
+// // 啟動排程
+// cleanupSchedule.start();
 
 // async function sendEmail(toEmail, reservationData) {
 //     const {
